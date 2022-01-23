@@ -1538,12 +1538,10 @@ const $COMPONENTS = {
                 "#xo-back": {
                     animation: 'opacity 200ms forwards',
                     pointerEvents: 'all',
-                    zIndex: '9999',
                 },
                 "#xo-items": {
                     animation: 'slide 200ms forwards',
                     pointerEvents: 'all',
-                    zIndex: '9999',
                 },
             },
             "&([expand='false'])": {
@@ -1648,6 +1646,7 @@ const $COMPONENTS = {
             pointerEvents: 'none',
             inset: '0',
             backgroundColor: $COLORS.norms.$500 + "80",
+            zIndex: '9999',
         },
         "#xo-items": {
             width: '200px',
@@ -1659,6 +1658,7 @@ const $COMPONENTS = {
             left: '-100%',
             bottom: '0',
             overflow: 'auto',
+            zIndex: '9999',
         },
         mediaQueries: [{
             condition: "min-width: 768px",
@@ -1683,7 +1683,8 @@ const $COMPONENTS = {
             },
             "#xo-back": {
                 opacity: '0',
-                pointerEvents: 'none'
+                pointerEvents: 'none',
+                zIndex: '1',
             },
             "#xo-items": {
                 pointerEvents: 'all',
@@ -1697,6 +1698,7 @@ const $COMPONENTS = {
                 padding: '0',
                 gap: '1rem',
                 justifyContent: 'flex-end',
+                zIndex: '1',
             },
         }],
         keyFrames: [{
