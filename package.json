@@ -1,0 +1,20 @@
+{
+    "name": "xo-core",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/ahmedqo/xo-core.git"
+    },
+    "author": "ahmedqo",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/ahmedqo/xo-core/issues"
+    },
+    "homepage": "https://github.com/ahmedqo/xo-core#readme",
+    "dependencies": {}
+}
