@@ -28,17 +28,17 @@ window.XOPieChartElement = class extends XOElement {
 
     render() {
         return /*html*/ `
-            @{{if header}}
+            {*if header*}
                 <div id="xo-header">
                     {{header}}
                 </div>
-            @{{/if}}
-            @{{if data.length}}
+            {*/if*}
+            {*if data.length*}
                 <main id="xo-container">
                     ${__draw__(this)}
                 </main>
                 <div id="xo-tooltip"></div>
-            @{{/if}}
+            {*/if*}
         `;
     }
 

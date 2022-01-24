@@ -47,7 +47,7 @@ window.XOSelectItemElement = class extends XOElement {
 
     render() {
         return /*html*/ `
-            <a @{{if !disabled}} href @{{/if}} id="xo-container" (click|prev)="{{>clickHandler('event')}}">
+            <a {*if !disabled*} href {*/if*} id="xo-container" (click|prev)="{{>clickHandler('event')}}">
                 <slot></slot>
             </a>
         `;

@@ -1864,9 +1864,7 @@ const $COMPONENTS = {
                 "&([slot='brand'])": {
                     "#xo-container": {
                         padding: '0',
-                        "&:hover, &:focus": {
-                            backgroundColor: 'unset',
-                        },
+                        backgroundColor: 'unset',
                         "&:focus": {
                             borderRadius: '.25rem',
                             outlineStyle: 'solid',

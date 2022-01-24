@@ -1,5 +1,5 @@
-const blkExp = /\@\{\{block (.+?)\}\}((.|\n)*?)\@\{\{\/block\}\}/g,
-    jscExp = /\@\{\{([\s\S]+?)\}\}/g,
+const blkExp = /\{\*block (.+?)\*\}((.|\n)*?)\{\*\/block\*\}/g,
+    jscExp = /\{\*([\s\S]+?)\*\}/g,
     ecoExp = /\{\{([\s\S]+?)\}\}/g,
     filExp = /(\w+:\[(.+?)\])/g;
 
@@ -215,7 +215,7 @@ function addVariable (line, js) {
     var code = "";
     if (js) {
         line = line.trim();
-        if (line.startsWith(">") || line.startsWith("~")) {
+        if (line.startsWith(">")) {
             const { type, data } = __def(line);
             const fun = data.shift();
             const par = data.length ? data.join() : "''";
@@ -231,10 +231,10 @@ function addVariable (line, js) {
 }
 
 function __def (line) {
-    const type = line[0];
-    line = line.slice(1, line.length - 1).trim();
+    const type = line.slice(1).startsWith(">") ? false : true;
+    line = line.replaceAll(">", "").trim();
     const data = line.split(/[(),]/g).filter(Boolean);
-    return { type: type === ">" ? true : false, data };
+    return { type, data };
 }
 
 function block (html) {
