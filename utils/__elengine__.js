@@ -1,4 +1,5 @@
-const jscExp = /\@\{\{([\s\S]+?)\}\}/g,
+const blkExp = /\@\{\{block (.+?)\}\}((.|\n)*?)\@\{\{\/block\}\}/g,
+    jscExp = /\@\{\{([\s\S]+?)\}\}/g,
     ecoExp = /\{\{([\s\S]+?)\}\}/g,
     filExp = /(\w+:\[(.+?)\])/g;
 
@@ -236,6 +237,23 @@ function __def (line) {
     return { type: type === ">" ? true : false, data };
 }
 
+function block (html) {
+    var match,
+        cursor,
+        code = "", rep = [];
+    html = clean(html);
+    while (match = blkExp.exec(html)) {
+        var s = `function ${match[1]}($e){
+            return \`${match[2].replaceAll("{{", "${$e.").replaceAll("}}", "}")}\`;
+        };`
+        code += s;
+        rep.push(match[0]);
+        cursor = match.index + match[0].length;
+    }
+    rep.forEach(r => { html = html.replace(r, "") });
+    return [html, clean(code)]
+}
+
 function add (line, js) {
     var code = "";
     if (js) {
@@ -273,8 +291,9 @@ function __fill (line) {
 
 function shape (html) {
     var code = "var r=[]; var __temp;";
-    html = clean(html).replace(/["]+/g, '\\"');
-    code += parse(jscExp, html, add);
+    const [_html, _code] = block(html);
+    html = clean(_html).replace(/["]+/g, '\\"');
+    code += _code + parse(jscExp, html, add);
     code += 'return r.join("");';
     code = "with(obj || {}){" + code + "}";
     return code;
