@@ -284,58 +284,8 @@ function render (html, data) {
     try {
         return new Function("obj", "ctx", clean(html)).call(data, data || {});
     } catch (e) {
-        var arr = e.stack
-            .split("at")
-            .slice(5)
-            .reduce((a, i) => {
-                i = i.replace(location.origin, "").split(":");
-                i = `${i[0].split(" ")[i[0].split(" ").length - 1].slice(1)} 
-                <span>in line</span> ${i[1]}`;
-                return [...a, i];
-            }, [])
-            .join("<br/><span>at</span> ");
-        var template = `
-            <style>
-                body{
-                    height: 100vh;
-                    overflow: hidden;
-                }
-                .XO_Framework_Error {
-                    background-color: #000000C9;
-                    padding: 20px 40px;
-                    z-index: 100000000;
-                    position: fixed;
-                    inset: 0;
-
-                }
-                .XO_Framework_Error h1 {
-                    margin-bottom: 30px;
-                    font-size: 50px;
-                    color: tomato;
-                }
-                .XO_Framework_Error p {
-                    margin-bottom: 10px;
-                    letter-spacing: 1px;
-                    line-height: 1.5;
-                    font-size: 20px;
-                    color: #FFFFFF;
-                }
-                .XO_Framework_Error p span {
-                    letter-spacing: 1px;
-                    line-height: 1.5;
-                    font-size: 20px;
-                    color: #FFFFFF;
-                    font-weight: bolder;
-                }
-            </style>
-            <div class="XO_Framework_Error">
-                <h1>XO Error</h1>
-                <p>${e.message}:</p>
-                <p><span>at</span> ${arr}</p>
-            </div>
-        `;
-        document.body.insertAdjacentHTML("beforeend", template);
-        throw e;
+        alert('there is an error in your code check the console.');
+        console.log(e);
     }
 }
 

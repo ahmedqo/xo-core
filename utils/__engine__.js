@@ -1,4 +1,5 @@
-const jscExp = /\@\{\{([\s\S]+?)\}\}/g,
+const blkExp = /\@\{\{block (.+?)\}\}((.|\n)*?)\@\{\{\/block\}\}/g,
+    jscExp = /\@\{\{([\s\S]+?)\}\}/g,
     comExp = /\#\{\{([\s\S]+?)\}\}/g,
     ecoExp = /\{\{([\s\S]+?)\}\}/g,
     filExp = /(\w+:\[(.+?)\])/g;
@@ -101,6 +102,13 @@ function conditions(line) {
             data.shift();
             data.splice(0, 0, "console.log(");
             data[data.length - 1] = data[data.length - 1] + " );";
+            break;
+        case "raw":
+            data.shift();
+            data.splice(1, 1);
+            data.splice(1, 0, "(");
+            data.push(")");
+            data = [`r.push(${data.join("")});`];
             break;
         default:
             data = [line, ";"];
@@ -284,11 +292,11 @@ function __fill (line) {
 
 async function shape (html, data) {
     var code = "var r=[]; var __temp;";
-    code += `document.querySelectorAll("style").forEach(s => {if(s.hasAttribute("id")) s.remove();}); function useStyles(obj) { function $DECAMEL(str) { return str .replace(/([a-zd])([A-Z])/g, '$1' + "-" + '$2') .replace(/([A-Z]+)([A-Z][a-zd]+)/g, '$1' + "-" + '$2') .toLowerCase(); } function $SASS(c) { var all = ""; for (let name in c) { let vals = c[name], t = "", s = ""; if (typeof vals === "string") all += $DECAMEL(name) + ":" + vals + ";"; else { for (let sub in vals) { let subVals = vals[sub], NAME = $DECAMEL(sub); if (typeof subVals === "string") { t += NAME + ":" + subVals + ";"; } else { NAME.split(",").forEach((Name) => { let N = Name.trim().startsWith("&") ? Name.trim().slice(1) : " " + Name, Sn = name + N, o = {}; o[Sn] = subVals; s += $SASS(o); }); } } if (t.length > 0) all += name + "{" + t + "}"; if (s.length > 0) all += s; } } return all; } function $GUID() { var S4 = function() { return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1); }; return ("_" + S4() + S4() + "-" + Date.now()); } function $PARSE(obj) { let Class = {}, Style = {}; Object.keys(obj).forEach(key => { Class[key] = $GUID(); Style["." + Class[key]] = obj[key]; }); Style = $SASS(Style); return ({ Class, Style }) } function $CLEAN(str) { return (function() { return str.replace(/(||)/gm, ""); })().replaceAll(/ +/g, "").trim(); } const { Class, Style } = $PARSE(obj); exist = false; document.querySelectorAll("style").forEach(s => { if ($CLEAN(s.innerHTML) === $CLEAN(Style)) exist = true; }); if (!exist) { document.querySelector('head').insertAdjacentHTML("beforeend", "<style id=\\"" + $GUID() + "\\">" + Style + "</style>") } return Class; }`;
     html = await include(html, data);
-    html = clean(html).replace(/["]+/g, '\\"');
+    const [_html, _code] = block(html);
+    html = _html.replace(/["]+/g, '\\"');
     html = comment(html);
-    code += parse(jscExp, html, add);
+    code += _code + parse(jscExp, html, add);
     code += 'return r.join("");';
     code = "with(obj || {}){" + code + "}";
     return code;
@@ -309,60 +317,10 @@ function comment (html) {
 
 function render (html, data) {
     try {
-        return new Function("obj", "ctx", clean(html)).call(data, data || {});
+        return new Function("obj", "ctx", html).call(data, data || {});
     } catch (e) {
-        var arr = e.stack
-            .split("at")
-            .slice(5)
-            .reduce((a, i) => {
-                i = i.replace(location.origin, "").split(":");
-                i = `${i[0].split(" ")[i[0].split(" ").length - 1].slice(1)} 
-                <span>in line</span> ${i[1]}`;
-                return [...a, i];
-            }, [])
-            .join("<br/><span>at</span> ");
-        var template = `
-            <style>
-                body{
-                    height: 100vh;
-                    overflow: hidden;
-                }
-                .XO_Framework_Error {
-                    background-color: #000000C9;
-                    padding: 20px 40px;
-                    z-index: 100000000;
-                    position: fixed;
-                    inset: 0;
-
-                }
-                .XO_Framework_Error h1 {
-                    margin-bottom: 30px;
-                    font-size: 50px;
-                    color: tomato;
-                }
-                .XO_Framework_Error p {
-                    margin-bottom: 10px;
-                    letter-spacing: 1px;
-                    line-height: 1.5;
-                    font-size: 20px;
-                    color: #FFFFFF;
-                }
-                .XO_Framework_Error p span {
-                    letter-spacing: 1px;
-                    line-height: 1.5;
-                    font-size: 20px;
-                    color: #FFFFFF;
-                    font-weight: bolder;
-                }
-            </style>
-            <div class="XO_Framework_Error">
-                <h1>XO Error</h1>
-                <p>${e.message}:</p>
-                <p><span>at</span> ${arr}</p>
-            </div>
-        `;
-        document.body.insertAdjacentHTML("beforeend", template);
-        throw e;
+        alert('there is an error in your code check the console.');
+        console.log(e);
     }
 }
 
@@ -385,8 +343,25 @@ async function include (html, _data) {
     return html;
 }
 
+function block (html) {
+    var match,
+        cursor,
+        code = "", rep = [];
+    html = clean(html);
+    while (match = blkExp.exec(html)) {
+        var s = `function ${match[1]}($e){
+            return \`${match[2].replaceAll("{{", "${$e.").replaceAll("}}", "}")}\`;
+        };`
+        code += s;
+        rep.push(match[0]);
+        cursor = match.index + match[0].length;
+    }
+    rep.forEach(r => { html = html.replace(r, "") });
+    return [html, clean(code)]
+}
+
 async function html (code, data) {
-    code = await shape(clean(code), data);
+    code = await shape(code, data);
     return render(code, data);
 }
 
