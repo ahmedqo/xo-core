@@ -135,7 +135,7 @@ window.XOPasswordElement = class extends XOElement {
                         <label for="xo-text" id="xo-label" @{{if value}} class="valid" @{{/if}}>{{label}}</label>
                     @{{/if}}
                 </section>
-                <button id="xo-btn" @{{if disabled}} disabled @{{/if}} @{{if readonly}} disabled @{{/if}} (click)="{{>clickHandler()}}">
+                <button id="xo-btn" @{{if disabled || readonly}} disabled @{{/if}} (click)="{{>clickHandler()}}">
                     @{{if type === "text"}}
                         <svg version="1.0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000.000000 1000.000000" preserveAspectRatio="xMidYMid meet">
                             <g transform="translate(0.000000,1000.000000) scale(0.100000,-0.100000)">
@@ -155,7 +155,7 @@ window.XOPasswordElement = class extends XOElement {
                 <slot name="suffix"></slot>
             </main>
             @{{if info && infotype}}
-                <label id="xo-{{infotype}}">
+                <label id="xo-info" {{infotype}}>
                     <span>{{info}}</span>
                     @{{if infotype === 'success'}}
                         <svg version="1.0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000.000000 1000.000000" preserveAspectRatio="xMidYMid meet">

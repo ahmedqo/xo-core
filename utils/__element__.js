@@ -92,7 +92,7 @@ class XOElement extends HTMLElement {
                     this.removeAttribute("styles");
                 }
             }
-            this.reload();
+            this.revive();
         }
         __cons(this).onUpdated.bind(this)(name, newVal, oldVal);
     }
@@ -138,7 +138,7 @@ class XOElement extends HTMLElement {
         return "";
     }
 
-    reload() {
+    revive() {
         var code = ENG(__all(this), this.render());
         this.root.querySelectorAll("*").forEach((e) => (e.tagName !== "STYLE" ? e.remove() : ""));
         this.root.innerHTML += code;
@@ -445,7 +445,7 @@ function __fns(s) {
                 set(v) {
                     var o = PA[k];
                     PA[k] = __type(PA[k + "Type"].name)(v);
-                    if (o !== PA[k]) s.reload();
+                    if (o !== PA[k]) s.revive();
                     __cons(s).onUpdated.bind(s)(k, PA[k], o);
                 },
                 get() {

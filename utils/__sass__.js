@@ -219,7 +219,7 @@ const host = {
         gap: '.5rem',
         padding: '0 .5rem',
         borderWidth: '1px',
-        borderRadius: '.25rem',
+        borderRadius: '.5rem',
         position: 'relative',
         minHeight: '42px',
         backgroundColor: $COLORS.base.$100,
@@ -302,54 +302,51 @@ const host = {
         },
     },
     items = {
-        def: {
+        def: "",
+        med: "",
+        static: {
+            position: 'fixed',
+            maxHeight: '340px',
+            width: '100%',
+            bottom: '-100%',
+            zIndex: '9999',
+            filter: `drop-shadow(0 -2px 2px ${$COLORS.norms.$500 + '80'})`,
+            transition: 'top 200ms ease-in-out, bottom 200ms ease-in-out, opacity 200ms ease-in-out',
+            backgroundColor: '#FFFFFF',
+            "&[expand]": {
+                bottom: 0,
+            },
+            main: {
+                width: "calc(100% - 10px)",
+                gridTemplateColumns: "repeat(7, 1fr)",
+            }
+        },
+        change: {
+            bottom: 'unset !important',
             position: 'absolute',
             top: '200%',
             opacity: '0',
             left: '50%',
             width: 'max-content',
-            maxHeight: '240px',
-            borderRadius: '5px',
-            filter: `drop-shadow(2px 2px 4px ${$COLORS.norms.$500 + '80'})`,
+            borderRadius: '.25rem',
             overflowY: 'auto',
             pointerEvents: 'none',
-            transition: 'top 200ms ease-in-out, bottom 200ms ease-in-out, opacity 200ms ease-in-out',
-            backgroundColor: '#fff',
+            filter: `drop-shadow(2px 2px 4px ${$COLORS.norms.$500 + '80'})`,
             transform: 'translateX(-50%)',
-            zIndex: '10000000',
             "&[expand]": {
                 "--slide": '100%',
                 top: "var(--slide)",
                 opacity: '1',
                 pointerEvents: 'all',
             },
-        },
-        med: {
-            left: '0',
-            bottom: '-100%',
-            position: 'fixed',
-            borderRadius: '0px',
-            maxHeight: '340px',
-            width: '100%',
-            filter: `drop-shadow(0 -2px 2px ${$COLORS.norms.$500 + '80'})`,
-            transform: 'unset',
-            "&[expand]": {
-                top: 'unset',
-                bottom: '0%',
-            },
-            main: {
-                width: "calc(100% - 10px)",
-                gridTemplateColumns: "repeat(7, 1fr)",
-            },
         }
     },
-    success = {
+    info = {
         fontSize: '14px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
         marginTop: '5px',
-        color: $COLORS.woods.$500,
         textTransform: 'capitalize',
         span: {
             display: 'block',
@@ -359,26 +356,18 @@ const host = {
         svg: {
             width: '16px',
             height: '16px',
-            fill: $COLORS.woods.$500,
         },
-    },
-    error = {
-        fontSize: '14px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        marginTop: '5px',
-        color: $COLORS.flame.$500,
-        textTransform: 'capitalize',
-        span: {
-            display: 'block',
-            minHeight: '14px',
-            fontWeight: "bolder",
+        "&[success]": {
+            color: $COLORS.woods.$500,
+            svg: {
+                fill: $COLORS.woods.$500,
+            }
         },
-        svg: {
-            width: '16px',
-            height: '16px',
-            fill: $COLORS.flame.$500,
+        "&[error]": {
+            color: $COLORS.flame.$500,
+            svg: {
+                fill: $COLORS.flame.$500,
+            }
         },
     };
 
@@ -2443,8 +2432,7 @@ const $FIELDS = {
                 backgroundColor: $COLORS.base.$500,
             },
         },
-        "#xo-success": {...success },
-        "#xo-error": {...error },
+        "#xo-info": {...info },
         mediaQueries: [{
             condition: "max-width: 599px",
             "#xo-items": {...items.med },
@@ -2497,8 +2485,7 @@ const $FIELDS = {
                 margin: '3px 0',
             }
         },
-        "#xo-success": {...success },
-        "#xo-error": {...error },
+        "#xo-info": {...info },
         mediaQueries: [{
             condition: "max-width: 599px",
             "#xo-items": {
@@ -2596,8 +2583,7 @@ const $FIELDS = {
                 },
             },
         },
-        "#xo-success": {...success },
-        "#xo-error": {...error },
+        "#xo-info": {...info },
     },
     $FormComponent: {...$BASE },
     $NumberField: {
@@ -2621,8 +2607,7 @@ const $FIELDS = {
             width: '15px',
             height: '12px',
         },
-        "#xo-success": {...success },
-        "#xo-error": {...error },
+        "#xo-info": {...info },
     },
     $PasswordField: {
         ...$BASE,
@@ -2634,8 +2619,7 @@ const $FIELDS = {
         "#xo-container": {...container },
         "#xo-text": {...text },
         "#xo-label": {...label },
-        "#xo-success": {...success },
-        "#xo-error": {...error },
+        "#xo-info": {...info },
         "#xo-btn": {...btn },
     },
     $RateField: {
@@ -2704,8 +2688,7 @@ const $FIELDS = {
             backgroundColor: 'unset',
             gap: '5px',
         },
-        "#xo-success": {...success },
-        "#xo-error": {...error },
+        "#xo-info": {...info },
     },
     $RichField: {
         ...$BASE,
@@ -2979,8 +2962,7 @@ const $FIELDS = {
         ".html_val": {
             color: "hsl(41deg 94% 73%)",
         },
-        "#xo-success": {...success },
-        "#xo-error": {...error },
+        "#xo-info": {...info },
     },
     $SelectField: {
         ...$BASE,
@@ -2991,9 +2973,6 @@ const $FIELDS = {
             "&([search=\"hidden\"])": {
                 "#xo-search": {
                     display: 'none',
-                },
-                "#xo-items:before": {
-                    content: 'unset',
                 },
             },
             "&([theme=\"water\"]) #xo-items::-webkit-scrollbar-thumb": {
@@ -3022,7 +3001,7 @@ const $FIELDS = {
             },
         },
         "#xo-items": {
-            ...items.def,
+            ...items.static,
             minWidth: '100%',
             display: 'flex',
             flexDirection: 'column',
@@ -3033,15 +3012,6 @@ const $FIELDS = {
             "&::-webkit-scrollbar-thumb": {
                 width: '4px',
                 backgroundColor: $COLORS.base.$500,
-            },
-            "&:before": {
-                content: "''",
-                width: '100%',
-                height: '1px',
-                background: $COLORS.norms.$500,
-                position: 'absolute',
-                top: '50px',
-                left: '0',
             },
         },
         "#xo-search": {
@@ -3055,12 +3025,11 @@ const $FIELDS = {
             marginBottom: '6px',
             borderRadius: '5px',
         },
-        "#xo-success": {...success },
-        "#xo-error": {...error },
+        "#xo-info": {...info },
         mediaQueries: [{
-            condition: "max-width: 599px",
-            "#xo-items": {...items.med },
-        }]
+            condition: "min-width: 768px",
+            "#xo-items": {...items.change },
+        }],
     },
     $SelectItemField: {
         ...$BASE,
@@ -3278,8 +3247,7 @@ const $FIELDS = {
                 outlineOffset: '-1px',
             },
         },
-        "#xo-success": {...success },
-        "#xo-error": {...error },
+        "#xo-info": {...info },
         keyFrames: [{
             name: 'check',
             "0%": {
@@ -3302,8 +3270,7 @@ const $FIELDS = {
             flexWrap: 'wrap',
             gap: '5px',
         },
-        "#xo-success": {...success },
-        "#xo-error": {...error },
+        "#xo-info": {...info },
     },
     $TextField: {
         ...$BASE,
@@ -3315,8 +3282,7 @@ const $FIELDS = {
         "#xo-container": {...container },
         "#xo-text": {...text },
         "#xo-label": {...label },
-        "#xo-success": {...success },
-        "#xo-error": {...error },
+        "#xo-info": {...info },
     },
     $AreaField: {
         ...$BASE,
@@ -3329,8 +3295,7 @@ const $FIELDS = {
         "#xo-text": {...text, paddingTop: '17px', lineHeight: '1.2', height: '36px' },
         "#xo-text::-webkit-scrollbar": { display: 'none', },
         "#xo-label": {...label },
-        "#xo-success": {...success },
-        "#xo-error": {...error },
+        "#xo-info": {...info },
     },
     $TimeField: {
         ...$BASE,
@@ -3454,8 +3419,7 @@ const $FIELDS = {
                 backgroundColor: $COLORS.base.$500,
             },
         },
-        "#xo-success": {...success },
-        "#xo-error": {...error },
+        "#xo-info": {...info },
         mediaQueries: [{
             condition: "max-width: 599px",
             "#xo-items": {...items.med },
