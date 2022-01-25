@@ -30,24 +30,22 @@ window.XOSwitchGroupElement = class extends XOElement {
         Array.from(this.children).forEach(item => {
             if (item.tagName !== "XO-SWITCH") {
                 item.remove();
-            }
-            if (item.hasAttribute("checked")) {
-                this.value = item.getAttribute('value');
-                this.text = item.innerText;
-            }
-        });
-        this.querySelectorAll("xo-switch").forEach(item => {
-            item.addEventListener("click", (e) => {
-                if (item.checked) e.preventDefault();
-            });
-            item.addEventListener("checked", () => {
-                this.querySelectorAll("xo-switch").forEach(e => {
-                    if (e !== item) e.removeAttribute("checked");
+            } else {
+                if (item.hasAttribute("checked")) {
+                    this.value = item.getAttribute('value');
+                    this.text = item.innerText;
+                }
+                item.addEventListener("click", (e) => {
+                    if (item.checked) { e.preventDefault(); } else {
+                        this.querySelectorAll("xo-switch").forEach(e => {
+                            if (e !== item && e.checked) e.removeAttribute("checked");
+                        });
+                        this.text = item.text;
+                        this.value = item.value;
+                        this.makeEvent("checked");
+                    }
                 });
-                this.text = item.text;
-                this.value = item.value;
-                this.makeEvent("checked");
-            });
+            }
         });
     }
 

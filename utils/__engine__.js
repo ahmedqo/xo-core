@@ -313,7 +313,6 @@ function comment (html) {
         code = "";
     while ((match = comExp.exec(html))) {
         code += html.slice(cursor, match.index);
-        code += `<!-- ${match[1].trim()} -->`;
         cursor = match.index + match[0].length;
     }
     code += html.substr(cursor, html.length - cursor);

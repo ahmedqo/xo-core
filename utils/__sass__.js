@@ -1,6 +1,7 @@
 const $COLORS = {
+    'shade': '#1D1D1D30',
     'norms': {
-        '$100': '#ffffff',
+        '$100': '#FFFFFF',
         '$500': '#1D1D1D',
         '$900': '#000000',
     },
@@ -143,16 +144,16 @@ const chartHost = {
         },
     },
     chartTip = {
-        padding: '.25rem .5rem',
+        padding: [.25, .5, .25, .5, 'rem'],
         borderRadius: '.5rem',
         backgroundColor: $COLORS.norms.$500,
-        color: "#fff",
+        color: $COLORS.norms.$100,
         position: 'fixed',
         display: 'none',
         transform: 'translate(calc(-100% - 6px), -50%)',
         width: 'max-content',
         fontSize: '1rem',
-        zIndex: '10000',
+        zIndex: 9999,
         textAlign: 'center',
         flexDirection: 'column',
         gap: '.25rem',
@@ -177,14 +178,19 @@ const chartHost = {
 
 const host = {
         "&([outlined]) #xo-container": {
-            border: '2px solid #1d1d1d',
+            border: '2px solid ' + $COLORS.norms.$500,
             backgroundColor: 'transparent',
         },
         "&([rounded]) #xo-container": {
             borderRadius: '100px',
         },
-        "&([flatted]) #xo-container": {
-            borderRadius: '0',
+        "&([flatted])": {
+            "#xo-container": {
+                borderRadius: 0,
+            },
+            "#xo-items": {
+                borderRadius: 0,
+            },
         },
         "&([disabled])": {
             "#xo-container": {
@@ -217,15 +223,15 @@ const host = {
         alignItems: 'center',
         justifyContent: 'center',
         gap: '.5rem',
-        padding: '0 .5rem',
+        padding: [0, .5, 'rem'],
         borderWidth: '1px',
         borderRadius: '.5rem',
         position: 'relative',
         minHeight: '42px',
         backgroundColor: $COLORS.base.$100,
         section: {
-            width: '0px',
-            flex: '1',
+            width: 0,
+            flex: 1,
             height: '100%',
             display: 'flex',
             position: 'relative',
@@ -254,12 +260,12 @@ const host = {
         position: 'absolute',
         display: 'flex',
         alignItems: 'center',
-        top: '0px',
-        left: '0px',
+        top: 0,
+        left: 0,
         width: '100%',
         height: '100%',
         fontSize: '18px',
-        fontWeight: '500',
+        fontWeight: 500,
         textTransform: 'capitalize',
         color: $COLORS.norms.$500,
         whiteSpace: 'pre',
@@ -268,8 +274,8 @@ const host = {
         animation: 'height 200ms forwards reverse',
         "&.valid": {
             fontSize: '12px',
-            fontWeight: '800',
-            color: $COLORS.norms.$500 + '50',
+            fontWeight: 800,
+            color: $COLORS.shade,
             height: '20px',
         },
     },
@@ -308,10 +314,11 @@ const host = {
             position: 'fixed',
             maxHeight: '340px',
             width: '100%',
-            zIndex: '9999',
-            filter: `drop-shadow(0 -2px 2px ${$COLORS.norms.$500 + '80'})`,
+            zIndex: 9999,
+            borderRadius: '.5rem',
+            boxShadow: '0 -.2rem .3rem .1rem ' + $COLORS.shade,
             animation: 'slidebottom 200ms forwards reverse',
-            backgroundColor: '#FFFFFF',
+            backgroundColor: $COLORS.norms.$100,
             "&[expand]": {
                 animation: 'slidebottom 200ms forwards',
             },
@@ -324,10 +331,9 @@ const host = {
             bottom: 'unset !important',
             position: 'absolute',
             width: 'max-content',
-            borderRadius: '.25rem',
             overflowY: 'auto',
             pointerEvents: 'none',
-            filter: `drop-shadow(2px 2px 4px ${$COLORS.norms.$500 + '80'})`,
+            boxShadow: '0 .2rem .3rem .1rem ' + $COLORS.shade,
             animation: 'slidetop 200ms forwards reverse',
             "--slide": '100%',
             "&[expand]": {
@@ -434,18 +440,18 @@ const $ICONS = {
             cursor: 'pointer',
             justifyContent: 'center',
             alignItems: 'center',
-            zIndex: '1',
+            zIndex: 1,
             ".ripple": {
                 width: '100%',
                 height: '100%',
                 borderRadius: '50%',
-                background: '#1d1d1d70',
+                background: $COLORS.norms.$500 + 70,
                 transform: 'scale(0)',
                 position: 'absolute',
-                opacity: '1',
-                top: '0',
-                left: '0',
-                zIndex: '-1',
+                opacity: 1,
+                top: 0,
+                left: 0,
+                zIndex: -1,
                 "&.rippleEffect": {
                     animation: 'rippleDrop 500ms ease-in-out',
                 },
@@ -455,7 +461,7 @@ const $ICONS = {
             name: "rippleDrop",
             "100%": {
                 transform: 'scale(1.5)',
-                opacity: '0',
+                opacity: 0,
             },
         }],
     },
@@ -467,14 +473,14 @@ const $CHARTS = {
         ":host": {
             ...chartHost,
             "&([hollow]) #xo-slices": {
-                strokeWidth: '60',
+                strokeWidth: 60,
             },
         },
         "#xo-header": {...charthHeader },
         "#xo-container": {...chartContainer, borderRadius: '50%', overflow: 'hidden' },
         "#xo-slices": {
             fill: 'none',
-            strokeWidth: '200',
+            strokeWidth: 200,
             cursor: 'pointer',
         },
         "#xo-tooltip": {...chartTip },
@@ -488,47 +494,47 @@ const $CHARTS = {
             },
             "&([theme=\"water\"])": {
                 "#xo-dots": {
-                    fill: $COLORS.water.$900,
+                    fill: $COLORS.water.$500,
                 },
                 "#xo-area": {
-                    fill: $COLORS.water.$500 + '50',
-                    stroke: $COLORS.water.$900,
+                    fill: $COLORS.water.$500 + 70,
+                    stroke: $COLORS.water.$500,
                 },
             },
             "&([theme=\"flame\"])": {
                 "#xo-dots": {
-                    fill: $COLORS.flame.$900,
+                    fill: $COLORS.flame.$500,
                 },
                 "#xo-area": {
-                    fill: $COLORS.flame.$500 + '50',
-                    stroke: $COLORS.flame.$900,
+                    fill: $COLORS.flame.$500 + 70,
+                    stroke: $COLORS.flame.$500,
                 },
             },
             "&([theme=\"earth\"])": {
                 "#xo-dots": {
-                    fill: $COLORS.earth.$900,
+                    fill: $COLORS.earth.$500,
                 },
                 "#xo-area": {
-                    fill: $COLORS.earth.$500 + '50',
-                    stroke: $COLORS.earth.$900,
+                    fill: $COLORS.earth.$500 + 70,
+                    stroke: $COLORS.earth.$500,
                 },
             },
             "&([theme=\"woods\"])": {
                 "#xo-dots": {
-                    fill: $COLORS.woods.$900,
+                    fill: $COLORS.woods.$500,
                 },
                 "#xo-area": {
-                    fill: $COLORS.woods.$500 + '50',
-                    stroke: $COLORS.woods.$900,
+                    fill: $COLORS.woods.$500 + 70,
+                    stroke: $COLORS.woods.$500,
                 },
             },
             "&([theme=\"metal\"])": {
                 "#xo-dots": {
-                    fill: $COLORS.metal.$900,
+                    fill: $COLORS.metal.$500,
                 },
                 "#xo-area": {
-                    fill: $COLORS.metal.$500 + '50',
-                    stroke: $COLORS.metal.$900,
+                    fill: $COLORS.metal.$500 + 70,
+                    stroke: $COLORS.metal.$500,
                 },
             },
         },
@@ -536,21 +542,21 @@ const $CHARTS = {
         "#xo-container": {...chartContainer, height: 'unset', "svg": { transform: 'unset', } },
         "#xo-grid": {
             stroke: $COLORS.norms.$500,
-            strokeWidth: '.5',
+            strokeWidth: .5,
             strokeLinecap: "round",
-            fill: "#fff",
+            fill: $COLORS.norms.$100,
         },
         "#xo-dots": {
-            r: '8',
+            r: 8,
             cursor: 'pointer',
-            fill: $COLORS.base.$900,
+            fill: $COLORS.base.$500,
         },
         "#xo-area": {
             display: 'none',
-            strokeWidth: '2',
+            strokeWidth: 2,
             strokeLinecap: "round",
-            fill: $COLORS.base.$500 + '50',
-            stroke: $COLORS.base.$900,
+            fill: $COLORS.base.$500 + 70,
+            stroke: $COLORS.base.$500,
         },
         "#xo-tooltip": {...chartTip },
     },
@@ -573,72 +579,87 @@ const $CHARTS = {
             },
             "&([theme=\"water\"])": {
                 "#xo-dots": {
-                    fill: $COLORS.water.$900,
+                    fill: $COLORS.water.$500,
                 },
                 "#xo-bars": {
-                    stroke: $COLORS.water.$900,
+                    stroke: $COLORS.water.$500,
                 },
-                " #xo-line": {
-                    stroke: $COLORS.water.$900,
+                "#xo-line": {
+                    stroke: $COLORS.water.$500,
                 },
                 "#xo-area": {
-                    fill: $COLORS.water.$900 + '50',
+                    fill: $COLORS.water.$500 + 70,
+                },
+                "#xo-ref": {
+                    stroke: $COLORS.water.$900,
                 },
             },
             "&([theme=\"flame\"])": {
                 "#xo-dots": {
-                    fill: $COLORS.flame.$900,
+                    fill: $COLORS.flame.$500,
                 },
                 "#xo-bars": {
-                    stroke: $COLORS.flame.$900,
+                    stroke: $COLORS.flame.$500,
                 },
-                " #xo-line": {
-                    stroke: $COLORS.flame.$900,
+                "#xo-line": {
+                    stroke: $COLORS.flame.$500,
                 },
                 "#xo-area": {
-                    fill: $COLORS.flame.$900 + '50',
+                    fill: $COLORS.flame.$500 + 70,
+                },
+                "#xo-ref": {
+                    stroke: $COLORS.flame.$900,
                 },
             },
             "&([theme=\"earth\"])": {
                 "#xo-dots": {
-                    fill: $COLORS.earth.$900,
+                    fill: $COLORS.earth.$500,
                 },
                 "#xo-bars": {
-                    stroke: $COLORS.earth.$900,
+                    stroke: $COLORS.earth.$500,
                 },
-                " #xo-line": {
-                    stroke: $COLORS.earth.$900,
+                "#xo-line": {
+                    stroke: $COLORS.earth.$500,
                 },
                 "#xo-area": {
-                    fill: $COLORS.earth.$900 + '50',
+                    fill: $COLORS.earth.$500 + 70,
+                },
+                "#xo-ref": {
+                    stroke: $COLORS.earth.$900,
                 },
             },
             "&([theme=\"woods\"])": {
                 "#xo-dots": {
-                    fill: $COLORS.woods.$900,
+                    fill: $COLORS.woods.$500,
                 },
                 "#xo-bars": {
-                    stroke: $COLORS.woods.$900,
+                    stroke: $COLORS.woods.$500,
                 },
-                " #xo-line": {
-                    stroke: $COLORS.woods.$900,
+                "#xo-line": {
+                    stroke: $COLORS.woods.$500,
                 },
                 "#xo-area": {
-                    fill: $COLORS.woods.$900 + '50',
+                    fill: $COLORS.woods.$500 + 70,
+                },
+                "#xo-ref": {
+                    stroke: $COLORS.woods.$900,
                 },
             },
             "&([theme=\"metal\"])": {
                 "#xo-dots": {
-                    fill: $COLORS.metal.$900,
+                    fill: $COLORS.metal.$500,
                 },
                 "#xo-bars": {
-                    stroke: $COLORS.metal.$900,
+                    stroke: $COLORS.metal.$500,
                 },
-                " #xo-line": {
-                    stroke: $COLORS.metal.$900,
+                "#xo-line": {
+                    stroke: $COLORS.metal.$500,
                 },
                 "#xo-area": {
-                    fill: $COLORS.metal.$900 + '50',
+                    fill: $COLORS.metal.$500 + 70,
+                },
+                "#xo-ref": {
+                    stroke: $COLORS.metal.$900,
                 },
             },
         },
@@ -654,9 +675,9 @@ const $CHARTS = {
         },
         "#xo-grid": {
             stroke: $COLORS.base.$100,
-            strokeWidth: '1',
+            strokeWidth: 1,
             strokeLinecap: "round",
-            strokeDasharray: '2'
+            strokeDasharray: 2,
         },
         "#xo-legendVert": {
             stroke: $COLORS.norms.$500,
@@ -674,34 +695,41 @@ const $CHARTS = {
             alignItems: 'center',
             justifyContent: 'center',
             textAlign: 'center',
-            padding: '0 10px',
+            padding: [0, 10],
         },
         "#xo-hover": {
-            opacity: '0',
-            stroke: "#fff",
+            opacity: 0,
+            stroke: $FOCUSCOLOR,
+        },
+        "#xo-ref": {
+            stroke: $COLORS.base.$900,
+            strokeDasharray: 10,
+            strokeLinecap: 'round',
+            strokeWidth: 4,
+            opacity: 0,
         },
         "#xo-dots": {
             display: 'none',
             cursor: 'pointer',
-            r: '8',
-            fill: $COLORS.base.$900,
+            r: 8,
+            fill: $COLORS.base.$500,
         },
         "#xo-bars": {
             display: 'none',
-            strokeWidth: '40',
+            strokeWidth: 40,
             cursor: 'pointer',
-            stroke: $COLORS.base.$900,
+            stroke: $COLORS.base.$500,
         },
-        " #xo-line": {
+        "#xo-line": {
             display: 'none',
-            stroke: $COLORS.base.$900,
+            stroke: $COLORS.base.$500,
             fill: "transparent",
-            strokeWidth: '5',
+            strokeWidth: 5,
             strokeLinecap: "round",
         },
         "#xo-area": {
             display: 'none',
-            fill: $COLORS.base.$900 + '50',
+            fill: $COLORS.base.$500 + 70,
             strokeLinecap: "round",
         },
         "#xo-tooltip": {...chartTip },
@@ -790,7 +818,7 @@ const $COMPONENTS = {
             display: 'flex',
             color: $COLORS.norms.$500,
             overflow: 'hidden',
-            padding: '.6rem 1rem',
+            padding: [.6, 1, 'rem'],
             fontSize: '22px',
             position: 'relative',
             alignItems: 'center',
@@ -799,7 +827,7 @@ const $COMPONENTS = {
             backgroundColor: $COLORS.base.$500,
         },
         "#xo-icon": {
-            padding: '0',
+            padding: 0,
             border: 'unset',
             background: 'unset',
             width: '20px',
@@ -822,12 +850,12 @@ const $COMPONENTS = {
             },
         },
         "#xo-content": {
-            height: '0',
+            height: 0,
             overflow: 'hidden',
             p: {
                 fontSize: '18px',
                 padding: '1rem',
-                margin: '0px',
+                margin: 0,
             },
         },
         keyFrames: [{
@@ -841,7 +869,7 @@ const $COMPONENTS = {
         }, {
             name: "slide",
             "0%": {
-                height: '0',
+                height: 0,
             },
             "100%": {
                 height: 'var(--height)',
@@ -913,7 +941,7 @@ const $COMPONENTS = {
             position: 'relative',
             boxSizing: 'border-box',
             textTransform: 'capitalize',
-            padding: '.6rem .6rem .6rem 1rem',
+            padding: [.6, .6, .6, 1, 'rem'],
             overflow: 'hidden',
             fontSize: '18px',
             borderRadius: '.5rem',
@@ -927,13 +955,13 @@ const $COMPONENTS = {
             color: $COLORS.base.$900,
             justifyContent: 'space-between',
             div: {
-                flex: '1',
+                flex: 1,
                 display: 'flex',
             },
         },
         "#xo-icon": {
-            order: '2',
-            padding: '0',
+            order: 2,
+            padding: 0,
             border: 'unset',
             background: 'unset',
             width: '16px',
@@ -976,14 +1004,14 @@ const $COMPONENTS = {
             height: '42px',
         },
         "#xo-container": {
-            padding: '0 10px',
+            padding: [0, 10],
             borderRadius: '.5rem',
             width: '100%',
             gap: '5px',
             display: 'flex',
             alignItems: 'center',
             position: 'relative',
-            backgroundColor: $COLORS.norms.$500 + '50',
+            backgroundColor: $COLORS.shade,
         },
         "#xo-btn": {
             width: '24px',
@@ -991,7 +1019,7 @@ const $COMPONENTS = {
             background: 'unset',
             border: 'unset',
             display: 'flex',
-            padding: '0',
+            padding: 0,
             "&:hover": {
                 cursor: 'pointer',
                 filter: 'none',
@@ -1011,7 +1039,7 @@ const $COMPONENTS = {
             display: 'flex',
             alignItems: 'center',
             fontSize: '12px',
-            fontWeight: '500',
+            fontWeight: 500,
             color: "var(--back)",
             fontFamily: 'Segoe UI, sans-serif',
         },
@@ -1050,7 +1078,7 @@ const $COMPONENTS = {
         },
         "section": {
             "&:nth-child(3)": {
-                flex: '1',
+                flex: 1,
                 display: 'flex',
                 alignItems: 'center',
             },
@@ -1058,7 +1086,7 @@ const $COMPONENTS = {
                 position: 'absolute',
                 top: '50%',
                 padding: '10px',
-                backgroundColor: $COLORS.norms.$500 + '50',
+                backgroundColor: $COLORS.shade,
                 display: 'flex',
                 transformOrigin: 'right',
                 transition: 'transform 200ms ease-in-out',
@@ -1161,7 +1189,7 @@ const $COMPONENTS = {
             boxSizing: 'border-box',
             width: '100%',
             height: '100%',
-            padding: '.6rem 1rem',
+            padding: [.6, 1, 'rem'],
             overflow: 'hidden',
             flexWrap: 'wrap',
             borderRadius: '.5rem',
@@ -1173,7 +1201,7 @@ const $COMPONENTS = {
             position: 'relative',
             gap: '.5rem',
             "&:hover": {
-                filter: `drop-shadow(0 0 3px ${$COLORS.norms.$500 + '80'})`,
+                filter: `drop-shadow(0 0 3px ${$COLORS.shade})`,
             },
         },
         "#xo-icon": {
@@ -1188,12 +1216,12 @@ const $COMPONENTS = {
             color: $COLORS.norms.$100,
         },
         "#xo-label": {
-            flex: '1',
+            flex: 1,
             display: 'block',
             fontSize: '24px',
-            fontWeight: '600',
+            fontWeight: 600,
             textAlign: 'center',
-            width: '0',
+            width: 0,
             minWidth: 'max-content',
             textTransform: 'capitalize',
         },
@@ -1295,8 +1323,8 @@ const $COMPONENTS = {
             borderColor: $COLORS.norms.$500,
             position: 'relative',
             fontSize: '20px',
-            fontWeight: '700',
-            padding: '.6rem .6rem .6rem 1rem',
+            fontWeight: 700,
+            padding: [.6, .6, .6, 1, 'rem'],
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
@@ -1305,7 +1333,7 @@ const $COMPONENTS = {
         "#xo-icon": {
             border: 'unset',
             backgroundColor: 'unset',
-            padding: '0',
+            padding: 0,
             width: '16px',
             height: '16px',
             cursor: 'pointer',
@@ -1335,16 +1363,16 @@ const $COMPONENTS = {
             display: 'inline-block',
             "&([full])": {
                 position: 'fixed',
-                inset: '0',
-                zIndex: '100',
+                inset: 0,
+                zIndex: 100,
                 "#xo-container": {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     width: '100%',
                     height: '100%',
-                    backgroundColor: $COLORS.norms.$500 + 'bb',
-                    zIndex: '10000000',
+                    backgroundColor: $COLORS.shade,
+                    zIndex: 9999,
                 },
             },
             "&([theme=\"water\"]) #xo-circle": {
@@ -1395,10 +1423,10 @@ const $COMPONENTS = {
             display: 'block',
         },
         "#xo-circle": {
-            r: '8',
-            cx: '10',
-            cy: '10',
-            strokeWidth: '2',
+            r: 8,
+            cx: 10,
+            cy: 10,
+            strokeWidth: 2,
             fill: "transparent",
             strokeLinecap: "round",
             strokeDasharray: "calc(100 * 50.2 / 100) 50.2",
@@ -1413,8 +1441,8 @@ const $COMPONENTS = {
     $ModalComponent: {
         ...$BASE,
         ":host": {
-            width: '0',
-            height: '0',
+            width: 0,
+            height: 0,
             "&([theme=\"top\"]) #xo-content": {
                 animation: 'top 200ms forwards',
             },
@@ -1442,14 +1470,14 @@ const $COMPONENTS = {
         },
         "#xo-container": {
             position: 'fixed',
-            top: '0',
-            left: '0',
+            top: 0,
+            left: 0,
             width: '100%',
             height: '100vh',
-            opacity: '1',
-            backgroundColor: $COLORS.norms.$500 + 'bb',
+            opacity: 1,
+            backgroundColor: $COLORS.shade,
             pointerEvents: 'all',
-            zIndex: '10000',
+            zIndex: 9999,
             animation: 'opacity 200ms forwards',
             "&[shrink]": {
                 animation: 'opacity 200ms forwards reverse',
@@ -1458,7 +1486,6 @@ const $COMPONENTS = {
         },
         "#xo-icon": {
             background: 'unset',
-            padding: 'unset',
             padding: 'unset',
             border: 'unset',
             display: 'flex',
@@ -1497,10 +1524,10 @@ const $COMPONENTS = {
         keyFrames: [{
             name: "opacity",
             "0%": {
-                opacity: '0',
+                opacity: 0,
             },
             "100%": {
-                opacity: '1',
+                opacity: 1,
             },
         }, {
             name: "center",
@@ -1622,7 +1649,7 @@ const $COMPONENTS = {
             width: "100%",
             maxWidth: "1200px",
             display: "flex",
-            padding: '.6rem 1rem',
+            padding: [.6, 1, 'rem'],
             flexWrap: 'wrap',
             margin: 'auto',
             minHeight: '56px',
@@ -1661,11 +1688,11 @@ const $COMPONENTS = {
         },
         "#xo-back": {
             position: 'fixed',
-            opacity: '0',
+            opacity: 0,
             pointerEvents: 'none',
-            inset: '0',
-            backgroundColor: $COLORS.norms.$500 + "80",
-            zIndex: '9999',
+            inset: 0,
+            backgroundColor: $COLORS.shade,
+            zIndex: 9999,
         },
         "#xo-items": {
             width: '200px',
@@ -1673,11 +1700,11 @@ const $COMPONENTS = {
             pointerEvents: 'none',
             flexDirection: 'column',
             position: 'fixed',
-            top: '0',
+            top: 0,
             left: '-100%',
-            bottom: '0',
+            bottom: 0,
             overflow: 'auto',
-            zIndex: '9999',
+            zIndex: 9999,
         },
         mediaQueries: [{
             condition: "min-width: 768px",
@@ -1701,9 +1728,9 @@ const $COMPONENTS = {
                 display: 'none',
             },
             "#xo-back": {
-                opacity: '0',
+                opacity: 0,
                 pointerEvents: 'none',
-                zIndex: '1',
+                zIndex: 1,
             },
             "#xo-items": {
                 pointerEvents: 'all',
@@ -1714,10 +1741,10 @@ const $COMPONENTS = {
                 minWidth: 'max-content',
                 flex: 'auto',
                 overflow: 'unset',
-                padding: '0',
+                padding: 0,
                 gap: '1rem',
                 justifyContent: 'flex-end',
-                zIndex: '1',
+                zIndex: 1,
             },
         }],
         keyFrames: [{
@@ -1731,10 +1758,10 @@ const $COMPONENTS = {
             }, {
                 name: "opacity",
                 "0%": {
-                    opacity: '0',
+                    opacity: 0,
                 },
                 "100%": {
-                    opacity: '1',
+                    opacity: 1,
                 },
             },
             {
@@ -1743,7 +1770,7 @@ const $COMPONENTS = {
                     left: '-200px',
                 },
                 "100%": {
-                    left: '0',
+                    left: 0,
                 },
             }
         ],
@@ -1793,11 +1820,11 @@ const $COMPONENTS = {
             display: "block",
             width: "100%",
             "#xo-container": {
-                padding: '.6rem 1rem',
+                padding: [.6, 1, 'rem'],
             },
             "&([active])": {
                 "#xo-container": {
-                    backgroundColor: $COLORS.norms.$500 + "60",
+                    backgroundColor: $COLORS.shade,
                 },
             },
             "&([to])": {
@@ -1808,7 +1835,7 @@ const $COMPONENTS = {
             "&([slot='brand'])": {
                 width: 'max-content',
                 "#xo-container": {
-                    padding: '0',
+                    padding: 0,
                     width: 'max-content',
                     backgroundColor: 'unset',
                     textDecoration: 'unset',
@@ -1826,7 +1853,7 @@ const $COMPONENTS = {
                 },
                 "#xo-label": {
                     fontSize: '1.8rem',
-                    fontWeight: '800',
+                    fontWeight: 800,
                     fontFamily: 'arial, sans-serif',
                 },
             },
@@ -1839,7 +1866,7 @@ const $COMPONENTS = {
             boxSizing: 'border-box',
             gap: '5px',
             "&:hover": {
-                backgroundColor: $COLORS.norms.$500 + "60",
+                backgroundColor: $COLORS.shade,
             },
             "&:focus": {
                 borderRadius: '.25rem',
@@ -1852,7 +1879,7 @@ const $COMPONENTS = {
         "#xo-label": {
             display: 'flex',
             alignItems: 'center',
-            lineHeight: '1',
+            lineHeight: 1,
             fontSize: '1.4rem',
             pointerEvents: 'none',
         },
@@ -1882,18 +1909,18 @@ const $COMPONENTS = {
                 width: 'max-content',
                 "#xo-container": {
                     transition: 'padding 200ms ease-in-out',
-                    padding: '0',
+                    padding: 0,
                 },
                 "&([active])": {
                     "#xo-container": {
-                        backgroundColor: $COLORS.norms.$500 + "60",
-                        padding: '.25rem 1rem',
+                        backgroundColor: $COLORS.shade,
+                        padding: [.25, 1, 'rem'],
                         borderRadius: '9999px',
                     },
                 },
                 "&([slot='brand'])": {
                     "#xo-container": {
-                        padding: '0',
+                        padding: 0,
                         backgroundColor: 'unset',
                         "&:focus": {
                             borderRadius: '.25rem',
@@ -1907,8 +1934,8 @@ const $COMPONENTS = {
             },
             "#xo-container": {
                 "&:hover, &:focus": {
-                    backgroundColor: $COLORS.norms.$500 + "60",
-                    padding: '.25rem 1rem',
+                    backgroundColor: $COLORS.shade,
+                    padding: [.25, 1, 'rem'],
                     borderRadius: '9999px',
                 },
                 "&:focus": {
@@ -1954,14 +1981,14 @@ const $COMPONENTS = {
             transform: 'translateX(-50%)',
             display: 'flex',
             justifyContent: 'center',
-            backgroundColor: $COLORS.norms.$500 + "80",
-            padding: '5px 3px',
+            backgroundColor: $COLORS.shade,
+            padding: [5, 3],
             borderRadius: '5px',
             maxWidth: "calc(100% - 20px)",
             gap: '.5rem',
             alignItems: 'center',
             div: {
-                flex: '1',
+                flex: 1,
                 display: 'flex',
                 gap: '5px',
                 justifyContent: 'center',
@@ -1993,31 +2020,31 @@ const $COMPONENTS = {
             "&:hover": {
                 cursor: 'pointer',
                 "&::after": {
-                    backgroundColor: $COLORS.norms.$500 + '50',
+                    backgroundColor: $COLORS.shade,
                 },
                 "&::before": {
-                    backgroundColor: $COLORS.norms.$500 + '50',
+                    backgroundColor: $COLORS.shade,
                 },
             },
             "&:focus": {
                 cursor: 'pointer',
                 "&::after": {
-                    backgroundColor: $COLORS.norms.$500 + '50',
+                    backgroundColor: $COLORS.shade,
                 },
                 "&::before": {
-                    backgroundColor: $COLORS.norms.$500 + '50',
+                    backgroundColor: $COLORS.shade,
                 },
             },
         },
         ".arrows#xo-arrowLeft": {
             "&::after": {
-                bottom: '0',
+                bottom: 0,
                 left: '50%',
                 transformOrigin: 'right',
                 transform: 'translateX(-50%) rotate(45deg)',
             },
             "&::before": {
-                top: '0',
+                top: 0,
                 left: '50%',
                 transformOrigin: 'right',
                 transform: 'translateX(-50%) rotate(-45deg)',
@@ -2025,13 +2052,13 @@ const $COMPONENTS = {
         },
         ".arrows#xo-arrowRight": {
             "&::after": {
-                bottom: '0',
+                bottom: 0,
                 left: '50%',
                 transformOrigin: 'left',
                 transform: 'translateX(-50%) rotate(-45deg)',
             },
             "&::before": {
-                top: '0',
+                top: 0,
                 left: '50%',
                 transformOrigin: 'left',
                 transform: 'translateX(-50%) rotate(45deg)',
@@ -2049,11 +2076,11 @@ const $COMPONENTS = {
             "&:hover": {
                 width: '24px',
                 cursor: 'pointer',
-                backgroundColor: $COLORS.norms.$500 + '50',
+                backgroundColor: $COLORS.shade,
             },
             "&:focus": {
                 width: '24px',
-                backgroundColor: $COLORS.norms.$500 + '50',
+                backgroundColor: $COLORS.shade,
             },
             "&[active]": {
                 width: '24px',
@@ -2066,7 +2093,7 @@ const $COMPONENTS = {
         ":host": {
             display: 'block',
             boxSizing: 'content-box',
-            flexShrink: '0',
+            flexShrink: 0,
             width: '100%',
             "&([active])  #xo-container, &([active='true'])  #xo-container": {
                 pointerEvents: 'all',
@@ -2076,13 +2103,13 @@ const $COMPONENTS = {
             },
         },
         "#xo-container": {
-            flexShrink: '0',
+            flexShrink: 0,
             width: '100%',
             height: '100%',
             backgroundPosition: 'center',
             backgroundRepeat: "no-repeat",
             backgroundSize: "contain",
-            backgroundColor: '#1d1d1d',
+            backgroundColor: $COLORS.norms.$500,
             pointerEvents: 'none',
         },
     },
@@ -2100,12 +2127,12 @@ const $FIELDS = {
                 borderRadius: '100px',
             },
             "&([flatted]) #xo-container": {
-                borderRadius: '0',
+                borderRadius: 0,
             },
             "&([disabled])": {
                 pointerEvents: 'none',
                 "#xo-container": {
-                    opacity: '.5',
+                    opacity: .5,
                     "&:hover": {
                         cursor: 'no-drop',
                     },
@@ -2120,12 +2147,12 @@ const $FIELDS = {
                 backgroundColor: "transparent",
                 color: $COLORS.norms.$500,
                 "&:hover": {
-                    boxShadow: `0 0 5px ${$COLORS.norms.$500 + '80'}`,
+                    boxShadow: `0 0 5px ${$COLORS.shade}`,
                     backgroundColor: $COLORS.base.$500,
                     color: $COLORS.norms.$500,
                 },
                 "&:active": {
-                    boxShadow: `inset 0 0 5px ${$COLORS.norms.$500 + '80'}`,
+                    boxShadow: `inset 0 0 5px ${$COLORS.shade}`,
                     cursor: 'context-menu',
                 },
             },
@@ -2223,7 +2250,7 @@ const $FIELDS = {
             color: $COLORS.norms.$500,
             fontSize: '20px',
             overflow: 'hidden',
-            padding: '5px 20px',
+            padding: [5, 20],
             position: 'relative',
             borderRadius: '.5rem',
             alignItems: 'center',
@@ -2237,7 +2264,7 @@ const $FIELDS = {
             gap: '5px',
             outline: 'none',
             "&:hover": {
-                boxShadow: `0 0 5px ${$COLORS.norms.$500 + '80'}`,
+                boxShadow: `0 0 5px ${$COLORS.shade}`,
                 cursor: 'context-menu',
             },
             "&:focus": {
@@ -2248,7 +2275,7 @@ const $FIELDS = {
                 outlineOffset: '-1px',
             },
             "&:active": {
-                boxShadow: `inset 0 0 5px ${$COLORS.norms.$500 + '80'}`,
+                boxShadow: `inset 0 0 5px ${$COLORS.shade}`,
                 cursor: 'context-menu',
             },
         },
@@ -2256,7 +2283,7 @@ const $FIELDS = {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            lineHeight: '0px',
+            lineHeight: 0,
             gap: '5px',
         },
     },
@@ -2389,17 +2416,17 @@ const $FIELDS = {
             main: {
                 display: 'grid',
                 gridTemplateColumns: "repeat(7, 3.287em)",
-                margin: '0 5px 5px 5px',
+                margin: [0, 5, 5, 5],
             },
         },
         "#xo-title": {
-            margin: '0',
+            margin: 0,
             fontSize: '20px',
-            flexGrow: '1',
+            flexGrow: 1,
             textAlign: 'center',
         },
         "#xo-controll": {
-            padding: '0',
+            padding: 0,
             border: 'unset',
             background: 'unset',
             display: 'flex',
@@ -2422,12 +2449,12 @@ const $FIELDS = {
             display: 'grid',
             gridTemplateColumns: "repeat(7, 3.287em)",
             gridColumn: "1/8",
-            margin: '5px 0',
+            margin: [5, 0],
         },
         "#xo-weekDay": {
             gridColumn: "span 1",
             textAlign: 'center',
-            margin: '0',
+            margin: 0,
             fontSize: '16px',
             fontWeight: "bolder",
         },
@@ -2435,9 +2462,9 @@ const $FIELDS = {
             gridColumn: "span 1",
             textAlign: 'center',
             border: 'unset',
-            padding: '5px 0',
+            padding: [5, 0],
             background: 'unset',
-            fontWeight: '700',
+            fontWeight: 700,
             fontSize: '14px',
             outline: 'none',
             "&:hover": {
@@ -2449,7 +2476,7 @@ const $FIELDS = {
                 backgroundColor: $COLORS.base.$100,
             },
             "&[off]": {
-                opacity: '0',
+                opacity: 0,
                 pointerEvents: 'none',
             },
             "&[on]": {
@@ -2502,7 +2529,7 @@ const $FIELDS = {
             "&:hover": {
                 cursor: 'pointer',
                 filter: 'none',
-                opacity: '.8',
+                opacity: .8,
             },
             "&:focus": {
                 outlineWidth: '2px',
@@ -2510,7 +2537,7 @@ const $FIELDS = {
                 outlineColor: $COLORS.norms.$500,
             },
             "&:nth-child(9)": {
-                margin: '3px 0',
+                margin: [3, 0],
             }
         },
         "#xo-info": {...info },
@@ -2565,16 +2592,16 @@ const $FIELDS = {
             div: {
                 display: 'flex',
                 gap: '10px',
-                flex: '1',
+                flex: 1,
                 alignItems: 'center',
                 span: {
                     textOverflow: 'ellipsis',
                     whiteSpace: 'nowrap',
                     overflow: 'hidden',
-                    flex: '1',
-                    width: '0',
+                    flex: 1,
+                    width: 0,
                     fontSize: '18px',
-                    fontWeight: '500',
+                    fontWeight: 500,
                 },
             },
             button: {
@@ -2586,14 +2613,14 @@ const $FIELDS = {
                 textDecoration: 'unset',
                 backgroundColor: 'unset',
                 border: 'unset',
-                padding: '0',
+                padding: 0,
                 position: 'relative',
                 cursor: 'pointer',
                 "&::before": {
                     content: "''",
                     position: 'absolute',
                     top: '50%',
-                    left: '0',
+                    left: 0,
                     width: '100%',
                     height: '4px',
                     backgroundColor: $COLORS.norms.$500,
@@ -2603,7 +2630,7 @@ const $FIELDS = {
                     content: "''",
                     position: 'absolute',
                     top: '50%',
-                    left: '0',
+                    left: 0,
                     width: '100%',
                     height: '4px',
                     backgroundColor: $COLORS.norms.$500,
@@ -2664,7 +2691,7 @@ const $FIELDS = {
             "&([disabled])": {
                 "#xo-icon": {
                     cursor: 'none',
-                    opacity: '.5',
+                    opacity: .5,
                 }
             },
             "&([theme=\"water\"]) #xo-icon.active svg": {
@@ -2831,7 +2858,7 @@ const $FIELDS = {
             padding: '7px',
             borderRadius: '.5rem',
             boxSizing: 'border-box',
-            background: $COLORS.norms.$100 + '80',
+            background: $COLORS.norms.$100 + 80,
             "&:focus": {
                 outlineWidth: '2px',
                 outlineStyle: 'solid',
@@ -2841,9 +2868,9 @@ const $FIELDS = {
                 cursor: 'pointer',
             },
             "&[data-code]": {
-                fontWeight: '900',
+                fontWeight: 900,
                 fontSize: '18px',
-                lineHeight: '0',
+                lineHeight: 0,
             },
             svg: {
                 width: '100%',
@@ -2865,7 +2892,7 @@ const $FIELDS = {
             padding: '10px',
             display: 'flex',
             width: '350px',
-            zIndex: '2',
+            zIndex: 2,
             gap: '10px',
             top: '50%',
             left: '50%',
@@ -2882,16 +2909,16 @@ const $FIELDS = {
             },
             p: {
                 width: '100%',
-                margin: '0 0 5px 0',
+                margin: [0, 0, 5, 0],
             },
             h3: {
                 width: '100%',
                 fontSize: '14px',
-                margin: '0 0 10px 0',
+                margin: [0, 0, 10, 0],
             },
             input: {
                 width: '100%',
-                padding: '5px 10px',
+                padding: [5, 10],
                 fontSize: '18px',
                 borderWidth: '1px',
                 borderStyle: 'solid',
@@ -2906,7 +2933,7 @@ const $FIELDS = {
             width: '19px',
             height: '19px',
             "&:hover": {
-                opacity: '.5',
+                opacity: .5,
             },
             "&:focus": {
                 outlineWidth: '2px',
@@ -2920,7 +2947,7 @@ const $FIELDS = {
             fontSize: '30px',
             color: '#fff',
             backgroundColor: $COLORS.woods.$500,
-            padding: '0 10px',
+            padding: [0, 10],
             borderRadius: '.5rem',
             "&:focus": {
                 outlineWidth: '2px',
@@ -2936,7 +2963,7 @@ const $FIELDS = {
         },
         "#xo-content": {
             boxSizing: 'border-box',
-            padding: '10px 15px',
+            padding: [10, 15],
             resize: 'vertical',
             minHeight: '300px',
             height: '100%',
@@ -2971,9 +2998,9 @@ const $FIELDS = {
         ".edit": {
             background: $COLORS.norms.$500,
             position: "absolute",
-            inset: "0",
+            inset: 0,
             userSelect: "none",
-            padding: "10px 15px",
+            padding: [10, 15],
             color: "#eeeeee",
             fontSize: "20px",
             display: "none",
@@ -3045,7 +3072,7 @@ const $FIELDS = {
         },
         "#xo-search": {
             width: "calc(100% - 10px)",
-            padding: '9px 10px',
+            padding: [9, 10],
             fontSize: '18px',
             borderWidth: '1px',
             borderStyle: 'solid',
@@ -3155,7 +3182,7 @@ const $FIELDS = {
         "#xo-container": {
             display: 'flex',
             textDecoration: 'unset',
-            padding: '4px 12px',
+            padding: [4, 12],
             fontSize: '26px',
             color: $COLORS.norms.$500,
             width: '100%',
@@ -3178,12 +3205,12 @@ const $FIELDS = {
             width: 'max-content',
             height: '42px',
             "&([disabled]) #xo-trigger": {
-                opacity: '.5',
+                opacity: .5,
                 cursor: 'default',
                 "&::before": { cursor: 'default', },
             },
             "&([checked])": {
-                opacity: '1',
+                opacity: 1,
                 "#xo-trigger": {
                     backgroundColor: $COLORS.base.$900,
                     "&::before": {
@@ -3201,9 +3228,9 @@ const $FIELDS = {
             },
             "&([flatted])": {
                 "#xo-trigger": {
-                    borderRadius: '0px',
+                    borderRadius: 0,
                     "&::before": {
-                        borderRadius: '0px',
+                        borderRadius: 0,
                     },
                 },
             },
@@ -3321,7 +3348,7 @@ const $FIELDS = {
             ...host
         },
         "#xo-container": {...container },
-        "#xo-text": {...text, paddingTop: '17px', lineHeight: '1.2', height: '36px' },
+        "#xo-text": {...text, paddingTop: '17px', lineHeight: 1.2, height: '36px' },
         "#xo-text::-webkit-scrollbar": { display: 'none', },
         "#xo-label": {...label },
         "#xo-info": {...info },
@@ -3401,7 +3428,7 @@ const $FIELDS = {
             alignItems: 'center',
             justifyContent: 'center',
             gap: '6px',
-            margin: '10px 0',
+            margin: [10, 0],
         },
         "#xo-controll": {
             display: 'flex',
@@ -3426,9 +3453,9 @@ const $FIELDS = {
         "#xo-time": {
             display: 'flex',
             fontSize: '22px',
-            fontWeight: '700',
+            fontWeight: 700,
             backgroundColor: $COLORS.base.$100,
-            padding: '6px 14px',
+            padding: [6, 14],
             borderRadius: '.5rem',
             textAlign: 'center',
             alignItems: 'center',
@@ -3436,12 +3463,11 @@ const $FIELDS = {
         },
         "#xo-period": {
             display: 'flex',
-            padding: 'unset',
             border: 'unset',
             background: 'unset',
             cursor: 'pointer',
             fontSize: '16px',
-            padding: '5px 10px',
+            padding: [5, 10],
             borderRadius: '.5rem',
             fontWeight: 'bolder',
             "&[active]": {
@@ -3462,7 +3488,7 @@ const $UI = {
         ":host": {
             width: '100%',
             display: 'block',
-            boxShadow: '0 0.3rem 0.3rem -0.1rem #1D1D1D30',
+            boxShadow: '0 .3rem .3rem -.1rem ' + $COLORS.shade,
             backgroundColor: $COLORS.base.$500,
             "&([theme=": {
                 "&\"water\"])": {
@@ -3533,7 +3559,7 @@ const $UI = {
             },
             "&([shade=\"1\"]), &([theme=\"water\"]), &([theme=\"flame\"]), &([theme=\"woods\"]), &([theme=\"metal\"])": {
                 "*": {
-                    color: '#FFFFFF',
+                    color: $COLORS.norms.$100,
                 },
             },
             "&([shade=": {
@@ -3574,7 +3600,7 @@ const $UI = {
             },
         },
         "#xo-container": {
-            padding: '.5rem 1rem',
+            padding: [.5, 1, 'rem'],
             display: 'flex',
             maxWidth: '1200px',
             minHeight: '1rem',

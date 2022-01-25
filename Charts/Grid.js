@@ -81,7 +81,8 @@ function __chart__(self) {
         g6 = __node__('g'),
         g7 = __node__('g'),
         g8 = __node__('g'),
-        g9 = __node__('g');
+        g9 = __node__('g'),
+        g10 = __node__('g');
 
     svg.setAttribute("viewBox", `0 0 ${size.width} ${size.height}`);
 
@@ -203,9 +204,18 @@ function __chart__(self) {
                 id: "xo-hover",
                 'stroke-width': `calc((100% / ${data.length}) - 10px)`,
                 "data-value": `<strong>${data[i].label}</strong><br/><em>${data[i].value}</em>`,
+            }),
+            line3 = __node__("line", {
+                x1: mv,
+                y1: 0,
+                x2: mv,
+                y2: nSize.height,
+                id: "xo-ref",
+                'stroke': `red`,
             });
         g2.appendChild(line);
         g9.appendChild(line2);
+        g10.appendChild(line3);
     };
 
     svg.appendChild(g1);
@@ -217,23 +227,26 @@ function __chart__(self) {
     svg.appendChild(g7);
     svg.appendChild(g8);
     svg.appendChild(g9);
+    svg.appendChild(g10);
 
     return svg.outerHTML;
 }
 
 function __tooltip__(self) {
-    self.$.container.find("#xo-hover").forEach(e => {
+    self.$.container.find("#xo-hover").forEach((e, i) => {
         e.addEventListener("mousemove", _ => {
             self.$.tooltip.innerHTML = e.dataset.value;
             self.$.tooltip.style.left = _.x + "px";
             self.$.tooltip.style.top = _.y + "px";
             self.$.tooltip.style.display = "block";
+            self.$.container.find("#xo-ref")[i].css('opacity', .5);
             if (_.x < parseFloat(window.getComputedStyle(self.$.tooltip).width))
                 self.$.tooltip.classList.add("right");
             else
                 self.$.tooltip.classList.remove("right");
         });
         e.addEventListener("mouseout", () => {
+            self.$.container.find("#xo-ref")[i].css('opacity', 0);
             self.$.tooltip.style.display = "none";
         });
     })

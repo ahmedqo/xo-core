@@ -232,12 +232,17 @@ function __orgin(c) {
         let vals = c[name],
             t = "",
             s = "";
-        if (typeof vals === "string") all += `${__decamel(name)}:${vals};`;
-        else {
+        if (Array.isArray(vals)) {
+            all += __arr(vals, name);
+        } else if (typeof vals === "string") {
+            all += `${__decamel(name)}:${vals};`;
+        } else {
             for (let sub in vals) {
                 let subVals = vals[sub],
                     NAME = __decamel(sub);
-                if (typeof subVals !== "object") {
+                if (Array.isArray(subVals)) {
+                    t += __arr(subVals, NAME);
+                } else if (typeof subVals !== "object") {
                     t += `${NAME}:${subVals};`;
                 } else {
                     NAME.split(",").forEach((Name) => {
@@ -254,6 +259,31 @@ function __orgin(c) {
         }
     }
     return all;
+}
+
+function __arr(vals, name) {
+    let code;
+    switch (vals.length) {
+        case 2:
+            code = `${name}-top:${vals[0] == null ? "unset" : vals[0] + "px"};${name}-right:${vals[1] == null ? "unset" : vals[1] + "px"
+                };${name}-bottom:${vals[0] == null ? "unset" : vals[0] + "px"};${name}-left:${vals[1] == null ? "unset" : vals[1] + "px"}; `;
+            break;
+        case 3:
+            code = `${name}-top:${vals[0] == null ? "unset" : vals[0] + vals[2]};${name}-right:${vals[1] == null ? "unset" : vals[1] + vals[2]
+                };${name}-bottom:${vals[0] == null ? "unset" : vals[0] + vals[2]};${name}-left:${vals[1] == null ? "unset" : vals[1] + vals[2]
+                };`;
+            break;
+        case 4:
+            code = `${name}-top:${vals[0] == null ? "unset" : vals[0] + "px"};${name}-right:${vals[1] == null ? "unset" : vals[1] + "px"
+                };${name}-bottom:${vals[2] == null ? "unset" : vals[2] + "px"};${name}-left:${vals[3] == null ? "unset" : vals[3] + "px"};`;
+            break;
+        case 5:
+            code = `${name}-top:${vals[0] == null ? "unset" : vals[0] + vals[4]};${name}-right:${vals[1] == null ? "unset" : vals[1] + vals[4]
+                };${name}-bottom:${vals[2] == null ? "unset" : vals[2] + vals[4]};${name}-left:${vals[3] == null ? "unset" : vals[3] + vals[4]
+                };`;
+            break;
+    }
+    return code;
 }
 
 function __dom(E) {
