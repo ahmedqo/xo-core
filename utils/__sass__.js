@@ -136,7 +136,7 @@ const chartHost = {
     },
     chartContainer = {
         width: '100%',
-        margin: 'auto',
+        margin: ['auto', 'auto'],
         "svg": {
             borderRadius: '50%',
             transform: 'rotate(-90deg) scaleY(-1)',
@@ -250,7 +250,7 @@ const host = {
         width: '100%',
         height: '100%',
         minHeight: '42px',
-        paddingTop: '14px',
+        padding: [14, null, null, null],
         fontSize: '18px',
         boxSizing: 'border-box',
         color: $COLORS.norms.$500,
@@ -284,7 +284,7 @@ const host = {
         height: '20px',
         background: 'unset',
         border: 'unset',
-        padding: 'unset',
+        padding: [null, null],
         display: 'flex',
         animation: 'rotate 200ms forwards reverse',
         "&:hover": {
@@ -347,7 +347,7 @@ const host = {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        marginTop: '5px',
+        margin: [5, null, null, null],
         textTransform: 'capitalize',
         span: {
             display: 'block',
@@ -391,9 +391,11 @@ const host = {
         name: 'slidebottom',
         "0%": {
             bottom: '-100%',
+            opacity: 0,
         },
         "100%": {
             bottom: '-0%',
+            opacity: 1,
         },
     }, {
         name: 'slidetop',
@@ -827,7 +829,7 @@ const $COMPONENTS = {
             backgroundColor: $COLORS.base.$500,
         },
         "#xo-icon": {
-            padding: 0,
+            padding: [0, 0],
             border: 'unset',
             background: 'unset',
             width: '20px',
@@ -854,8 +856,8 @@ const $COMPONENTS = {
             overflow: 'hidden',
             p: {
                 fontSize: '18px',
-                padding: '1rem',
-                margin: 0,
+                padding: [1, 1, 'rem'],
+                margin: [0, 0],
             },
         },
         keyFrames: [{
@@ -961,7 +963,7 @@ const $COMPONENTS = {
         },
         "#xo-icon": {
             order: 2,
-            padding: 0,
+            padding: [0, 0],
             border: 'unset',
             background: 'unset',
             width: '16px',
@@ -989,8 +991,8 @@ const $COMPONENTS = {
             boxSizing: 'content-box',
             display: 'block',
             width: '100%',
-            padding: '1rem',
-            margin: 'auto',
+            padding: [1, 1, 'rem'],
+            margin: ['auto', 'auto'],
             maxWidth: '1200px',
         }
     },
@@ -1019,7 +1021,7 @@ const $COMPONENTS = {
             background: 'unset',
             border: 'unset',
             display: 'flex',
-            padding: 0,
+            padding: [0, 0],
             "&:hover": {
                 cursor: 'pointer',
                 filter: 'none',
@@ -1085,7 +1087,7 @@ const $COMPONENTS = {
             "&:last-child": {
                 position: 'absolute',
                 top: '50%',
-                padding: '10px',
+                padding: [10, 10],
                 backgroundColor: $COLORS.shade,
                 display: 'flex',
                 transformOrigin: 'right',
@@ -1243,7 +1245,7 @@ const $COMPONENTS = {
             width: '100%',
             "&([trigger=\"hidden\"])": {
                 "#xo-header": {
-                    paddingRight: '10px',
+                    padding: [null, 10, null, null],
                 },
                 "#xo-icon": {
                     display: 'none',
@@ -1333,7 +1335,7 @@ const $COMPONENTS = {
         "#xo-icon": {
             border: 'unset',
             backgroundColor: 'unset',
-            padding: 0,
+            padding: [0, 0],
             width: '16px',
             height: '16px',
             cursor: 'pointer',
@@ -1353,7 +1355,7 @@ const $COMPONENTS = {
             },
         },
         "#xo-content": {
-            padding: '1rem',
+            padding: [1, 1, 'rem'],
             fontSize: '18px',
         },
     },
@@ -1486,7 +1488,7 @@ const $COMPONENTS = {
         },
         "#xo-icon": {
             background: 'unset',
-            padding: 'unset',
+            padding: [null, null],
             border: 'unset',
             display: 'flex',
             cursor: 'pointer',
@@ -1651,7 +1653,7 @@ const $COMPONENTS = {
             display: "flex",
             padding: [.6, 1, 'rem'],
             flexWrap: 'wrap',
-            margin: 'auto',
+            margin: ['auto', 'auto'],
             minHeight: '56px',
             alignItems: 'center',
             justifyContent: 'space-between',
@@ -1735,13 +1737,13 @@ const $COMPONENTS = {
             "#xo-items": {
                 pointerEvents: 'all',
                 position: 'unset',
-                marginLeft: 'auto',
+                margin: [null, null, null, 'auto'],
                 flexDirection: 'row',
                 alignItems: 'center',
                 minWidth: 'max-content',
                 flex: 'auto',
                 overflow: 'unset',
-                padding: 0,
+                padding: [0, 0],
                 gap: '1rem',
                 justifyContent: 'flex-end',
                 zIndex: 1,
@@ -1779,43 +1781,37 @@ const $COMPONENTS = {
         ...$BASE,
         ":host": {
             "&([space=\"full\"])": {
-                margin: 'auto',
+                margin: ['auto', 'auto'],
             },
             "&([space=\"up\"])": {
-                marginTop: 'auto',
+                margin: ['auto', null, null, null],
             },
             "&([space=\"down\"])": {
-                marginBottom: 'auto',
+                margin: [null, null, 'auto', null],
             },
             "&([space=\"left\"])": {
-                marginLeft: 'auto',
+                margin: [null, null, null, 'auto'],
             },
             "&([space=\"right\"])": {
-                marginRight: 'auto',
+                margin: [null, 'auto', null, null],
             },
             "&([space=\"hors\"])": {
-                marginLeft: 'auto',
-                marginRight: 'auto',
+                margin: [null, 'auto', null, 'auto'],
             },
             "&([space=\"vert\"])": {
-                marginTop: 'auto',
-                marginBottom: 'auto',
+                margin: ['auto', null, 'auto', null],
             },
             "&([space=\"up-left\"])": {
-                marginTop: 'auto',
-                marginLeft: 'auto',
+                margin: ['auto', null, null, 'auto'],
             },
             "&([space=\"up-right\"])": {
-                marginTop: 'auto',
-                marginRight: 'auto',
+                margin: ['auto', 'auto', null, null],
             },
             "&([space=\"down-left\"])": {
-                marginBottom: 'auto',
-                marginLeft: 'auto',
+                margin: [null, null, 'auto', 'auto'],
             },
             "&([space=\"down-right\"])": {
-                marginBottom: 'auto',
-                marginRight: 'auto',
+                margin: [null, 'auto', 'auto', null],
             },
             display: "block",
             width: "100%",
@@ -1835,7 +1831,7 @@ const $COMPONENTS = {
             "&([slot='brand'])": {
                 width: 'max-content',
                 "#xo-container": {
-                    padding: 0,
+                    padding: [0, 0],
                     width: 'max-content',
                     backgroundColor: 'unset',
                     textDecoration: 'unset',
@@ -1886,30 +1882,10 @@ const $COMPONENTS = {
         mediaQueries: [{
             condition: "min-width: 768px",
             ":host": {
-                "&([space=\"full\"])": {
-                    marginTop: 'unset',
-                    marginBottom: 'unset',
-                },
-                "&([space=\"vert\"])": {
-                    marginTop: 'unset',
-                    marginBottom: 'unset',
-                },
-                "&([space=\"up-left\"])": {
-                    marginTop: 'unset',
-                },
-                "&([space=\"up-right\"])": {
-                    marginTop: 'unset',
-                },
-                "&([space=\"down-left\"])": {
-                    marginBottom: 'unset',
-                },
-                "&([space=\"down-right\"])": {
-                    marginBottom: 'unset',
-                },
                 width: 'max-content',
                 "#xo-container": {
                     transition: 'padding 200ms ease-in-out',
-                    padding: 0,
+                    padding: [0, 0],
                 },
                 "&([active])": {
                     "#xo-container": {
@@ -1920,7 +1896,7 @@ const $COMPONENTS = {
                 },
                 "&([slot='brand'])": {
                     "#xo-container": {
-                        padding: 0,
+                        padding: [0, 0],
                         backgroundColor: 'unset',
                         "&:focus": {
                             borderRadius: '.25rem',
@@ -2411,7 +2387,7 @@ const $FIELDS = {
                 alignItems: 'center',
                 backgroundColor: $COLORS.base.$500,
                 gap: '10px',
-                padding: '16px',
+                padding: [16, 16],
             },
             main: {
                 display: 'grid',
@@ -2420,20 +2396,20 @@ const $FIELDS = {
             },
         },
         "#xo-title": {
-            margin: 0,
+            margin: [0, 0],
             fontSize: '20px',
             flexGrow: 1,
             textAlign: 'center',
         },
         "#xo-controll": {
-            padding: 0,
+            padding: [0, 0],
             border: 'unset',
             background: 'unset',
             display: 'flex',
             width: '16px',
             height: '16px',
             "&:first-child": {
-                marginLeft: 'auto',
+                margin: [null, null, null, 'auto'],
             },
             "&:hover": {
                 filter: 'none',
@@ -2454,7 +2430,7 @@ const $FIELDS = {
         "#xo-weekDay": {
             gridColumn: "span 1",
             textAlign: 'center',
-            margin: 0,
+            margin: [0, 0],
             fontSize: '16px',
             fontWeight: "bolder",
         },
@@ -2511,7 +2487,7 @@ const $FIELDS = {
         "#xo-btn": {...btn },
         "#xo-items": {
             ...items.def,
-            padding: '5px',
+            padding: [5, 5],
             maxHeight: 'unset',
             display: 'grid',
             gridTemplateColumns: "repeat(8, 36px)",
@@ -2520,7 +2496,7 @@ const $FIELDS = {
         "#xo-item": {
             gridColumn: "span 1",
             border: 'unset',
-            padding: 'unset',
+            padding: [null, null],
             background: 'unset',
             height: '30px',
             borderRadius: '2px',
@@ -2584,9 +2560,9 @@ const $FIELDS = {
             backgroundColor: $COLORS.base.$100,
             color: $COLORS.norms.$500,
             gap: '10px',
-            padding: '10px',
+            padding: [10, 10],
             borderRadius: '.5rem',
-            marginTop: '10px',
+            marginTop: [10, null, null, null],
             alignItems: 'center',
             justifyContent: 'space-between',
             div: {
@@ -2613,7 +2589,7 @@ const $FIELDS = {
                 textDecoration: 'unset',
                 backgroundColor: 'unset',
                 border: 'unset',
-                padding: 0,
+                padding: [0, 0],
                 position: 'relative',
                 cursor: 'pointer',
                 "&::before": {
@@ -2716,7 +2692,7 @@ const $FIELDS = {
             width: '42px',
             height: '42px',
             background: 'unset',
-            padding: 'unset',
+            padding: [null, null],
             border: 'unset',
             "svg": {
                 display: 'flex',
@@ -2739,7 +2715,7 @@ const $FIELDS = {
         "#xo-container": {
             ...container,
             border: 'unset',
-            padding: 'unset',
+            padding: [null, null],
             backgroundColor: 'unset',
             gap: '5px',
         },
@@ -2827,7 +2803,7 @@ const $FIELDS = {
             display: 'flex',
             flexWrap: 'wrap',
             backgroundColor: $COLORS.base.$100,
-            padding: '10px',
+            padding: [10, 10],
             gap: '5px',
             justifyContent: 'space-between',
         },
@@ -2855,7 +2831,7 @@ const $FIELDS = {
             justifyContent: 'center',
             width: '30px',
             height: '30px',
-            padding: '7px',
+            padding: [7, 7],
             borderRadius: '.5rem',
             boxSizing: 'border-box',
             background: $COLORS.norms.$100 + 80,
@@ -2878,7 +2854,7 @@ const $FIELDS = {
             },
         },
         "[autoleft]": {
-            marginLeft: 'auto',
+            margin: [null, null, null, 'auto'],
         },
         "#wrap": {
             position: 'relative',
@@ -2889,7 +2865,7 @@ const $FIELDS = {
             position: 'absolute',
             borderRadius: '.5rem',
             flexWrap: 'wrap',
-            padding: '10px',
+            padding: [10, 10],
             display: 'flex',
             width: '350px',
             zIndex: 2,
@@ -3077,8 +3053,7 @@ const $FIELDS = {
             borderWidth: '1px',
             borderStyle: 'solid',
             borderColor: '#969696',
-            marginTop: '5px',
-            marginBottom: '6px',
+            margin: [5, null, 6, null],
             borderRadius: '.5rem',
         },
         "#xo-info": {...info },
@@ -3348,7 +3323,7 @@ const $FIELDS = {
             ...host
         },
         "#xo-container": {...container },
-        "#xo-text": {...text, paddingTop: '17px', lineHeight: 1.2, height: '36px' },
+        "#xo-text": {...text, padding: [17, null, null, null], lineHeight: 1.2, height: '36px' },
         "#xo-text::-webkit-scrollbar": { display: 'none', },
         "#xo-label": {...label },
         "#xo-info": {...info },
@@ -3415,7 +3390,7 @@ const $FIELDS = {
             alignItems: 'center',
             justifyContent: 'center',
             flexWrap: 'wrap',
-            padding: '5px',
+            padding: [5, 5],
             div: {
                 display: 'flex',
                 width: '100%',
@@ -3432,7 +3407,7 @@ const $FIELDS = {
         },
         "#xo-controll": {
             display: 'flex',
-            padding: 'unset',
+            padding: [null, null],
             border: 'unset',
             background: 'unset',
             width: '16px',

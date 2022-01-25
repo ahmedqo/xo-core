@@ -261,25 +261,29 @@ function __orgin(c) {
     return all;
 }
 
-function __arr(vals, name) {
-    let code;
-    switch (vals.length) {
+function __arr(v, n) {
+    let code,
+        num = (nbr) => /\d/g.test(nbr);
+
+    switch (v.length) {
         case 2:
-            code = `${name}-top:${vals[0] == null ? "unset" : vals[0] + "px"};${name}-right:${vals[1] == null ? "unset" : vals[1] + "px"
-                };${name}-bottom:${vals[0] == null ? "unset" : vals[0] + "px"};${name}-left:${vals[1] == null ? "unset" : vals[1] + "px"}; `;
+            code = `${n}-top:${v[0] == null ? "unset" : num(v[0]) ? v[0] + "px" : v[0]};${n}-right:${v[1] == null ? "unset" : num(v[1]) ? v[1] + "px" : v[1]
+                };${n}-bottom:${v[0] == null ? "unset" : num(v[0]) ? v[0] + "px" : v[0]};${n}-left:${v[1] == null ? "unset" : num(v[1]) ? v[1] + "px" : v[1]
+                }; `;
             break;
         case 3:
-            code = `${name}-top:${vals[0] == null ? "unset" : vals[0] + vals[2]};${name}-right:${vals[1] == null ? "unset" : vals[1] + vals[2]
-                };${name}-bottom:${vals[0] == null ? "unset" : vals[0] + vals[2]};${name}-left:${vals[1] == null ? "unset" : vals[1] + vals[2]
+            code = `${n}-top:${v[0] == null ? "unset" : num(v[0]) ? v[0] + v[2] : v[0]};${n}-right:${v[1] == null ? "unset" : num(v[1]) ? v[1] + v[2] : v[1]
+                };${n}-bottom:${v[0] == null ? "unset" : num(v[0]) ? v[0] + v[2] : v[0]};${n}-left:${v[1] == null ? "unset" : num(v[1]) ? v[1] + v[2] : v[1]
                 };`;
             break;
         case 4:
-            code = `${name}-top:${vals[0] == null ? "unset" : vals[0] + "px"};${name}-right:${vals[1] == null ? "unset" : vals[1] + "px"
-                };${name}-bottom:${vals[2] == null ? "unset" : vals[2] + "px"};${name}-left:${vals[3] == null ? "unset" : vals[3] + "px"};`;
+            code = `${n}-top:${v[0] == null ? "unset" : num(v[0]) ? v[0] + "px" : v[0]};${n}-right:${v[1] == null ? "unset" : num(v[1]) ? v[1] + "px" : v[1]
+                };${n}-bottom:${v[2] == null ? "unset" : num(v[2]) ? v[2] + "px" : v[2]};${n}-left:${v[3] == null ? "unset" : num(v[3]) ? v[3] + "px" : v[3]
+                };`;
             break;
         case 5:
-            code = `${name}-top:${vals[0] == null ? "unset" : vals[0] + vals[4]};${name}-right:${vals[1] == null ? "unset" : vals[1] + vals[4]
-                };${name}-bottom:${vals[2] == null ? "unset" : vals[2] + vals[4]};${name}-left:${vals[3] == null ? "unset" : vals[3] + vals[4]
+            code = `${n}-top:${v[0] == null ? "unset" : num(v[0]) ? v[0] + v[4] : v[0]};${n}-right:${v[1] == null ? "unset" : num(v[1]) ? v[1] + v[4] : v[1]
+                };${n}-bottom:${v[2] == null ? "unset" : num(v[2]) ? v[2] + v[4] : v[2]};${n}-left:${v[3] == null ? "unset" : num(v[3]) ? v[3] + v[4] : v[3]
                 };`;
             break;
     }
