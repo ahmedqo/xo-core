@@ -1,5 +1,5 @@
-const blkExp = /\{\*block (.+?)\*\}((.|\n)*?)\{\*\/block\*\}/g,
-    jscExp = /\{\*([\s\S]+?)\*\}/g,
+const blkExp = /{§block (.+?)§}((.|\n)*?){§\/block§}/g,
+    jscExp = /{§([\s\S]+?)§}/g,
     ecoExp = /\{\{([\s\S]+?)\}\}/g,
     filExp = /(\w+:\[(.+?)\])/g;
 
@@ -41,9 +41,14 @@ function conditions(line) {
             data.shift();
             data.splice(data.length, 0, "});");
             break;
+        case "loop":
+            data.shift();
+            data = [`for(var $i=0;$i<${data.join("")};$i++){`];
+            break;
         case "/if":
         case "/for":
         case "/try":
+        case "/loop":
         case "/while":
         case "/switch":
             data.shift();
@@ -304,7 +309,7 @@ function render (html, data) {
         return new Function("obj", "ctx", clean(html)).call(data, data || {});
     } catch (e) {
         alert('there is an error in your code check the console.');
-        console.log(e);
+        throw e;
     }
 }
 

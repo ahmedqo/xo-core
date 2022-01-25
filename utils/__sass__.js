@@ -280,7 +280,7 @@ const host = {
         border: 'unset',
         padding: 'unset',
         display: 'flex',
-        transition: 'transform 200ms ease-in-out',
+        animation: 'rotate 200ms forwards reverse',
         "&:hover": {
             filter: 'none',
             cursor: 'pointer',
@@ -293,7 +293,7 @@ const host = {
             outlineOffset: '-1px',
         },
         "&[active]": {
-            transform: 'rotate(360deg)',
+            animation: 'rotate 200ms forwards',
         },
         svg: {
             width: '100%',
@@ -308,13 +308,12 @@ const host = {
             position: 'fixed',
             maxHeight: '340px',
             width: '100%',
-            bottom: '-100%',
             zIndex: '9999',
             filter: `drop-shadow(0 -2px 2px ${$COLORS.norms.$500 + '80'})`,
-            transition: 'top 200ms ease-in-out, bottom 200ms ease-in-out, opacity 200ms ease-in-out',
+            animation: 'slidebottom 200ms forwards reverse',
             backgroundColor: '#FFFFFF',
             "&[expand]": {
-                bottom: 0,
+                animation: 'slidebottom 200ms forwards',
             },
             main: {
                 width: "calc(100% - 10px)",
@@ -324,19 +323,15 @@ const host = {
         change: {
             bottom: 'unset !important',
             position: 'absolute',
-            top: '200%',
-            opacity: '0',
-            left: '50%',
             width: 'max-content',
             borderRadius: '.25rem',
             overflowY: 'auto',
             pointerEvents: 'none',
             filter: `drop-shadow(2px 2px 4px ${$COLORS.norms.$500 + '80'})`,
-            transform: 'translateX(-50%)',
+            animation: 'slidetop 200ms forwards reverse',
+            "--slide": '100%',
             "&[expand]": {
-                "--slide": '100%',
-                top: "var(--slide)",
-                opacity: '1',
+                animation: 'slidetop 200ms forwards',
                 pointerEvents: 'all',
             },
         }
@@ -369,7 +364,42 @@ const host = {
                 fill: $COLORS.flame.$500,
             }
         },
-    };
+    },
+    keyFrames = [{
+        name: 'rotate',
+        "0%": {
+            transform: 'rotate(0deg)',
+        },
+        "100%": {
+            transform: 'rotate(360deg)',
+        },
+    }, {
+        name: 'rotate180',
+        "0%": {
+            transform: 'rotate(0deg)',
+        },
+        "100%": {
+            transform: 'rotate(180deg)',
+        },
+    }, {
+        name: 'slidebottom',
+        "0%": {
+            bottom: '-100%',
+        },
+        "100%": {
+            bottom: '-0%',
+        },
+    }, {
+        name: 'slidetop',
+        "0%": {
+            top: '200%',
+            opacity: 0,
+        },
+        "100%": {
+            top: 'var(--slide)',
+            opacity: 1,
+        },
+    }];
 
 const $ICONS = {
     $IconComponent: {
@@ -947,7 +977,7 @@ const $COMPONENTS = {
         },
         "#xo-container": {
             padding: '0 10px',
-            borderRadius: '5px',
+            borderRadius: '.5rem',
             width: '100%',
             gap: '5px',
             display: 'flex',
@@ -2195,7 +2225,7 @@ const $FIELDS = {
             overflow: 'hidden',
             padding: '5px 20px',
             position: 'relative',
-            borderRadius: '5px',
+            borderRadius: '.5rem',
             alignItems: 'center',
             boxSizing: 'border-box',
             justifyContent: 'center',
@@ -2528,7 +2558,7 @@ const $FIELDS = {
             color: $COLORS.norms.$500,
             gap: '10px',
             padding: '10px',
-            borderRadius: '5px',
+            borderRadius: '.5rem',
             marginTop: '10px',
             alignItems: 'center',
             justifyContent: 'space-between',
@@ -2762,7 +2792,7 @@ const $FIELDS = {
         "#xo-container": {
             width: '100%',
             height: '100%',
-            borderRadius: '5px',
+            borderRadius: '.5rem',
             position: 'relative',
             overflow: 'hidden',
         },
@@ -2777,7 +2807,7 @@ const $FIELDS = {
         "#xo-toolGroup": {
             display: 'flex',
             width: 'max-content',
-            borderRadius: '5px',
+            borderRadius: '.5rem',
             "#xo-icon": {
                 border: 'unset',
                 borderRadius: 'unset',
@@ -2799,7 +2829,7 @@ const $FIELDS = {
             width: '30px',
             height: '30px',
             padding: '7px',
-            borderRadius: '5px',
+            borderRadius: '.5rem',
             boxSizing: 'border-box',
             background: $COLORS.norms.$100 + '80',
             "&:focus": {
@@ -2830,7 +2860,7 @@ const $FIELDS = {
             justifyContent: 'flex-end',
             backgroundColor: '#fff',
             position: 'absolute',
-            borderRadius: '5px',
+            borderRadius: '.5rem',
             flexWrap: 'wrap',
             padding: '10px',
             display: 'flex',
@@ -2866,7 +2896,7 @@ const $FIELDS = {
                 borderWidth: '1px',
                 borderStyle: 'solid',
                 borderColor: $COLORS.norms.$500,
-                borderRadius: '5px',
+                borderRadius: '.5rem',
                 color: $COLORS.norms.$500,
             },
         },
@@ -2891,7 +2921,7 @@ const $FIELDS = {
             color: '#fff',
             backgroundColor: $COLORS.woods.$500,
             padding: '0 10px',
-            borderRadius: '5px',
+            borderRadius: '.5rem',
             "&:focus": {
                 outlineWidth: '2px',
                 outlineStyle: 'solid',
@@ -2994,8 +3024,9 @@ const $FIELDS = {
         "#xo-label": {...label },
         "#xo-btn": {
             ...btn,
+            animation: 'rotate180 200ms forwards reverse',
             "&[active]": {
-                transform: 'rotate(180deg)',
+                animation: 'rotate180 200ms forwards',
             },
         },
         "#xo-items": {
@@ -3021,13 +3052,14 @@ const $FIELDS = {
             borderColor: '#969696',
             marginTop: '5px',
             marginBottom: '6px',
-            borderRadius: '5px',
+            borderRadius: '.5rem',
         },
         "#xo-info": {...info },
         mediaQueries: [{
             condition: "min-width: 768px",
             "#xo-items": {...items.change },
         }],
+        keyFrames,
     },
     $SelectItemField: {
         ...$BASE,
@@ -3155,7 +3187,7 @@ const $FIELDS = {
                 "#xo-trigger": {
                     backgroundColor: $COLORS.base.$900,
                     "&::before": {
-                        animation: 'check 250ms forwards'
+                        animation: 'check 200ms forwards'
                     },
                 },
             },
@@ -3176,34 +3208,34 @@ const $FIELDS = {
                 },
             },
             "&([theme=\"water\"][checked]) #xo-trigger": {
-                backgroundColor: $COLORS.water.$500,
+                background: $COLORS.water.$500,
             },
             "&([theme=\"water\"]) #xo-trigger": {
-                backgroundColor: $COLORS.water.$100,
+                background: $COLORS.water.$100,
             },
             "&([theme=\"flame\"][checked]) #xo-trigger": {
-                backgroundColor: $COLORS.flame.$500,
+                background: $COLORS.flame.$500,
             },
             "&([theme=\"flame\"]) #xo-trigger": {
-                backgroundColor: $COLORS.flame.$100,
+                background: $COLORS.flame.$100,
             },
             "&([theme=\"earth\"][checked]) #xo-trigger": {
-                backgroundColor: $COLORS.earth.$500,
+                background: $COLORS.earth.$500,
             },
             "&([theme=\"earth\"]) #xo-trigger": {
-                backgroundColor: $COLORS.earth.$100,
+                background: $COLORS.earth.$100,
             },
             "&([theme=\"woods\"][checked]) #xo-trigger": {
-                backgroundColor: $COLORS.woods.$500,
+                background: $COLORS.woods.$500,
             },
             "&([theme=\"woods\"]) #xo-trigger": {
-                backgroundColor: $COLORS.woods.$100,
+                background: $COLORS.woods.$100,
             },
             "&([theme=\"metal\"][checked]) #xo-trigger": {
-                backgroundColor: $COLORS.metal.$500,
+                background: $COLORS.metal.$500,
             },
             "&([theme=\"metal\"]) #xo-trigger": {
-                backgroundColor: $COLORS.metal.$100,
+                background: $COLORS.metal.$100,
             },
         },
         "#xo-container": {
@@ -3221,9 +3253,8 @@ const $FIELDS = {
             width: '74px',
             height: '100%',
             position: 'relative',
-            backgroundColor: $COLORS.base.$100,
-            borderRadius: '5px',
-            transition: 'background 200ms ease-in-out',
+            background: $COLORS.base.$100,
+            borderRadius: '.5rem',
             cursor: 'pointer',
             "&::before": {
                 width: "calc((100% /2) - 5px)",
@@ -3233,8 +3264,8 @@ const $FIELDS = {
                 left: '5px',
                 content: "''",
                 backgroundColor: '#fff',
-                borderRadius: '5px',
-                animation: 'check 250ms forwards reverse',
+                borderRadius: '.5rem',
+                animation: 'check 200ms forwards reverse',
                 cursor: 'pointer',
             },
             "&:focus": {
@@ -3263,7 +3294,7 @@ const $FIELDS = {
         },
         "#xo-container": {
             width: '100%',
-            borderRadius: '5px',
+            borderRadius: '.5rem',
             display: 'flex',
             flexWrap: 'wrap',
             gap: '5px',
@@ -3398,7 +3429,7 @@ const $FIELDS = {
             fontWeight: '700',
             backgroundColor: $COLORS.base.$100,
             padding: '6px 14px',
-            borderRadius: '5px',
+            borderRadius: '.5rem',
             textAlign: 'center',
             alignItems: 'center',
             justifyContent: 'center',
@@ -3411,7 +3442,7 @@ const $FIELDS = {
             cursor: 'pointer',
             fontSize: '16px',
             padding: '5px 10px',
-            borderRadius: '5px',
+            borderRadius: '.5rem',
             fontWeight: 'bolder',
             "&[active]": {
                 backgroundColor: $COLORS.base.$500,

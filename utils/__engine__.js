@@ -1,7 +1,7 @@
-const blkExp = /\{\*block (.+?)\*\}((.|\n)*?)\{\*\/block\*\}/g,
-    jscExp = /\{\*([\s\S]+?)\*\}/g,
-    comExp = /\{\#([\s\S]+?)\#\}/g,
-    ecoExp = /\{\{([\s\S]+?)\}\}/g,
+const blkExp = /{§block (.+?)§}((.|\n)*?){§\/block§}/g,
+    jscExp = /{§([\s\S]+?)§}/g,
+    comExp = /{#([\s\S]+?)#}/g,
+    ecoExp = /{{([\s\S]+?)}}/g,
     filExp = /(\w+:\[(.+?)\])/g;
 
 async function request(page, data) {
@@ -52,9 +52,14 @@ function conditions(line) {
             data.shift();
             data.splice(data.length, 0, "});");
             break;
+        case "loop":
+            data.shift();
+            data = [`for(var $i=0;$i<${data.join("")};$i++){`];
+            break;
         case "/if":
         case "/for":
         case "/try":
+        case "/loop":
         case "/while":
         case "/switch":
             data.shift();
@@ -237,7 +242,7 @@ function addVariable (line, js) {
             const { type, data } = __def(line);
             const fun = data.shift();
             const par = data.length ? data.join() : "''";
-            code = type ? `r.push("("+${fun}+")("+${par}+")");` : `r.push((${fun})(${par}));`;
+            code = type ? `r.push("(${!fun.startsWith("function") ? "function " : ""}"+${fun}+")("+${par}+")");` : `r.push((${fun})(${par}));`;
         } else {
             const [_data, _line] = __fill(line);
             code = _data + "r.push(" + _line + ");";

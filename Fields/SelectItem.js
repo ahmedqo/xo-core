@@ -28,7 +28,7 @@ window.XOSelectItemElement = class extends XOElement {
                     e.removeAttribute("selected");
                 });
                 this.setAttribute("selected", "");
-                pt.$.items.attrs().del("expand");
+                pt._expand = false;
                 pt.$.container.class().del("focus");
                 __set__(pt, this);
             }
@@ -47,7 +47,7 @@ window.XOSelectItemElement = class extends XOElement {
 
     render() {
         return /*html*/ `
-            <a {*if !disabled*} href {*/if*} id="xo-container" (click|prev)="{{>clickHandler('event')}}">
+            <a {§if !disabled§} href {§/if§} id="xo-container" (click|prev)="{{>clickHandler('event')}}">
                 <slot></slot>
             </a>
         `;
@@ -61,7 +61,6 @@ customElements.define(XOSelectItemElement.prototype.tag, XOSelectItemElement);
 
 function __set__(p, s) {
     if (!p || !p.$) return;
-    if (p.label) p.$.label.class().add("valid");
     p.index = Array.from(p.querySelectorAll(XOSelectItemElement.prototype.tag)).indexOf(s);
     p.$.text.value = s.text;
     p.value = s.value;

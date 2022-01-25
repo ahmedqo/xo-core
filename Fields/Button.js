@@ -19,7 +19,7 @@ window.XOButtonElement = class extends XOElement {
 
     render() {
         return /*html*/ `
-            <button id="xo-container" {*if disabled*} disabled {*/if*}>
+            <button id="xo-container" {§if disabled§} disabled {§/if§}>
                 <slot name="prefix"></slot>
                 <label id="xo-label">
                     <slot></slot>
