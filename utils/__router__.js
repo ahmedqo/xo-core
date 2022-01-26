@@ -294,19 +294,13 @@ module.exports = (function(window, document) {
         const match = __match(self);
         const params = __params(match);
         const queries = __queries();
-        const view = __view(match, params, queries);
         __logger(self, match, params, queries);
-        const all = self._root.querySelectorAll("*");
-        self._root.appendChild(view);
-        all.forEach(e => e.remove());
+        self._root.innerHTML = await __view(match, params, queries);
     }
 
     function __view(match, param, query) {
-        const view = match.route.view,
-            name = `xo-${view.name.toLowerCase()}-view`;
-        if (!customElements.get(name))
-            customElements.define(name, view);
-        return new view(param, query);
+        const view = new match.route.view(param, query);
+        return view.render();
     }
 
     /**

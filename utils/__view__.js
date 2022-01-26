@@ -1,42 +1,33 @@
 const XOHtml = require("./__engine__");
 
-const prop = {
-    title: "",
-    template: false,
-}
-
 const objs = (self) => {
-    var all = {}
-    Object.getOwnPropertyNames(self.constructor.state).forEach(p => {
-        if (typeof self.constructor.state[p] === "function") all[p] = self.constructor.state[p].bind(self);
-        else all[p] = self.constructor.state[p];
+    const state = self.state(),
+        all = { param: self.param, query: self.query };
+    Object.getOwnPropertyNames(state).forEach(p => {
+        all[p] = state[p];
     });
     return all;
 }
 
-class XOView extends HTMLElement {
+class XOView {
     constructor(param, query) {
-        super();
-        let props = Object.assign({}, prop, this.constructor.props);
-        document.title = props.title;
+        document.title = this.props().title || '';
         this.param = param;
         this.query = query;
-        this.root = this.attachShadow({ mode: "closed" });
-        this.root.innerHTML = `
-            <style>:host{display:block}</style>
-            <slot></slot>
-        `;
-        XOHtml(objs(this))(`{§include ${props.template}§}`).then(code => {
-            this.innerHTML = code;
-        });
     }
 
-    static get props() {
+    props() {
         return {}
     }
 
-    static get state() {
+    state() {
         return {}
+    }
+
+    render() {
+        return (async() => {
+            return await XOHtml(objs(this))(`{§include ${this.props().template}§}`);
+        })();
     }
 }
 

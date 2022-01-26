@@ -223,7 +223,7 @@ function addVariable (line, js) {
         if (line.startsWith(">")) {
             const { type, data } = __def(line);
             const fun = data.shift();
-            const par = data.length ? data.join() : "''";
+            const par = data.length ? data.join('+","+') : "''";
             code = type ? `r.push("this.${fun}("+${par}+")");` : `r.push(this.${fun}(${par}));`;
         } else {
             const [_data, _line] = __fill(line);

@@ -241,8 +241,9 @@ function addVariable (line, js) {
         if (line.startsWith(">")) {
             const { type, data } = __def(line);
             const fun = data.shift();
-            const par = data.length ? data.join() : "''";
-            code = type ? `r.push("(${!fun.startsWith("function") ? "function " : ""}"+${fun}+")("+${par}+")");` : `r.push((${fun})(${par}));`;
+            data.splice(0, 0, 'JSON.stringify(this).replaceAll("\\"","\'")');
+            const props = data.join('+","+');
+            code = type ? `r.push("("+${fun}+")("+${props}+")");` : `r.push((${fun})(${props}));`;
         } else {
             const [_data, _line] = __fill(line);
             code = _data + "r.push(" + _line + ");";
@@ -321,7 +322,8 @@ function comment (html) {
 
 function render (html, data) {
     try {
-        return new Function("obj", "ctx", html).call(data, data || {});
+        const t = new Function("obj", "ctx", html).call(data, data || {});
+        return t;
     } catch (e) {
         alert('there is an error in your code check the console.');
         throw e;
