@@ -1,5 +1,5 @@
 const $COLORS = {
-    'shade': '#1D1D1D30',
+    'shade': '#1D1D1D50',
     'norms': {
         '$100': '#FFFFFF',
         '$500': '#1D1D1D',
@@ -1203,7 +1203,7 @@ const $COMPONENTS = {
             position: 'relative',
             gap: '.5rem',
             "&:hover": {
-                filter: `drop-shadow(0 0 3px ${$COLORS.shade})`,
+                boxShadow: '0 .3rem .3rem -.1rem ' + $COLORS.shade,
             },
         },
         "#xo-icon": {
