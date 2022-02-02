@@ -989,16 +989,6 @@ const $COMPONENTS = {
             },
         },
     },
-    $ContainerComponent: {
-        ":host": {
-            boxSizing: 'content-box',
-            display: 'block',
-            width: '100%',
-            padding: [1, 1, 'rem'],
-            margin: ['auto', 'auto'],
-            maxWidth: '1200px',
-        }
-    },
     $AudioComponent: {
         ...$BASE,
         ":host": {
@@ -3595,7 +3585,17 @@ const $UI = {
             flexWrap: 'wrap',
             alignItems: 'center',
         },
-    }
+    },
+    $ContainerUi: {
+        ":host": {
+            boxSizing: 'content-box',
+            display: 'block',
+            width: '100%',
+            padding: [1, 1, 'rem'],
+            margin: ['auto', 'auto'],
+            maxWidth: '1200px',
+        }
+    },
 }
 
 module.exports = {
