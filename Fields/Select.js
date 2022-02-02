@@ -18,6 +18,8 @@ window.XOSelectElement = class extends XOElement {
             infotype: String,
             disabled: Boolean,
             label: String,
+            trigger: String,
+            search: String,
         }
     }
 
@@ -32,16 +34,12 @@ window.XOSelectElement = class extends XOElement {
 
     static get methods() {
         return {
-            focusHandler() {
-                if (this.disabled || this.readonly) return;
-            },
             clickHandler() {
                 if (this.disabled || this.readonly || this.querySelectorAll("xo-select-item").length === 0) return;
                 if (this._expand) {
                     __hide__(this);
                 } else {
-                    this.$.items.css("--slide", "100%");
-
+                    __show__(this);
                     if ((window.innerWidth - this.offsetLeft) < this.$.items.clientWidth) {
                         this.$.items.css({ left: "unset", right: "0", transform: "unset" });
                     } else if (this.offsetLeft < ((this.$.items.offsetWidth - this.offsetWidth) / 2)) {
@@ -52,10 +50,11 @@ window.XOSelectElement = class extends XOElement {
                         this.$.items.css("width", window.innerWidth - 50 + "px");
                     }
 
-                    if ((window.innerHeight - this.getBoundingClientRect().bottom) < this.$.items.offsetHeight) {
-                        this.$.items.css("--slide", "-" + this.$.items.offsetHeight + "px");
-                    }
-                    __show__(this);
+                    setTimeout(() => {
+                        if ((window.innerHeight - (this.offsetTop + this.clientHeight)) < this.$.items.clientHeight) {
+                            this.$.items.css("--slide", -this.$.items.clientHeight + "px");
+                        }
+                    }, 100);
                 }
                 this._expand = !this._expand;
             },
@@ -68,8 +67,6 @@ window.XOSelectElement = class extends XOElement {
                     }
                     if ((window.innerHeight - this.getBoundingClientRect().bottom) < this.$.items.offsetHeight) {
                         this.$.items.css("--slide", "-" + this.$.items.offsetHeight + "px");
-                    } else {
-                        this.$.items.css("--slide", "100%");
                     }
                 });
             },
@@ -82,9 +79,6 @@ window.XOSelectElement = class extends XOElement {
                             this.$.label.class().del("valid")
                         }
                     }
-                    setTimeout(() => {
-                        __hide__(this);
-                    }, 150);
                 }
             },
             clear() {
@@ -152,7 +146,6 @@ window.XOSelectElement = class extends XOElement {
                 <section>
                     <input id="xo-text" type="text" readonly
                         (blur)="{{>blurHandler('event')}}"
-                        (focus)="{{>focusHandler()}}"
                         (click)="{{>clickHandler()}}"
                         {§if disabled§} disabled {§/if§}
                         {§if text§} value="{{text}}" {§/if§}
@@ -162,16 +155,22 @@ window.XOSelectElement = class extends XOElement {
                         <label for="xo-text" id="xo-label" {§if value§} class="valid" {§/if§}>{{label}}</label>
                     {§/if§}
                 </section>
-                <button id="xo-btn" {§if disabled || readonly§} disabled {§/if§} {§if _expand§} active {§/if§} (click)="{{>clickHandler()}}">
-                    <svg version="1.0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000.000000 1000.000000" preserveAspectRatio="xMidYMid meet">
-                        <g transform="translate(0.000000,1000.000000) scale(0.100000,-0.100000)">
-                            <path d="M985 8013 c-16 -2 -49 -11 -72 -19 -113 -37 -141 -60 -474 -393 -288 -288 -329 -333 -357 -391 -50 -105 -57 -137 -57 -255 1 -126 22 -201 84 -295 42 -64 4513 -4540 4582 -4588 78 -53 165 -82 264 -89 117 -7 191 7 291 57 l82 40 2250 2249 c1237 1238 2265 2269 2285 2293 80 99 110 190 111 333 1 221 -29 267 -421 657 -381 379 -420 403 -643 403 -112 0 -131 -4 -220 -43 -34 -14 -113 -65 -136 -87 -29 -26 -1532 -1522 -2485 -2472 -581 -579 -1062 -1053 -1070 -1053 -7 0 -473 458 -1034 1018 -2135 2129 -2502 2493 -2555 2533 -55 41 -103 66 -170 89 -38 12 -206 21 -255 13z"/>
-                        </g>
-                    </svg>
-                </button>
+                {§if trigger !== 'hidden'§}
+                    <button id="xo-btn" {§if disabled || readonly§} disabled {§/if§} {§if _expand§} active {§/if§} (click)="{{>clickHandler()}}">
+                        <svg version="1.0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000.000000 1000.000000" preserveAspectRatio="xMidYMid meet">
+                            <g transform="translate(0.000000,1000.000000) scale(0.100000,-0.100000)">
+                                <path d="M985 8013 c-16 -2 -49 -11 -72 -19 -113 -37 -141 -60 -474 -393 -288 -288 -329 -333 -357 -391 -50 -105 -57 -137 -57 -255 1 -126 22 -201 84 -295 42 -64 4513 -4540 4582 -4588 78 -53 165 -82 264 -89 117 -7 191 7 291 57 l82 40 2250 2249 c1237 1238 2265 2269 2285 2293 80 99 110 190 111 333 1 221 -29 267 -421 657 -381 379 -420 403 -643 403 -112 0 -131 -4 -220 -43 -34 -14 -113 -65 -136 -87 -29 -26 -1532 -1522 -2485 -2472 -581 -579 -1062 -1053 -1070 -1053 -7 0 -473 458 -1034 1018 -2135 2129 -2502 2493 -2555 2533 -55 41 -103 66 -170 89 -38 12 -206 21 -255 13z"/>
+                            </g>
+                        </svg>
+                    </button>
+                {§/if§}
                 <slot name="suffix"></slot>
                 <div id="xo-items" {§if _expand§} expand {§/if§}>
-                    <input type="text" id="xo-search" placeholder="Search..." {§if !_expand§} disabled {§/if§} (input)="{{>inputHandler()}}" />
+                    {§if search !== 'hidden'§}
+                        <div id="xo-row">
+                            <input type="text" id="xo-search" placeholder="Search..." {§if !_expand§} disabled {§/if§} (input)="{{>inputHandler()}}" />
+                        </div>
+                    {§/if§}
                     <slot></slot>
                 </div>
             </main>
@@ -203,10 +202,7 @@ customElements.define(XOSelectElement.prototype.tag, XOSelectElement);
 
 function __click__(self, e) {
     if (e.target !== self) {
-        self.querySelectorAll("xo-select-item").forEach(e => {
-            e.setAttribute("disabled", "");
-            e.style.display = "";
-        });
+        __hide__(self);
         if (self.label) {
             if (self.$.text.val().trim()) {
                 self.$.label.class().add("valid");
@@ -219,7 +215,6 @@ function __click__(self, e) {
 }
 
 function __hide__(self) {
-    self.$.search.val("");
     self.querySelectorAll("xo-select-item").forEach(e => {
         e.setAttribute("disabled", "");
         e.style.display = "";
@@ -227,7 +222,6 @@ function __hide__(self) {
 }
 
 function __show__(self) {
-    self.$.search.val("");
     self.querySelectorAll("xo-select-item").forEach(e => {
         e.removeAttribute("disabled");
         e.style.display = "";

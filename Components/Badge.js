@@ -17,15 +17,15 @@ window.XOBadgeElement = class extends XOElement {
     render() {
         let back = __getBackground__(__getText__(this.innerHTML));
         return /*html*/ `
-            <main id="xo-container" styles="{'--delay': '{{loading || 1500}}ms'}">
-                <span id="xo-icon" styles="{background: ${back}}">
-                    <slot name="icon"></slot>
-                </span>
-                <label id="xo-label">
-                    <slot></slot>
-                </label>
-            </main>
-        `;
+                <main id="xo-container" styles="{'--delay': '{{loading || 1500}}ms'}">
+                    <span id="xo-icon" styles="{background: ${back}}">
+                        <slot name="icon"></slot>
+                    </span>
+                    <label id="xo-label">
+                        <slot></slot>
+                    </label>
+                </main>
+            `;
     }
 
 }
@@ -33,7 +33,6 @@ window.XOBadgeElement = class extends XOElement {
 XOBadgeElement.prototype.tag = "xo-badge";
 
 customElements.define(XOBadgeElement.prototype.tag, XOBadgeElement);
-
 /**
  * @param {strinig} txt 
  * @returns first letter of each word 

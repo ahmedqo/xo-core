@@ -33,4 +33,19 @@ class XOView {
 
 XOView.prototype.name = 'XOView';
 
-module.exports = XOView;
+module.exports = function(n, { title, template, state }) {
+    return class extends XOView {
+        static get name() {
+            return n || '';
+        }
+        props() {
+            return {
+                title: title || '',
+                template: template || '',
+            }
+        }
+        state() {
+            return state || {};
+        }
+    }
+}

@@ -8,10 +8,10 @@ window.XOAppBarElement = class extends XOElement {
 
     render() {
         return /*html*/ `
-            <main id="xo-container">
-                <slot></slot>
-            </main>
-        `;
+                <main id="xo-container">
+                    <slot></slot>
+                </main>
+            `;
     }
 }
 

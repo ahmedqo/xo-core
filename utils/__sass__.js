@@ -6,9 +6,9 @@ const $COLORS = {
         '$900': '#000000',
     },
     'base': {
-        '$100': '#F7F7F7',
-        '$500': '#EEEEEE',
-        '$900': '#777777',
+        '$100': '#e9e9e9',
+        '$500': '#d3d3d3',
+        '$900': '#7f7f7f',
     },
     'water': {
         '$100': '#9DC1FB',
@@ -315,6 +315,7 @@ const host = {
             maxHeight: '340px',
             width: '100%',
             zIndex: 9999,
+            overflow: 'auto',
             borderRadius: '.5rem',
             boxShadow: '0 -.2rem .3rem .1rem ' + $COLORS.shade,
             animation: 'slidebottom 200ms forwards reverse',
@@ -392,6 +393,7 @@ const host = {
         "0%": {
             bottom: '-100%',
             opacity: 0,
+            height: 0,
         },
         "100%": {
             bottom: '-0%',
@@ -402,6 +404,7 @@ const host = {
         "0%": {
             top: '200%',
             opacity: 0,
+            height: 0,
         },
         "100%": {
             top: 'var(--slide)',
@@ -679,7 +682,7 @@ const $CHARTS = {
             stroke: $COLORS.base.$100,
             strokeWidth: 1,
             strokeLinecap: "round",
-            strokeDasharray: 2,
+            strokeDasharray: 10,
         },
         "#xo-legendVert": {
             stroke: $COLORS.norms.$500,
@@ -707,7 +710,7 @@ const $CHARTS = {
             stroke: $COLORS.base.$900,
             strokeDasharray: 10,
             strokeLinecap: 'round',
-            strokeWidth: 4,
+            strokeWidth: 1,
             opacity: 0,
         },
         "#xo-dots": {
@@ -2269,18 +2272,26 @@ const $FIELDS = {
             display: 'inline-block',
             width: '260px',
             ...host,
+            "&([theme=\"water\"]) #xo-items, &([theme=\"woods\"]) #xo-items, &([theme=\"flame\"]) #xo-items, &([theme=\"metal\"]) #xo-items": {
+                "header": {
+                    color: $COLORS.norms.$100,
+                },
+                "#xo-controll svg": {
+                    fill: $COLORS.norms.$100,
+                },
+                "#xo-day": {
+                    "&[active]": {
+                        color: $COLORS.norms.$100,
+                    },
+                },
+            },
             "&([theme=\"water\"]) #xo-items": {
                 "header": {
                     backgroundColor: $COLORS.water.$500,
-                    color: '#fff',
-                },
-                "#xo-controll svg": {
-                    fill: '#fff',
                 },
                 "#xo-day": {
                     "&[active]": {
                         backgroundColor: $COLORS.water.$500,
-                        color: '#fff',
                     },
                     "&:hover": {
                         backgroundColor: $COLORS.water.$100,
@@ -2293,15 +2304,10 @@ const $FIELDS = {
             "&([theme=\"woods\"]) #xo-items": {
                 "header": {
                     backgroundColor: $COLORS.woods.$500,
-                    color: '#fff',
-                },
-                "#xo-controll svg": {
-                    fill: '#fff',
                 },
                 "#xo-day": {
                     "&[active]": {
                         backgroundColor: $COLORS.woods.$500,
-                        color: '#fff',
                     },
                     "&:hover": {
                         backgroundColor: $COLORS.woods.$100,
@@ -2314,15 +2320,10 @@ const $FIELDS = {
             "&([theme=\"flame\"]) #xo-items": {
                 "header": {
                     backgroundColor: $COLORS.flame.$500,
-                    color: '#fff',
-                },
-                "#xo-controll svg": {
-                    fill: '#fff',
                 },
                 "#xo-day": {
                     "&[active]": {
                         backgroundColor: $COLORS.flame.$500,
-                        color: '#fff',
                     },
                     "&:hover": {
                         backgroundColor: $COLORS.flame.$100,
@@ -2343,7 +2344,6 @@ const $FIELDS = {
                 "#xo-day": {
                     "&[active]": {
                         backgroundColor: $COLORS.earth.$500,
-                        color: '#fff',
                     },
                     "&:hover": {
                         backgroundColor: $COLORS.earth.$100,
@@ -2356,15 +2356,10 @@ const $FIELDS = {
             "&([theme=\"metal\"]) #xo-items": {
                 "header": {
                     backgroundColor: $COLORS.metal.$500,
-                    color: '#fff',
-                },
-                "#xo-controll svg": {
-                    fill: '#fff',
                 },
                 "#xo-day": {
                     "&[active]": {
                         backgroundColor: $COLORS.metal.$500,
-                        color: '#fff',
                     },
                     "&:hover": {
                         backgroundColor: $COLORS.metal.$100,
@@ -2380,8 +2375,7 @@ const $FIELDS = {
         "#xo-label": {...label },
         "#xo-btn": {...btn },
         "#xo-items": {
-            ...items.def,
-            maxHeight: 'unset',
+            ...items.static,
             header: {
                 display: 'flex',
                 alignItems: 'center',
@@ -2391,8 +2385,8 @@ const $FIELDS = {
             },
             main: {
                 display: 'grid',
-                gridTemplateColumns: "repeat(7, 3.287em)",
-                margin: [0, 5, 5, 5],
+                gridTemplateColumns: "repeat(7, 1fr)",
+                padding: [.5, .5, 'rem'],
             },
         },
         "#xo-title": {
@@ -2406,14 +2400,21 @@ const $FIELDS = {
             border: 'unset',
             background: 'unset',
             display: 'flex',
-            width: '16px',
-            height: '16px',
+            width: '20px',
+            height: '20px',
             "&:first-child": {
                 margin: [null, null, null, 'auto'],
             },
             "&:hover": {
                 filter: 'none',
                 cursor: 'pointer',
+            },
+            "&:focus": {
+                borderRadius: '.25rem',
+                outlineStyle: 'solid',
+                outlineColor: $FOCUSCOLOR,
+                outlineWidth: '2px',
+                outlineOffset: '-1px',
             },
             svg: {
                 width: '100%',
@@ -2423,33 +2424,36 @@ const $FIELDS = {
         },
         "#weeks": {
             display: 'grid',
-            gridTemplateColumns: "repeat(7, 3.287em)",
+            gridTemplateColumns: "repeat(7, 1fr)",
             gridColumn: "1/8",
-            margin: [5, 0],
+            width: '100%',
         },
         "#xo-weekDay": {
             gridColumn: "span 1",
             textAlign: 'center',
-            margin: [0, 0],
             fontSize: '16px',
             fontWeight: "bolder",
+            margin: [null, null, .5, null, 'rem'],
         },
         "#xo-day": {
             gridColumn: "span 1",
             textAlign: 'center',
             border: 'unset',
-            padding: [5, 0],
             background: 'unset',
             fontWeight: 700,
             fontSize: '14px',
-            outline: 'none',
+            padding: [.25, .25, 'rem'],
+            borderRadius: '.25rem',
             "&:hover": {
                 filter: 'none',
                 cursor: 'pointer',
                 backgroundColor: $COLORS.base.$100,
             },
             "&:focus": {
-                backgroundColor: $COLORS.base.$100,
+                outlineStyle: 'solid',
+                outlineColor: $FOCUSCOLOR,
+                outlineWidth: '2px',
+                outlineOffset: '-1px',
             },
             "&[off]": {
                 opacity: 0,
@@ -2465,14 +2469,15 @@ const $FIELDS = {
         },
         "#xo-info": {...info },
         mediaQueries: [{
-            condition: "max-width: 599px",
-            "#xo-items": {...items.med },
+            condition: "min-width: 768px",
+            "#xo-items": {...items.change, minWidth: '320px' },
             "#weeks": {
                 width: "calc(100% - 10px)",
                 gridTemplateColumns: "repeat(7, 1fr)",
                 width: '100%',
             }
-        }]
+        }],
+        keyFrames,
     },
     $ColorField: {
         ...$BASE,
@@ -3002,7 +3007,7 @@ const $FIELDS = {
             width: '260px',
             ...host,
             "&([search=\"hidden\"])": {
-                "#xo-search": {
+                "#xo-row": {
                     display: 'none',
                 },
             },
@@ -3046,15 +3051,22 @@ const $FIELDS = {
                 backgroundColor: $COLORS.base.$500,
             },
         },
+        "#xo-row": {
+            width: '100%',
+            padding: [5, 5],
+            position: 'sticky',
+            backgroundColor: $COLORS.norms.$100,
+            top: 0,
+        },
         "#xo-search": {
-            width: "calc(100% - 10px)",
+            display: 'block',
             padding: [9, 10],
             fontSize: '18px',
             borderWidth: '1px',
             borderStyle: 'solid',
             borderColor: '#969696',
-            margin: [5, null, 6, null],
             borderRadius: '.5rem',
+            width: '100%',
         },
         "#xo-info": {...info },
         mediaQueries: [{

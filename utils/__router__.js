@@ -23,8 +23,7 @@ module.exports = (function(window, document) {
             location.hash = '#/';
 
         window.addEventListener('popstate', () => {
-            const url = this._hash ? location.hash.slice(1) : location.pathname;
-            this.goto(url);
+            __run(this);
             if (this._pop instanceof Function)
                 this._pop();
         });
@@ -95,14 +94,10 @@ module.exports = (function(window, document) {
      * @return {this}
      */
     XORouter.goto = function(url) {
-        url = (this._hash ? "#" : "") + url;
-        if (!history.state || history.state.path !== url) {
-            history.pushState({
-                page: document.title,
-                path: url
-            }, document.title, url);
-            __run(this);
-        }
+        history.pushState({
+            path: url
+        }, document.title, url);
+        __run(this);
         return this;
     }
 
