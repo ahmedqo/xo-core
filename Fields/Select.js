@@ -37,9 +37,9 @@ window.XOSelectElement = class extends XOElement {
             clickHandler() {
                 if (this.disabled || this.readonly || this.querySelectorAll("xo-select-item").length === 0) return;
                 if (this._expand) {
-                    __hide__(this);
+                    __hide(this);
                 } else {
-                    __show__(this);
+                    __show(this);
                     if ((window.innerWidth - this.offsetLeft) < this.$.items.clientWidth) {
                         this.$.items.css({ left: "unset", right: "0", transform: "unset" });
                     } else if (this.offsetLeft < ((this.$.items.offsetWidth - this.offsetWidth) / 2)) {
@@ -103,13 +103,13 @@ window.XOSelectElement = class extends XOElement {
         observer.observe(this, { characterData: true, childList: true, subtree: true });
         this.innerHTML = this.innerHTML.trim();
         document.addEventListener("click", e => {
-            __click__(this, e);
+            __click(this, e);
         });
     }
 
     static onRemoved() {
         document.removeEventListener("click", e => {
-            __click__(this, e);
+            __click(this, e);
         });
     }
 
@@ -200,29 +200,29 @@ XOSelectElement.prototype.tag = "xo-select";
 
 customElements.define(XOSelectElement.prototype.tag, XOSelectElement);
 
-function __click__(self, e) {
+function __click(self, e) {
     if (e.target !== self) {
-        __hide__(self);
+        __hide(self);
         if (self.label) {
             if (self.$.text.val().trim()) {
                 self.$.label.class().add("valid");
             } else {
-                self.$.label.class().del("valid")
+                self.$.label.class().del("valid");
             }
         }
         self._expand = false;
     }
 }
 
-function __hide__(self) {
-    self.querySelectorAll("xo-select-item").forEach(e => {
+function __hide(self) {
+    self.querySelectorAll("xo-select-item").forEach(function(e) {
         e.setAttribute("disabled", "");
         e.style.display = "";
     });
 }
 
-function __show__(self) {
-    self.querySelectorAll("xo-select-item").forEach(e => {
+function __show(self) {
+    self.querySelectorAll("xo-select-item").forEach(function(e) {
         e.removeAttribute("disabled");
         e.style.display = "";
     });

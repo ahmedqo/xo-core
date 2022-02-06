@@ -87,15 +87,17 @@ customElements.define(XONavBarElement.prototype.tag, XONavBarElement);
 function __resize(self) {
     if (window.innerWidth > 768) {
         self.setAttribute("expand", false);
-        self.querySelectorAll("xo-navbar-item").forEach(item => item.removeAttribute("tabindex"));
+        self.querySelectorAll("xo-navbar-item").forEach(function(item) {
+            return item.removeAttribute("tabindex");
+        });
     } else {
         self.setAttribute("expand", false);
     }
 }
 
 function __change(self) {
-    self.querySelectorAll("xo-navbar-item").forEach(item => {
+    self.querySelectorAll("xo-navbar-item").forEach(function(item) {
         item.removeAttribute("active");
         if ((location.hash.includes(item.to) || location.pathname === item.to) && !item.hasAttribute("slot")) item.setAttribute("active", "");
-    })
+    });
 }

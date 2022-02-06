@@ -1,4 +1,6 @@
-const ENG = require("./__elengine__");
+("use strict");
+
+var ENG = require("./__elengine__");
 
 JSON["name"] = "JSON";
 
@@ -82,12 +84,11 @@ class XOElement extends HTMLElement {
         if (oldVal !== newVal) {
             if (name === "styles") {
                 if (this.root.querySelector("style") && newVal !== null) {
-                    var style = __sass({
+                    var style = __sass(Object.assign({
                         mediaQueries: [],
                         keyFrames: [],
-                        properties: [],
-                        ...new Function(`return ${JSON.parse(JSON.stringify(newVal))}`)(),
-                    });
+                        properties: []
+                    }, new Function(`return ${JSON.parse(JSON.stringify(newVal))}`)()));
                     this.root.querySelector("style").innerHTML = __sass(__cons(this).styles) + style;
                     this.removeAttribute("styles");
                 }

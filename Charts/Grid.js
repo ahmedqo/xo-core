@@ -1,5 +1,6 @@
 const { $GridChart } = require('../utils/__sass__');
 const XOElement = require('../utils/__element__');
+var { _toConsumableArray, _node } = require("../utils/__runtime__");
 
 window.XOGridChartElement = class extends XOElement {
 
@@ -24,7 +25,7 @@ window.XOGridChartElement = class extends XOElement {
 
     static onUpdated() {
         if (this.data.length) {
-            __tooltip__(this);
+            __tooltip(this);
         }
     }
 
@@ -37,7 +38,7 @@ window.XOGridChartElement = class extends XOElement {
             {§/if§}
             {§if data.length§}
                 <main id="xo-container">
-                    ${__chart__(this)}
+                    ${__chart(this)}
                 </main>
                 <div id="xo-tooltip"></div>
             {§/if§}
@@ -50,135 +51,127 @@ XOGridChartElement.prototype.tag = "xo-grid-chart";
 
 customElements.define(XOGridChartElement.prototype.tag, XOGridChartElement);
 
-function __node__(n, v) {
-    n = document.createElementNS("http://www.w3.org/2000/svg", n);
-    for (var p in v)
-        n.setAttributeNS(null, p.replace(/[A-Z]/g, function(m, p, o, s) {
-            return "-" + m.toLowerCase();
-        }), v[p]);
-    return n
-}
-
-function __chart__(self) {
-    let size = self.size,
+function __chart(self) {
+    var size = self.size,
         offset = self.offset,
         data = self.data,
         nSize = {
             width: size.width - offset.width,
             height: size.height - offset.height
         },
-        max = Math.max(...data.map(e => e.value)),
+        max = Math.max.apply(Math, _toConsumableArray(data.map(function(e) {
+            return e.value;
+        }))),
         len = data.length > 9 ? 10 : data.length + 1,
         unit = max / len;
 
     // elems
-    let svg = __node__('svg'),
-        g1 = __node__('g'),
-        g2 = __node__('g'),
-        g3 = __node__('g'),
-        g4 = __node__('g'),
-        g5 = __node__('g'),
-        g6 = __node__('g'),
-        g7 = __node__('g'),
-        g8 = __node__('g'),
-        g9 = __node__('g'),
-        g10 = __node__('g');
+    var svg = _node('svg'),
+        g1 = _node('g'),
+        g2 = _node('g'),
+        g3 = _node('g'),
+        g4 = _node('g'),
+        g5 = _node('g'),
+        g6 = _node('g'),
+        g7 = _node('g'),
+        g8 = _node('g'),
+        g9 = _node('g'),
+        g10 = _node('g');
 
-    svg.setAttribute("viewBox", `0 0 ${size.width} ${size.height}`);
+    svg.setAttribute("viewBox", "0 0 " + size.width + " " + size.height);
 
     // axis
-    let x = __node__('line', { x1: offset.width, y1: 0, x2: offset.width, y2: nSize.height, id: "xo-axis" }),
-        y = __node__('line', { x1: offset.width, y1: nSize.height, x2: size.width, y2: nSize.height, id: "xo-axis" }),
-        x0 = __node__('line', { x1: offset.width - 5, y1: 1, x2: offset.width + 5, y2: 1, id: "xo-axis" }),
-        y0 = __node__('line', { x1: size.width - 1, y1: nSize.height - 5, x2: size.width - 1, y2: nSize.height + 5, id: "xo-axis" });
+    var x = _node('line', { x1: offset.width, y1: 0, x2: offset.width, y2: nSize.height, id: "xo-axis" }),
+        y = _node('line', { x1: offset.width, y1: nSize.height, x2: size.width, y2: nSize.height, id: "xo-axis" }),
+        x0 = _node('line', { x1: offset.width - 5, y1: 1, x2: offset.width + 5, y2: 1, id: "xo-axis" }),
+        y0 = _node('line', { x1: size.width - 1, y1: nSize.height - 5, x2: size.width - 1, y2: nSize.height + 5, id: "xo-axis" });
     g3.appendChild(x0);
     g3.appendChild(x);
     g3.appendChild(y);
     g3.appendChild(y0);
 
     // grid
-    for (let i = 0; i < len; i++) {
-        let mv = (nSize.height - 10) / len,
-            line = __node__("line", {
+    for (var i = 0; i < len; i++) {
+        var mv = (nSize.height - 10) / len,
+            _line = _node("line", {
                 x1: offset.width,
-                y1: (mv * i) + 10,
+                y1: mv * i + 10,
                 x2: size.width,
-                y2: (mv * i) + 10,
-                id: "xo-grid",
+                y2: mv * i + 10,
+                id: "xo-grid"
             });
-        g4.appendChild(line);
+        g4.appendChild(_line);
     };
 
     // ylabels
-    for (let i = len; i >= 0; i--) {
+    for (var _i = len; _i >= 0; _i--) {
 
-        let mv = (nSize.height - 10) / len,
-            text = __node__('text', {
+        var _mv = (nSize.height - 10) / len,
+            text = _node('text', {
                 x: offset.width / 2,
-                y: (mv * (len - i)) + 10,
+                y: _mv * (len - _i) + 10,
                 id: "xo-legendVert"
             });
-        text.innerHTML = Number.isInteger(Number(unit * i)) ? Number(unit * i) : Number(unit * i).toFixed(2);
+        text.innerHTML = Number.isInteger(Number(unit * _i)) ? Number(unit * _i) : Number(unit * _i).toFixed(2);
         g1.appendChild(text);
     };
 
     // xlabels
-    for (let i = 0; i < data.length; i++) {
-        let mv = ((nSize.width / (data.length)) * i) + offset.width,
-            text = __node__("foreignObject", {
-                x: mv,
+    for (var _i2 = 0; _i2 < data.length; _i2++) {
+        var _mv2 = nSize.width / data.length * _i2 + offset.width,
+            _text = _node("foreignObject", {
+                x: _mv2,
                 y: nSize.height,
-                width: `calc(100% / ${data.length})`,
-                height: offset.height,
+                width: "calc(100% / " + data.length + ")",
+                height: offset.height
             });
-        text.innerHTML = `<div id="xo-legendHors">${data[i].label}</div>`;
-        g2.appendChild(text);
+        _text.innerHTML = "<div id=\"xo-legendHors\">" + data[_i2].label + "</div>";
+        g2.appendChild(_text);
     };
 
     // bar 
-    for (let i = 0; i < data.length; i++) {
-        let mv = ((nSize.width / (data.length)) * i) + offset.width + ((nSize.width / (data.length)) / 2),
-            pr = Number(data[i].value) ? (nSize.height + 10) - (nSize.height / 100) * ((Number(data[i].value) / max) * 100) : nSize.height,
-            line = __node__("line", {
-                x1: mv,
+    for (var _i3 = 0; _i3 < data.length; _i3++) {
+        var _mv3 = nSize.width / data.length * _i3 + offset.width + nSize.width / data.length / 2,
+            pr = Number(data[_i3].value) ? nSize.height + 10 - nSize.height / 100 * (Number(data[_i3].value) / max * 100) : nSize.height,
+            _line2 = _node("line", {
+                x1: _mv3,
                 y1: nSize.height - 1,
-                x2: mv,
+                x2: _mv3,
                 y2: pr,
                 id: "xo-bars",
-                'stroke-width': `calc((100% / ${data.length}))`,
+                'stroke-width': "calc((100% / " + data.length + "))"
             });
-        g5.appendChild(line);
+        g5.appendChild(_line2);
     }
 
     // area 
-    let path = data.reduce((acc, itm, i) => {
-            let mv = ((nSize.width / (data.length)) * i) + offset.width + ((nSize.width / (data.length)) / 2),
-                pr = Number(itm.value) ? (nSize.height + 10) - (nSize.height / 100) * ((Number(itm.value) / max) * 100) : nSize.height;
-            return acc + `${mv} ${pr} `;
-        },
-        "").trim();
-    let xf = offset.width + ((nSize.width / (data.length)) / 2),
-        xl = ((nSize.width / (data.length)) * (data.length - 1)) + offset.width + ((nSize.width / (data.length)) / 2),
-        area = __node__("path", {
-            d: `M${xf} ${nSize.height} ${path} ${xl} ${nSize.height}`,
-            id: "xo-area",
+    var path = data.reduce(function(acc, itm, i) {
+        var mv = nSize.width / data.length * i + offset.width + nSize.width / data.length / 2,
+            pr = Number(itm.value) ? nSize.height + 10 - nSize.height / 100 * (Number(itm.value) / max * 100) : nSize.height;
+        return acc + (mv + " " + pr + " ");
+    }, "").trim();
+    var xf = offset.width + nSize.width / data.length / 2,
+        xl = nSize.width / data.length * (data.length - 1) + offset.width + nSize.width / data.length / 2,
+        area = _node("path", {
+            d: "M" + xf + " " + nSize.height + " " + path + " " + xl + " " + nSize.height,
+            id: "xo-area"
         });
     g6.appendChild(area);
 
     // line 
-    let line = __node__("path", {
-        d: `M${path}`,
-        id: "xo-line",
+    var line = _node("path", {
+        d: "M" + path,
+        id: "xo-line"
     });
     g7.appendChild(line);
 
     // dots 
-    for (let i = 0; i < data.length; i++) {
-        let mv = ((nSize.width / (data.length)) * i) + offset.width + ((nSize.width / (data.length)) / 2),
-            pr = Number(data[i].value) ? (nSize.height + 10) - (nSize.height / 100) * ((Number(data[i].value) / max) * 100) : nSize.height,
-            circle = __node__("circle", {
-                cx: mv,
-                cy: pr,
+    for (var _i4 = 0; _i4 < data.length; _i4++) {
+        var _mv4 = nSize.width / data.length * _i4 + offset.width + nSize.width / data.length / 2,
+            _pr = Number(data[_i4].value) ? nSize.height + 10 - nSize.height / 100 * (Number(data[_i4].value) / max * 100) : nSize.height,
+            circle = _node("circle", {
+                cx: _mv4,
+                cy: _pr,
                 r: 10,
                 id: "xo-dots"
             });
@@ -186,34 +179,34 @@ function __chart__(self) {
     }
 
     // hovers
-    for (let i = 0; i < data.length; i++) {
-        let mv = ((nSize.width / (data.length)) * i) + offset.width + ((nSize.width / (data.length)) / 2),
-            line = __node__("line", {
-                x1: mv,
+    for (var _i5 = 0; _i5 < data.length; _i5++) {
+        var _mv5 = nSize.width / data.length * _i5 + offset.width + nSize.width / data.length / 2,
+            _line3 = _node("line", {
+                x1: _mv5,
                 y1: nSize.height - 3,
-                x2: mv,
+                x2: _mv5,
                 y2: nSize.height + 3,
                 stroke: "black",
-                'stroke-linecap': 'round',
+                'stroke-linecap': 'round'
             }),
-            line2 = __node__("line", {
-                x1: mv,
+            line2 = _node("line", {
+                x1: _mv5,
                 y1: 0,
-                x2: mv,
+                x2: _mv5,
                 y2: nSize.height,
                 id: "xo-hover",
-                'stroke-width': `calc((100% / ${data.length}) - 10px)`,
-                "data-value": `<strong>${data[i].label}</strong><br/><em>${data[i].value}</em>`,
+                'stroke-width': "calc((100% / " + data.length + ") - 10px)",
+                "data-value": "<strong>" + data[_i5].label + "</strong><br/><em>" + data[_i5].value + "</em>"
             }),
-            line3 = __node__("line", {
-                x1: mv,
+            line3 = _node("line", {
+                x1: _mv5,
                 y1: 0,
-                x2: mv,
+                x2: _mv5,
                 y2: nSize.height,
                 id: "xo-ref",
-                'stroke': `red`,
+                'stroke': "red"
             });
-        g2.appendChild(line);
+        g2.appendChild(_line3);
         g9.appendChild(line2);
         g10.appendChild(line3);
     };
@@ -232,22 +225,20 @@ function __chart__(self) {
     return svg.outerHTML;
 }
 
-function __tooltip__(self) {
-    self.$.container.find("#xo-hover").forEach((e, i) => {
-        e.addEventListener("mousemove", _ => {
+function __tooltip(self) {
+    self.$.container.find("#xo-hover").forEach(function(e, i) {
+        e.addEventListener("mousemove", function(_) {
             self.$.tooltip.innerHTML = e.dataset.value;
             self.$.tooltip.style.left = _.x + "px";
             self.$.tooltip.style.top = _.y + "px";
             self.$.tooltip.style.display = "block";
             self.$.container.find("#xo-ref")[i].css('opacity', .5);
-            if (_.x < parseFloat(window.getComputedStyle(self.$.tooltip).width))
-                self.$.tooltip.classList.add("right");
-            else
-                self.$.tooltip.classList.remove("right");
+            if (_.x < parseFloat(window.getComputedStyle(self.$.tooltip).width)) self.$.tooltip.classList.add("right");
+            else self.$.tooltip.classList.remove("right");
         });
-        e.addEventListener("mouseout", () => {
+        e.addEventListener("mouseout", function() {
             self.$.container.find("#xo-ref")[i].css('opacity', 0);
             self.$.tooltip.style.display = "none";
         });
-    })
+    });
 }

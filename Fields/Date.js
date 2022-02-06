@@ -59,7 +59,7 @@ window.XODateElement = class extends XOElement {
                     }, 150);
                 }
                 this._expand = !this._expand;
-                __cal__(this, this.day, this.month - 1, this.year);
+                __cal(this, this.day, this.month - 1, this.year);
             },
             blurHandler(e) {
                 if (e.relatedTarget !== this.$.search) {
@@ -97,7 +97,7 @@ window.XODateElement = class extends XOElement {
                         this.$.items.css("--slide", -this.$.items.clientHeight + "px");
                     }
                 }, 100);
-                __cal__(this, this.day, this.month - 1, this.year);
+                __cal(this, this.day, this.month - 1, this.year);
             },
             clear() {
                 this.value = "";
@@ -116,13 +116,13 @@ window.XODateElement = class extends XOElement {
             this.removeAttribute("value");
         }
         document.addEventListener("click", e => {
-            __click__(this, e);
+            __click(this, e);
         });
     }
 
     static onRemoved() {
         document.removeEventListener("click", e => {
-            __click__(this, e);
+            __click(this, e);
         });
     }
 
@@ -259,63 +259,58 @@ XODateElement.prototype.tag = "xo-date";
 
 customElements.define(XODateElement.prototype.tag, XODateElement);
 
-function __click__(self, e) {
+
+function __click(self, e) {
     if (e.target !== self) {
         if (self.label) {
             if (self.$.text.val().trim()) {
                 self.$.label.class().add("valid");
             } else {
-                self.$.label.class().del("valid")
+                self.$.label.class().del("valid");
             }
         }
         self._expand = false;
     }
 }
 
-function __cal__(el, d = null, m = null, y = null) {
+function __cal(el) {
+    var d = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+    var m = arguments.length <= 2 || arguments[2] === undefined ? null : arguments[2];
+    var y = arguments.length <= 3 || arguments[3] === undefined ? null : arguments[3];
+
     DATE.setDate(1);
-    el.$.items.find("#xo-day").forEach(b => b.remove());
-    const lastDay = new Date(
-        DATE.getFullYear(),
-        DATE.getMonth() + 1,
-        0
-    ).getDate();
+    el.$.items.find("#xo-day").forEach(function(b) {
+        return b.remove();
+    });
+    var lastDay = new Date(DATE.getFullYear(), DATE.getMonth() + 1, 0).getDate();
 
-    const firstDayIndex = DATE.getDay();
+    var firstDayIndex = DATE.getDay();
 
-    const lastDayIndex = new Date(
-        DATE.getFullYear(),
-        DATE.getMonth() + 1,
-        0
-    ).getDay();
+    var lastDayIndex = new Date(DATE.getFullYear(), DATE.getMonth() + 1, 0).getDay();
 
-    const nextDays = 7 - lastDayIndex - 1;
+    var nextDays = 7 - lastDayIndex - 1;
 
     el.$.title.htm(months[DATE.getMonth()] + ", " + DATE.getFullYear());
-    let days = "";
+    var days = "";
 
-    for (let x = firstDayIndex; x > 0; x--) {
-        days += `<div id="xo-day" part="--xo-day" off></div>`;
+    for (var x = firstDayIndex; x > 0; x--) {
+        days += "<div id=\"xo-day\" part=\"--xo-day\" off></div>";
     }
 
-    for (let i = 1; i <= lastDay; i++) {
-        var day = (i < 10) ? "0" + i : i,
-            mon = ((DATE.getMonth() + 1) < 10) ? "0" + (DATE.getMonth() + 1) : (DATE.getMonth() + 1);
-        if (
-            i === d && DATE.getMonth() === m && DATE.getFullYear() === y
-        ) {
-            days += `<button id="xo-day" part="--xo-day" date="${DATE.getFullYear()}-${mon}-${day}" active>${day}</button>`;
-        } else if (
-            i === new Date().getDate() && DATE.getMonth() === new Date().getMonth() && DATE.getFullYear() === new Date().getFullYear()
-        ) {
-            days += `<button id="xo-day" part="--xo-day" date="${DATE.getFullYear()}-${mon}-${day}" on>${day}</button>`;
+    for (var i = 1; i <= lastDay; i++) {
+        var day = i < 10 ? "0" + i : i,
+            mon = DATE.getMonth() + 1 < 10 ? "0" + (DATE.getMonth() + 1) : DATE.getMonth() + 1;
+        if (i === d && DATE.getMonth() === m && DATE.getFullYear() === y) {
+            days += "<button id=\"xo-day\" part=\"--xo-day\" date=\"" + DATE.getFullYear() + "-" + mon + "-" + day + "\" active>" + day + "</button>";
+        } else if (i === new Date().getDate() && DATE.getMonth() === new Date().getMonth() && DATE.getFullYear() === new Date().getFullYear()) {
+            days += "<button id=\"xo-day\" part=\"--xo-day\" date=\"" + DATE.getFullYear() + "-" + mon + "-" + day + "\" on>" + day + "</button>";
         } else {
-            days += `<button id="xo-day" part="--xo-day" date="${DATE.getFullYear()}-${mon}-${day}">${day}</button>`;
+            days += "<button id=\"xo-day\" part=\"--xo-day\" date=\"" + DATE.getFullYear() + "-" + mon + "-" + day + "\">" + day + "</button>";
         }
     }
 
-    for (let j = 1; j <= nextDays; j++) {
-        days += `<div id="xo-day" part="--xo-day" off></div>`;
+    for (var j = 1; j <= nextDays; j++) {
+        days += "<div id=\"xo-day\" part=\"--xo-day\" off></div>";
     }
     el.$.items.find("main").innerHTML += days;
 }

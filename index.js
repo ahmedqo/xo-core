@@ -9,7 +9,7 @@ const XOView = require("./utils/__view__");
 const XODate = require("./utils/__date__");
 const XODom = require("./utils/__dom__");
 
-const { XOShape, XOSheet } = require("./utils/__base__");
+const { XOShape, XOSheet, XOStore } = require("./utils/__base__");
 
 module.exports.XOElement = XOElement;
 module.exports.XOCookie = XOCookie;
@@ -24,3 +24,4 @@ module.exports.XODom = XODom;
 
 module.exports.XOShape = XOShape;
 module.exports.XOSheet = XOSheet;
+module.exports.XOStore = XOStore;

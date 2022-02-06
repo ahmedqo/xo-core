@@ -1,38 +1,31 @@
-module.exports = (function(window, document) {
-    'use strict';
+("use strict");
 
+module.exports = (function(window, document) {
     let domReadyQueue = [];
 
     /**
      * check if dom loaded then run fn else push to array
-     * @param {Function} fn 
+     * @param {Function} fn
      * @return Function|Array
      */
     const handleDOMReady = (fn) => {
-
-        return document.readyState === "complete" ?
-            fn.call(document) :
-            domReadyQueue.push(fn);
-
-    }
+        return document.readyState === "complete" ? fn.call(document) : domReadyQueue.push(fn);
+    };
 
     document.addEventListener("DOMContentLoaded", function onDOMReady() {
-
         document.removeEventListener("DOMContentLoaded", onDOMReady);
 
         while (domReadyQueue.length) {
             domReadyQueue.shift().call(document);
         }
-
-    })
+    });
 
     /**
      * XODom Constractor
-     * @param {String|HTMLElement|NodeList} ele 
+     * @param {String|HTMLElement|NodeList} ele
      * @return XODom
      */
     function XODom(ele) {
-
         if (ele instanceof XODom) {
             return ele;
         }
@@ -41,7 +34,7 @@ module.exports = (function(window, document) {
             return new XODom(ele);
         }
 
-        if (typeof ele === 'function') {
+        if (typeof ele === "function") {
             return handleDOMReady(ele);
         }
 
@@ -56,13 +49,8 @@ module.exports = (function(window, document) {
             ele === window
         ) {
             this._nodes = ele.length > 0 ? [].slice.call(ele) : [ele];
-        } else if (
-            typeof ele === "string"
-        ) {
-            if (
-                ele[ele.length - 1] === ">" &&
-                ele[0] === "<"
-            ) {
+        } else if (typeof ele === "string") {
+            if (ele[ele.length - 1] === ">" && ele[0] === "<") {
                 this._nodes = [createNode(ele)];
             } else {
                 this._nodes = [].slice.call(document.querySelectorAll(ele));
@@ -75,12 +63,11 @@ module.exports = (function(window, document) {
                 this[i] = this._nodes[i];
             }
         }
-
     }
 
     /**
      * create an html element
-     * @param {String} htm 
+     * @param {String} htm
      * @return HTMLElement
      */
     function createNode(htm) {
@@ -93,7 +80,7 @@ module.exports = (function(window, document) {
 
     /**
      * execute fn to each node list elements
-     * @param {Function} fn 
+     * @param {Function} fn
      * @return XODom
      */
     XODom.fn.each = function(fn) {
@@ -101,12 +88,12 @@ module.exports = (function(window, document) {
             fn.call(this, this[i], i);
         }
         return this;
-    }
+    };
 
     /**
      * if htm set html to each node list elements
      * get html of the first node list element
-     * @param {String|Undefined|Array} htm 
+     * @param {String|Undefined|Array} htm
      * @return XODom|String
      */
     XODom.fn.htm = function(htm) {
@@ -118,17 +105,17 @@ module.exports = (function(window, document) {
             return this[0] && this[0].outerHTML;
         }
 
-        this.each(e => {
+        this.each((e) => {
             e.innerHTML = htm;
         });
 
         return this;
-    }
+    };
 
     /**
      * set text to each node list elements
      * get text of the first node list element
-     * @param {String} txt 
+     * @param {String} txt
      * @return XODom|String
      */
     XODom.fn.txt = function(txt) {
@@ -136,17 +123,17 @@ module.exports = (function(window, document) {
             return this[0] && this[0].innerText;
         }
 
-        this.each(e => {
+        this.each((e) => {
             e.innerText = txt;
         });
 
         return this;
-    }
+    };
 
     /**
      * set val to each node list elements if value in element
      * get value of the first node list element if value in element
-     * @param {String} val 
+     * @param {String} val
      * @return XODom
      */
     XODom.fn.val = function(val) {
@@ -154,13 +141,12 @@ module.exports = (function(window, document) {
             return this[0] && "value" in this[0] && this[0].value;
         }
 
-        this.each(e => {
-            if ("value" in this[0])
-                e.value = val;
+        this.each((e) => {
+            if ("value" in this[0]) e.value = val;
         });
 
         return this;
-    }
+    };
 
     /**
      * get value length of the first node list element
@@ -168,11 +154,11 @@ module.exports = (function(window, document) {
      */
     XODom.fn.len = function() {
         return this[0] && "value" in this[0] && this[0].value.trim().length;
-    }
+    };
 
     /**
      * add html|node to each node list elements
-     * @param {String|NodeList} htm 
+     * @param {String|NodeList} htm
      * @return XODom
      */
     XODom.fn.attach = function(...htm) {
@@ -183,16 +169,16 @@ module.exports = (function(window, document) {
                 });
             if (n instanceof HTMLElement)
                 this.each(function(e) {
-                    e.append(n)
+                    e.append(n);
                 });
         }
 
         return this;
-    }
+    };
 
     /**
      * append each node list element to target
-     * @param {HTMLElement|String} el 
+     * @param {HTMLElement|String} el
      * @return XODom
      */
     XODom.fn.attachTo = function(el) {
@@ -208,12 +194,12 @@ module.exports = (function(window, document) {
             });
         }
 
-        return this
-    }
+        return this;
+    };
 
     /**
      * pre-add html|node to each node list elements
-     * @param {String|NodeList} htm 
+     * @param {String|NodeList} htm
      * @return XODom
      */
     XODom.fn.pretach = function(...htm) {
@@ -224,16 +210,16 @@ module.exports = (function(window, document) {
                 });
             if (n instanceof HTMLElement)
                 this.each(function(e) {
-                    e.prepend(n)
+                    e.prepend(n);
                 });
         }
 
         return this;
-    }
+    };
 
     /**
      * prepend each node list element to target
-     * @param {HTMLElement|String} el 
+     * @param {HTMLElement|String} el
      * @return XODom
      */
     XODom.fn.pretachTo = function(el) {
@@ -249,12 +235,12 @@ module.exports = (function(window, document) {
             });
         }
 
-        return this
-    }
+        return this;
+    };
 
     /**
      * wrap each node list element with htm
-     * @param {String} htm 
+     * @param {String} htm
      * @return XODom
      */
     XODom.fn.wrap = function(htm) {
@@ -262,11 +248,11 @@ module.exports = (function(window, document) {
             this.each(function(e) {
                 let w = createNode(htm);
                 e.parentElement.insertBefore(w, e);
-                w.append(e)
-            })
+                w.append(e);
+            });
         }
         return this;
-    }
+    };
 
     /**
      * remove parent of each node list element
@@ -276,12 +262,12 @@ module.exports = (function(window, document) {
         this.each(function(e) {
             let p = e.parentElement,
                 g = p.parentElement;
-            g.insertBefore(e, p)
+            g.insertBefore(e, p);
             p.remove();
         });
 
         return this;
-    }
+    };
 
     /**
      * get computed width of the first node list element if otr get bounding
@@ -289,8 +275,8 @@ module.exports = (function(window, document) {
      * @return String
      */
     XODom.fn.width = function(otr) {
-        return this[0] && otr ? this[0].getBoundingClientRect().width : getComputedStyle(this[0]).width
-    }
+        return this[0] && otr ? this[0].getBoundingClientRect().width : getComputedStyle(this[0]).width;
+    };
 
     /**
      * get computed height of the first node list element if otr get bounding
@@ -298,13 +284,12 @@ module.exports = (function(window, document) {
      * @return String
      */
     XODom.fn.height = function(otr) {
-        return this[0] && otr ? this[0].getBoundingClientRect().height : getComputedStyle(this[0]).height
-    }
-
+        return this[0] && otr ? this[0].getBoundingClientRect().height : getComputedStyle(this[0]).height;
+    };
 
     /**
      * add html|node after each node list elements
-     * @param {String|NodeList} htm 
+     * @param {String|NodeList} htm
      * @return XODom
      */
     XODom.fn.after = function(...htm) {
@@ -322,11 +307,11 @@ module.exports = (function(window, document) {
         }
 
         return this;
-    }
+    };
 
     /**
      * add html|node before each node list elements
-     * @param {String|NodeList} htm 
+     * @param {String|NodeList} htm
      * @return XODom
      */
     XODom.fn.before = function(...htm) {
@@ -342,11 +327,11 @@ module.exports = (function(window, document) {
         }
 
         return this;
-    }
+    };
 
     /**
      * remove ele node list or node list elements
-     * @param {String} ele 
+     * @param {String} ele
      * @return XODom
      */
     XODom.fn.remove = function(ele) {
@@ -365,11 +350,11 @@ module.exports = (function(window, document) {
             });
 
         return this;
-    }
+    };
 
     /**
      * find element in each node list elements
-     * @param {String} ele 
+     * @param {String} ele
      * @return XODom
      */
     XODom.fn.find = function(ele) {
@@ -384,79 +369,79 @@ module.exports = (function(window, document) {
         }
 
         return this;
-    }
+    };
 
     /**
      * get children of each node list elements
      * @return XODom
      */
     XODom.fn.children = function() {
-        let all = []
+        let all = [];
         this.each(function(e) {
             all = [].concat.call(all, [].slice.call(e.children));
         });
 
         return new XODom(all);
-    }
+    };
 
     /**
      * get children of each node list elements
      * @return XODom
      */
     XODom.fn.nodes = function() {
-        let all = []
+        let all = [];
         this.each(function(e) {
             all = [].concat.call(all, [].slice.call(e.childNodes));
         });
 
         return new XODom(all);
-    }
+    };
 
     /**
      * clone each node list elements
      * @return XODom
      */
     XODom.fn.clone = function() {
-        let all = []
+        let all = [];
         this.each(function(e) {
             all.push(e.cloneNode());
         });
 
         return new XODom(all);
-    }
+    };
 
     /**
      * replce each node list elements with ele
-     * @param {String|Node} ele 
+     * @param {String|Node} ele
      * @return XODom
      */
     XODom.fn.replace = function(ele) {
         if (ele) {
-            let node = createNode(ele)
-            this.each(el => {
+            let node = createNode(ele);
+            this.each((el) => {
                 el.replaceWith(node);
             });
         }
 
         return this;
-    }
+    };
 
     /**
      * add classes to each node list elements
-     * @param  {...String} nms 
+     * @param  {...String} nms
      * @return XODom
      */
     XODom.fn.addClass = function(...nms) {
-        this.each(el => {
+        this.each((el) => {
             el.classList.add(...nms);
         });
 
         return this;
-    }
+    };
 
     /**
      * delete classes to each node list elements
-     * @param  {...String} nms 
+     * @param  {...String} nms
      * @return XODom
      */
     XODom.fn.delClass = function(...nms) {
@@ -465,11 +450,11 @@ module.exports = (function(window, document) {
         });
 
         return this;
-    }
+    };
 
     /**
      * toggle classes to each node list elements
-     * @param  {...String} nms 
+     * @param  {...String} nms
      * @return XODom
      */
     XODom.fn.togClass = function(...nms) {
@@ -480,21 +465,21 @@ module.exports = (function(window, document) {
         });
 
         return this;
-    }
+    };
 
     /**
      * weather the first node list element has class or not
-     * @param {String} nms 
+     * @param {String} nms
      * @return Boolean
      */
     XODom.fn.hasClass = function(nms) {
         return this[0] && this[0].classList.contains(nms);
-    }
+    };
 
     /**
      * replace old class name with new class name to each node list elements
-     * @param {String} onm 
-     * @param {String} nnm 
+     * @param {String} onm
+     * @param {String} nnm
      * @return XODom
      */
     XODom.fn.putClass = function(onm, nnm) {
@@ -503,14 +488,14 @@ module.exports = (function(window, document) {
         });
 
         return this;
-    }
+    };
 
     /**
      * if nam{String} and val{String} set attribute to each node list elements
      * if nam{String} get attribute of the first node list element
      * if nam{Object} set attributes to each node list elements
-     * @param {String|Object} nam 
-     * @param {String} val 
+     * @param {String|Object} nam
+     * @param {String} val
      * @return XODom|String
      */
     XODom.fn.attr = function(nam, val) {
@@ -518,26 +503,26 @@ module.exports = (function(window, document) {
             return this[0] && this[0].getAttribute(nam);
         }
         if (nam && val != undefined && typeof nam == "string") {
-            this.each(e => {
+            this.each((e) => {
                 e.setAttribute(nam, val);
             });
         }
 
         if (nam && val === undefined && typeof nam == "object") {
-            this.each(e => {
+            this.each((e) => {
                 for (var key in nam) {
-                    let dec = key.replace(/\p{Lu}/gu, m => "-" + m.toLowerCase());
+                    let dec = key.replace(/\p{Lu}/gu, (m) => "-" + m.toLowerCase());
                     e.setAttribute(dec, nam[key]);
                 }
             });
         }
 
         return this;
-    }
+    };
 
     /**
      * delete attributes to each node list elements
-     * @param  {...String} nms 
+     * @param  {...String} nms
      * @return XODom
      */
     XODom.fn.delAttr = function(...nms) {
@@ -548,11 +533,11 @@ module.exports = (function(window, document) {
         });
 
         return this;
-    }
+    };
 
     /**
      * toggle attributes to each node list elements
-     * @param  {...String} nms 
+     * @param  {...String} nms
      * @return XODom
      */
     XODom.fn.togAttr = function(...nms) {
@@ -563,21 +548,21 @@ module.exports = (function(window, document) {
         });
 
         return this;
-    }
+    };
 
     /**
      * weather the first node list element has attribute or not
-     * @param {String} nms 
+     * @param {String} nms
      * @return Boolean
      */
     XODom.fn.hasAttr = function(nms) {
         return this[0] && this[0].hasAttribute(nms);
-    }
+    };
 
     /**
      * replace old attribute name with new attribute name to each node list elements
-     * @param {String} onm 
-     * @param {String} nnm 
+     * @param {String} onm
+     * @param {String} nnm
      * @return XODom
      */
     XODom.fn.putAttr = function(onm, nnm, val) {
@@ -587,14 +572,14 @@ module.exports = (function(window, document) {
         }
 
         return this;
-    }
+    };
 
     /**
      * if nam{String} and val{String} set property to each node list elements
      * if nam{String} get property of the first node list element
      * if nam{Object} set properties to each node list elements
-     * @param {String|Object} nam 
-     * @param {String} val 
+     * @param {String|Object} nam
+     * @param {String} val
      * @return XODom|String
      */
     XODom.fn.prop = function(nam, val) {
@@ -603,13 +588,13 @@ module.exports = (function(window, document) {
         }
 
         if (nam && val !== undefined && typeof nam == "string") {
-            this.each(e => {
+            this.each((e) => {
                 e[nam] = val;
             });
         }
 
         if (nam && val === undefined && typeof nam == "object") {
-            this.each(e => {
+            this.each((e) => {
                 for (var key in nam) {
                     e[key] = nam[key];
                 }
@@ -617,11 +602,11 @@ module.exports = (function(window, document) {
         }
 
         return this;
-    }
+    };
 
     /**
      * delete properties to each node list elements
-     * @param  {...String} nms 
+     * @param  {...String} nms
      * @return XODom
      */
     XODom.fn.delProp = function(...nms) {
@@ -632,7 +617,7 @@ module.exports = (function(window, document) {
         });
 
         return this;
-    }
+    };
 
     /**
      * weather the first node list element has property or not
@@ -641,7 +626,7 @@ module.exports = (function(window, document) {
      */
     XODom.fn.hasProp = function(nm) {
         return this[0] && nm in this[0];
-    }
+    };
 
     /**
      * get next node of the first node list element
@@ -649,7 +634,7 @@ module.exports = (function(window, document) {
      */
     XODom.fn.next = function() {
         return this[0] && new XODom(this[0].nextElementSibling);
-    }
+    };
 
     /**
      * get previous node of the first node list element
@@ -657,7 +642,7 @@ module.exports = (function(window, document) {
      */
     XODom.fn.prev = function() {
         return this[0] && new XODom(this[0].previousElementSibling);
-    }
+    };
 
     /**
      * get parent node of the first node list element
@@ -665,7 +650,7 @@ module.exports = (function(window, document) {
      */
     XODom.fn.parent = function() {
         return this[0] && new XODom(this[0].parentElement);
-    }
+    };
 
     /**
      * get length of node list
@@ -673,48 +658,48 @@ module.exports = (function(window, document) {
      */
     XODom.fn.size = function() {
         return this._nodes.length;
-    }
+    };
 
     /**
      * if nam{String} and val{String} set style to each node list elements
      * if nam{String} get style of the first node list element
      * if nam{Object} set styles to each node list elements
-     * @param {String|Object} nam 
-     * @param {String} val 
+     * @param {String|Object} nam
+     * @param {String} val
      * @return XODom|String
      */
     XODom.fn.css = function(nam, val) {
         if (nam && val === undefined && typeof nam == "string") {
-            return this[0] && getComputedStyle(this[0])[nam]
+            return this[0] && getComputedStyle(this[0])[nam];
         }
 
         if (nam && val !== undefined && typeof nam == "string") {
             if (val.startsWith(":")) {
-                return this[0] && getComputedStyle(this[0], val)[nam]
+                return this[0] && getComputedStyle(this[0], val)[nam];
             }
-            this.each(e => {
+            this.each((e) => {
                 e.style.setProperty(nam, val);
             });
         }
 
         if (nam && val === undefined && typeof nam == "object") {
-            this.each(e => {
+            this.each((e) => {
                 for (var key in nam) {
-                    let dec = key.replace(/\p{Lu}/gu, m => "-" + m.toLowerCase());
+                    let dec = key.replace(/\p{Lu}/gu, (m) => "-" + m.toLowerCase());
                     e.style.setProperty(dec, nam[key]);
                 }
             });
         }
 
         return this;
-    }
+    };
 
     /**
      * if nam{String} and val{String} set dataset val to each node list elements
      * if nam{String} get dataset val of the first node list element
      * if nam{Object} set dataset vals to each node list elements
-     * @param {String|Object} nam 
-     * @param {String} val 
+     * @param {String|Object} nam
+     * @param {String} val
      * @return XODom|String
      */
     XODom.fn.data = function(nam, val) {
@@ -723,13 +708,13 @@ module.exports = (function(window, document) {
         }
 
         if (nam && val !== undefined && typeof nam == "string") {
-            this.each(e => {
+            this.each((e) => {
                 e.dataset[nam] = val;
             });
         }
 
         if (nam && val === undefined && typeof nam == "object") {
-            this.each(e => {
+            this.each((e) => {
                 for (var key in nam) {
                     e.dataset[key] = nam[key];
                 }
@@ -737,11 +722,11 @@ module.exports = (function(window, document) {
         }
 
         return this;
-    }
+    };
 
     /**
      * get node list element at pos n -1 last one as XODom
-     * @param {Number} n 
+     * @param {Number} n
      * @return XODom
      */
     XODom.fn.get = function(n) {
@@ -751,11 +736,11 @@ module.exports = (function(window, document) {
             else el = this._nodes[n];
             if (el) return new XODom(el);
         }
-    }
+    };
 
     /**
      * validate value of the first node list element
-     * @param  {...String} nms 
+     * @param  {...String} nms
      * @return Boolean
      */
     XODom.fn.validate = function(...nms) {
@@ -776,14 +761,14 @@ module.exports = (function(window, document) {
             }
         }
         return arr.includes(false) ? false : true;
-    }
+    };
 
     // Evenets
 
     /**
      * add event to node list elements
-     * @param {String} nam 
-     * @param {Function} fn 
+     * @param {String} nam
+     * @param {Function} fn
      * @return XODom
      */
     XODom.fn.on = function(nam, fn) {
@@ -795,12 +780,12 @@ module.exports = (function(window, document) {
         });
 
         return this;
-    }
+    };
 
     /**
      * del event to node list elements
-     * @param {String} nam 
-     * @param {Function} fn 
+     * @param {String} nam
+     * @param {Function} fn
      * @return XODom
      */
     XODom.fn.off = function(nam, fn) {
@@ -808,17 +793,16 @@ module.exports = (function(window, document) {
             e.removeEventListener(nam, fn);
             if (!("eventList" in e)) e.eventList = {};
             if (!(nam in e.eventList)) e.eventList[nam] = [];
-            if (e.eventList[nam].indeXODomf(fn) !== -1)
-                e.eventList[nam].splice(e.eventList[nam].indeXODomf(fn), 1);
+            if (e.eventList[nam].indeXODomf(fn) !== -1) e.eventList[nam].splice(e.eventList[nam].indeXODomf(fn), 1);
         });
 
         return this;
-    }
+    };
 
     /**
      * run over on mouseover and run out on mouseout to each node list elements
-     * @param {Function} over 
-     * @param {Function} out 
+     * @param {Function} over
+     * @param {Function} out
      * @return XODom
      */
     XODom.fn.hover = function(over, out) {
@@ -836,12 +820,11 @@ module.exports = (function(window, document) {
         }
 
         return this;
-    }
-
+    };
 
     /**
      * add event to node list elements
-     * @param {Function} fn 
+     * @param {Function} fn
      * @return XODom
      */
     XODom.fn.afterprint = function(fn) {
@@ -860,11 +843,11 @@ module.exports = (function(window, document) {
         }
 
         return this;
-    }
+    };
 
     /**
      * add event to node list elements
-     * @param {Function} fn 
+     * @param {Function} fn
      * @return XODom
      */
     XODom.fn.beforeprint = function(fn) {
@@ -883,11 +866,11 @@ module.exports = (function(window, document) {
         }
 
         return this;
-    }
+    };
 
     /**
      * add event to node list elements
-     * @param {Function} fn 
+     * @param {Function} fn
      * @return XODom
      */
     XODom.fn.beforeunload = function(fn) {
@@ -906,11 +889,11 @@ module.exports = (function(window, document) {
         }
 
         return this;
-    }
+    };
 
     /**
      * add event to node list elements
-     * @param {Function} fn 
+     * @param {Function} fn
      * @return XODom
      */
     XODom.fn.error = function(fn) {
@@ -929,11 +912,11 @@ module.exports = (function(window, document) {
         }
 
         return this;
-    }
+    };
 
     /**
      * add event to node list elements
-     * @param {Function} fn 
+     * @param {Function} fn
      * @return XODom
      */
     XODom.fn.hashchange = function(fn) {
@@ -952,11 +935,11 @@ module.exports = (function(window, document) {
         }
 
         return this;
-    }
+    };
 
     /**
      * add event to node list elements
-     * @param {Function} fn 
+     * @param {Function} fn
      * @return XODom
      */
     XODom.fn.load = function(fn) {
@@ -975,11 +958,11 @@ module.exports = (function(window, document) {
         }
 
         return this;
-    }
+    };
 
     /**
      * add event to node list elements
-     * @param {Function} fn 
+     * @param {Function} fn
      * @return XODom
      */
     XODom.fn.offline = function(fn) {
@@ -998,11 +981,11 @@ module.exports = (function(window, document) {
         }
 
         return this;
-    }
+    };
 
     /**
      * add event to node list elements
-     * @param {Function} fn 
+     * @param {Function} fn
      * @return XODom
      */
     XODom.fn.online = function(fn) {
@@ -1021,11 +1004,11 @@ module.exports = (function(window, document) {
         }
 
         return this;
-    }
+    };
 
     /**
      * add event to node list elements
-     * @param {Function} fn 
+     * @param {Function} fn
      * @return XODom
      */
     XODom.fn.pageshow = function(fn) {
@@ -1044,11 +1027,11 @@ module.exports = (function(window, document) {
         }
 
         return this;
-    }
+    };
 
     /**
      * add event to node list elements
-     * @param {Function} fn 
+     * @param {Function} fn
      * @return XODom
      */
     XODom.fn.resize = function(fn) {
@@ -1067,11 +1050,11 @@ module.exports = (function(window, document) {
         }
 
         return this;
-    }
+    };
 
     /**
      * add event to node list elements
-     * @param {Function} fn 
+     * @param {Function} fn
      * @return XODom
      */
     XODom.fn.unload = function(fn) {
@@ -1090,11 +1073,11 @@ module.exports = (function(window, document) {
         }
 
         return this;
-    }
+    };
 
     /**
      * add event to node list elements
-     * @param {Function} fn 
+     * @param {Function} fn
      * @return XODom
      */
     XODom.fn.blur = function(fn) {
@@ -1113,11 +1096,11 @@ module.exports = (function(window, document) {
         }
 
         return this;
-    }
+    };
 
     /**
      * add event to node list elements
-     * @param {Function} fn 
+     * @param {Function} fn
      * @return XODom
      */
     XODom.fn.change = function(fn) {
@@ -1136,11 +1119,11 @@ module.exports = (function(window, document) {
         }
 
         return this;
-    }
+    };
 
     /**
      * add event to node list elements
-     * @param {Function} fn 
+     * @param {Function} fn
      * @return XODom
      */
     XODom.fn.contextmenu = function(fn) {
@@ -1159,11 +1142,11 @@ module.exports = (function(window, document) {
         }
 
         return this;
-    }
+    };
 
     /**
      * add event to node list elements
-     * @param {Function} fn 
+     * @param {Function} fn
      * @return XODom
      */
     XODom.fn.focus = function(fn) {
@@ -1182,11 +1165,11 @@ module.exports = (function(window, document) {
         }
 
         return this;
-    }
+    };
 
     /**
      * add event to node list elements
-     * @param {Function} fn 
+     * @param {Function} fn
      * @return XODom
      */
     XODom.fn.input = function(fn) {
@@ -1205,11 +1188,11 @@ module.exports = (function(window, document) {
         }
 
         return this;
-    }
+    };
 
     /**
      * add event to node list elements
-     * @param {Function} fn 
+     * @param {Function} fn
      * @return XODom
      */
     XODom.fn.invalid = function(fn) {
@@ -1228,11 +1211,11 @@ module.exports = (function(window, document) {
         }
 
         return this;
-    }
+    };
 
     /**
      * add event to node list elements
-     * @param {Function} fn 
+     * @param {Function} fn
      * @return XODom
      */
     XODom.fn.reset = function(fn) {
@@ -1251,11 +1234,11 @@ module.exports = (function(window, document) {
         }
 
         return this;
-    }
+    };
 
     /**
      * add event to node list elements
-     * @param {Function} fn 
+     * @param {Function} fn
      * @return XODom
      */
     XODom.fn.search = function(fn) {
@@ -1274,11 +1257,11 @@ module.exports = (function(window, document) {
         }
 
         return this;
-    }
+    };
 
     /**
      * add event to node list elements
-     * @param {Function} fn 
+     * @param {Function} fn
      * @return XODom
      */
     XODom.fn.select = function(fn) {
@@ -1297,11 +1280,11 @@ module.exports = (function(window, document) {
         }
 
         return this;
-    }
+    };
 
     /**
      * add event to node list elements
-     * @param {Function} fn 
+     * @param {Function} fn
      * @return XODom
      */
     XODom.fn.submit = function(fn) {
@@ -1320,11 +1303,11 @@ module.exports = (function(window, document) {
         }
 
         return this;
-    }
+    };
 
     /**
      * add event to node list elements
-     * @param {Function} fn 
+     * @param {Function} fn
      * @return XODom
      */
     XODom.fn.keydown = function(fn) {
@@ -1343,11 +1326,11 @@ module.exports = (function(window, document) {
         }
 
         return this;
-    }
+    };
 
     /**
      * add event to node list elements
-     * @param {Function} fn 
+     * @param {Function} fn
      * @return XODom
      */
     XODom.fn.keypress = function(fn) {
@@ -1366,11 +1349,11 @@ module.exports = (function(window, document) {
         }
 
         return this;
-    }
+    };
 
     /**
      * add event to node list elements
-     * @param {Function} fn 
+     * @param {Function} fn
      * @return XODom
      */
     XODom.fn.keyup = function(fn) {
@@ -1389,11 +1372,11 @@ module.exports = (function(window, document) {
         }
 
         return this;
-    }
+    };
 
     /**
      * add event to node list elements
-     * @param {Function} fn 
+     * @param {Function} fn
      * @return XODom
      */
     XODom.fn.click = function(fn) {
@@ -1412,11 +1395,11 @@ module.exports = (function(window, document) {
         }
 
         return this;
-    }
+    };
 
     /**
      * add event to node list elements
-     * @param {Function} fn 
+     * @param {Function} fn
      * @return XODom
      */
     XODom.fn.dblclick = function(fn) {
@@ -1435,11 +1418,11 @@ module.exports = (function(window, document) {
         }
 
         return this;
-    }
+    };
 
     /**
      * add event to node list elements
-     * @param {Function} fn 
+     * @param {Function} fn
      * @return XODom
      */
     XODom.fn.mousedown = function(fn) {
@@ -1458,11 +1441,11 @@ module.exports = (function(window, document) {
         }
 
         return this;
-    }
+    };
 
     /**
      * add event to node list elements
-     * @param {Function} fn 
+     * @param {Function} fn
      * @return XODom
      */
     XODom.fn.mousemove = function(fn) {
@@ -1481,11 +1464,11 @@ module.exports = (function(window, document) {
         }
 
         return this;
-    }
+    };
 
     /**
      * add event to node list elements
-     * @param {Function} fn 
+     * @param {Function} fn
      * @return XODom
      */
     XODom.fn.mouseout = function(fn) {
@@ -1504,11 +1487,11 @@ module.exports = (function(window, document) {
         }
 
         return this;
-    }
+    };
 
     /**
      * add event to node list elements
-     * @param {Function} fn 
+     * @param {Function} fn
      * @return XODom
      */
     XODom.fn.mouseover = function(fn) {
@@ -1527,11 +1510,11 @@ module.exports = (function(window, document) {
         }
 
         return this;
-    }
+    };
 
     /**
      * add event to node list elements
-     * @param {Function} fn 
+     * @param {Function} fn
      * @return XODom
      */
     XODom.fn.mouseup = function(fn) {
@@ -1550,11 +1533,11 @@ module.exports = (function(window, document) {
         }
 
         return this;
-    }
+    };
 
     /**
      * add event to node list elements
-     * @param {Function} fn 
+     * @param {Function} fn
      * @return XODom
      */
     XODom.fn.wheel = function(fn) {
@@ -1573,11 +1556,11 @@ module.exports = (function(window, document) {
         }
 
         return this;
-    }
+    };
 
     /**
      * add event to node list elements
-     * @param {Function} fn 
+     * @param {Function} fn
      * @return XODom
      */
     XODom.fn.wheel = function(fn) {
@@ -1596,11 +1579,11 @@ module.exports = (function(window, document) {
         }
 
         return this;
-    }
+    };
 
     /**
      * add event to node list elements
-     * @param {Function} fn 
+     * @param {Function} fn
      * @return XODom
      */
     XODom.fn.drag = function(fn) {
@@ -1619,11 +1602,11 @@ module.exports = (function(window, document) {
         }
 
         return this;
-    }
+    };
 
     /**
      * add event to node list elements
-     * @param {Function} fn 
+     * @param {Function} fn
      * @return XODom
      */
     XODom.fn.dragend = function(fn) {
@@ -1642,11 +1625,11 @@ module.exports = (function(window, document) {
         }
 
         return this;
-    }
+    };
 
     /**
      * add event to node list elements
-     * @param {Function} fn 
+     * @param {Function} fn
      * @return XODom
      */
     XODom.fn.dragenter = function(fn) {
@@ -1665,11 +1648,11 @@ module.exports = (function(window, document) {
         }
 
         return this;
-    }
+    };
 
     /**
      * add event to node list elements
-     * @param {Function} fn 
+     * @param {Function} fn
      * @return XODom
      */
     XODom.fn.dragleave = function(fn) {
@@ -1688,11 +1671,11 @@ module.exports = (function(window, document) {
         }
 
         return this;
-    }
+    };
 
     /**
      * add event to node list elements
-     * @param {Function} fn 
+     * @param {Function} fn
      * @return XODom
      */
     XODom.fn.dragover = function(fn) {
@@ -1711,11 +1694,11 @@ module.exports = (function(window, document) {
         }
 
         return this;
-    }
+    };
 
     /**
      * add event to node list elements
-     * @param {Function} fn 
+     * @param {Function} fn
      * @return XODom
      */
     XODom.fn.dragstart = function(fn) {
@@ -1734,11 +1717,11 @@ module.exports = (function(window, document) {
         }
 
         return this;
-    }
+    };
 
     /**
      * add event to node list elements
-     * @param {Function} fn 
+     * @param {Function} fn
      * @return XODom
      */
     XODom.fn.drop = function(fn) {
@@ -1757,11 +1740,11 @@ module.exports = (function(window, document) {
         }
 
         return this;
-    }
+    };
 
     /**
      * add event to node list elements
-     * @param {Function} fn 
+     * @param {Function} fn
      * @return XODom
      */
     XODom.fn.scroll = function(fn) {
@@ -1780,11 +1763,11 @@ module.exports = (function(window, document) {
         }
 
         return this;
-    }
+    };
 
     /**
      * add event to node list elements
-     * @param {Function} fn 
+     * @param {Function} fn
      * @return XODom
      */
     XODom.fn.copy = function(fn) {
@@ -1803,11 +1786,11 @@ module.exports = (function(window, document) {
         }
 
         return this;
-    }
+    };
 
     /**
      * add event to node list elements
-     * @param {Function} fn 
+     * @param {Function} fn
      * @return XODom
      */
     XODom.fn.cut = function(fn) {
@@ -1826,11 +1809,11 @@ module.exports = (function(window, document) {
         }
 
         return this;
-    }
+    };
 
     /**
      * add event to node list elements
-     * @param {Function} fn 
+     * @param {Function} fn
      * @return XODom
      */
     XODom.fn.paste = function(fn) {
@@ -1849,11 +1832,11 @@ module.exports = (function(window, document) {
         }
 
         return this;
-    }
+    };
 
     /**
      * add event to node list elements
-     * @param {Function} fn 
+     * @param {Function} fn
      * @return XODom
      */
     XODom.fn.toggle = function(fn) {
@@ -1872,7 +1855,7 @@ module.exports = (function(window, document) {
         }
 
         return this;
-    }
+    };
 
     /**
      * local storage handler
@@ -1880,9 +1863,9 @@ module.exports = (function(window, document) {
     XODom.storage = {
         /**
          * set local storage item if jsn as json
-         * @param {String} nam 
-         * @param {String|Object|Array} val 
-         * @param {Boolean} jsn 
+         * @param {String} nam
+         * @param {String|Object|Array} val
+         * @param {Boolean} jsn
          */
         set(nam, val, jsn) {
             if (nam && val !== undefined && typeof nam === "string") {
@@ -1893,7 +1876,7 @@ module.exports = (function(window, document) {
 
         /**
          * delete local storage items
-         * @param  {...String} nms 
+         * @param  {...String} nms
          */
         del(...nms) {
             for (var nm in nms) {
@@ -1903,8 +1886,8 @@ module.exports = (function(window, document) {
 
         /**
          * get local storage item if exist if jsn as json
-         * @param {String} nam 
-         * @param {Boolean} jsn 
+         * @param {String} nam
+         * @param {Boolean} jsn
          * @return String|Object
          */
         get(nam, jsn) {
@@ -1916,7 +1899,7 @@ module.exports = (function(window, document) {
 
         /**
          * get true if local storage item exist else fals
-         * @param {String} nam 
+         * @param {String} nam
          * @return Boolean
          */
         has(nam) {
@@ -1924,12 +1907,12 @@ module.exports = (function(window, document) {
         },
 
         /**
-         * delete all local storage items 
+         * delete all local storage items
          */
         rid() {
             localStorage.clear();
-        }
-    }
+        },
+    };
 
     /**
      * session storage handler
@@ -1937,9 +1920,9 @@ module.exports = (function(window, document) {
     XODom.session = {
         /**
          * set session storage item if jsn as json
-         * @param {String} nam 
-         * @param {String|Object|Array} val 
-         * @param {Boolean} jsn 
+         * @param {String} nam
+         * @param {String|Object|Array} val
+         * @param {Boolean} jsn
          */
         set(nam, val, jsn) {
             if (nam && val !== undefined && typeof nam === "string") {
@@ -1950,7 +1933,7 @@ module.exports = (function(window, document) {
 
         /**
          * delete session storage items
-         * @param  {...String} nms 
+         * @param  {...String} nms
          */
         del(...nms) {
             for (var nm in nms) {
@@ -1960,8 +1943,8 @@ module.exports = (function(window, document) {
 
         /**
          * get session storage item if exist if jsn as json
-         * @param {String} nam 
-         * @param {Boolean} jsn 
+         * @param {String} nam
+         * @param {Boolean} jsn
          * @return String|Object
          */
         get(nam, jsn) {
@@ -1973,7 +1956,7 @@ module.exports = (function(window, document) {
 
         /**
          * get true if session storage item exist else fals
-         * @param {String} nam 
+         * @param {String} nam
          * @return Boolean
          */
         has(nam) {
@@ -1981,12 +1964,12 @@ module.exports = (function(window, document) {
         },
 
         /**
-         * delete all session storage items 
+         * delete all session storage items
          */
         rid() {
             sessionStorage.clear();
-        }
-    }
+        },
+    };
 
     /**
      * larray handler
@@ -1994,18 +1977,17 @@ module.exports = (function(window, document) {
     XODom.array = {
         /**
          * convert list of arrays of length 2 to object
-         * @param  {...Array} arr 
+         * @param  {...Array} arr
          * @return Object
          */
         object(...arr) {
-            let all = {}
+            let all = {};
             for (var a of arr) {
-                if (a.length === 2)
-                    all[a[0]] = a[1];
+                if (a.length === 2) all[a[0]] = a[1];
             }
             return all;
         },
-    }
+    };
 
     /**
      * number handler
@@ -2013,54 +1995,50 @@ module.exports = (function(window, document) {
     XODom.number = {
         /**
          * check if fn bigger then ln if eq inlude =
-         * @param {Number} fn 
-         * @param {Number} ln 
-         * @param {Boolean} eq 
+         * @param {Number} fn
+         * @param {Number} ln
+         * @param {Boolean} eq
          * @return Boolean
          */
         bigger(fn, ln, eq) {
-            if ((Number(fn) || Number(fn) == 0) && (Number(ln) || Number(ln) == 0))
-                return eq ? Number(fn) >= Number(ln) : Number(fn) > Number(ln);
+            if ((Number(fn) || Number(fn) == 0) && (Number(ln) || Number(ln) == 0)) return eq ? Number(fn) >= Number(ln) : Number(fn) > Number(ln);
         },
 
         /**
          * check if fn smaller then ln if eq inlude =
-         * @param {Number} fn 
-         * @param {Number} ln 
-         * @param {Boolean} eq 
+         * @param {Number} fn
+         * @param {Number} ln
+         * @param {Boolean} eq
          * @return Boolean
          */
         lesser(fn, ln, eq) {
-            if ((Number(fn) || Number(fn) == 0) && (Number(ln) || Number(ln) == 0))
-                return eq ? Number(fn) <= Number(ln) : Number(fn) < Number(ln);
+            if ((Number(fn) || Number(fn) == 0) && (Number(ln) || Number(ln) == 0)) return eq ? Number(fn) <= Number(ln) : Number(fn) < Number(ln);
         },
 
         /**
          * check if fn equals to ln
-         * @param {Number} fn 
-         * @param {Number} ln 
-         * @param {Boolean} eq 
+         * @param {Number} fn
+         * @param {Number} ln
+         * @param {Boolean} eq
          * @return Boolean
          */
         equals(fn, ln) {
-            if ((Number(fn) || Number(fn) == 0) && (Number(ln) || Number(ln) == 0))
-                return Number(fn) == Number(ln);
+            if ((Number(fn) || Number(fn) == 0) && (Number(ln) || Number(ln) == 0)) return Number(fn) == Number(ln);
         },
 
         /**
          * check if num betweem min and max if eq inlude =
-         * @param {Number} num 
+         * @param {Number} num
          * @param {Number} min
          * @param {Number} max
-         * @param {Boolean} eql 
+         * @param {Boolean} eql
          * @return Boolean
          */
         middle(num, min, max, eql) {
             if ((Number(num) || Number(num) == 0) && (Number(min) || Number(min) == 0) && (Number(max) || Number(max) == 0))
                 return this.bigger(num, min, eql) && this.lesser(num, max, eql);
         },
-    }
+    };
 
     return XODom;
-
 })(window, document);

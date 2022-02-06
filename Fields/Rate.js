@@ -34,20 +34,20 @@ window.XORateElement = class extends XOElement {
                     let box = this.getBoundingClientRect(),
                         stars = this.$.container.find("button").length,
                         starIndex = Math.floor((e.pageX - box.left) / box.width * stars);
-                    __hover__(this, starIndex);
+                    __hover(this, starIndex);
                 }
             },
             outHandler() {
                 if (!this.readonly && !this.disabled)
-                    __hover__(this, this.value - 1);
+                    __hover(this, this.value - 1);
             },
             focusHandler(idx) {
                 if (!this.readonly && !this.disabled)
-                    __hover__(this, idx);
+                    __hover(this, idx);
             },
             blurHandler() {
                 if (!this.readonly && !this.disabled)
-                    __hover__(this, this.value - 1);
+                    __hover(this, this.value - 1);
             },
             clear() {
                 this.value = null;
@@ -65,7 +65,7 @@ window.XORateElement = class extends XOElement {
     static onUpdated(name, value) {
         switch (name) {
             case "value":
-                __hover__(this, value - 1)
+                __hover(this, value - 1)
                 this.makeEvent("change");
                 break;
         }
@@ -130,8 +130,8 @@ XORateElement.prototype.tag = "xo-rate";
 
 customElements.define(XORateElement.prototype.tag, XORateElement);
 
-function __hover__(self, index) {
-    self.$.container.each("button", (star, i) => {
+function __hover(self, index) {
+    self.$.container.each("button", function(star, i) {
         star.classList.toggle("active", i <= index);
     });
 }

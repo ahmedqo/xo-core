@@ -1,4 +1,6 @@
-const $COLORS = {
+("use strict");
+
+var $COLORS = {
     'shade': '#1D1D1D50',
     'norms': {
         '$100': '#FFFFFF',
@@ -112,16 +114,16 @@ let test = {
     }
 }
 
-const $FOCUSCOLOR = '#2196f3';
+var $FOCUSCOLOR = '#2196f3';
 
-const $BASE = {
+var $BASE = {
     "*": {
         "font-family": "Arial, sans-serif",
         "box-sizing": "border-box",
     }
 }
 
-const chartHost = {
+var chartHost = {
         width: '300px',
         display: 'inline-flex',
         flexDirection: 'column',
@@ -176,7 +178,7 @@ const chartHost = {
         },
     };
 
-const host = {
+var host = {
         "&([outlined]) #xo-container": {
             border: '2px solid ' + $COLORS.norms.$500,
             backgroundColor: 'transparent',
@@ -312,7 +314,7 @@ const host = {
         med: "",
         static: {
             position: 'fixed',
-            maxHeight: '340px',
+            maxHeight: '260px',
             width: '100%',
             zIndex: 9999,
             overflow: 'auto',
@@ -412,7 +414,7 @@ const host = {
         },
     }];
 
-const $ICONS = {
+var $ICONS = {
     $IconComponent: {
         ...$BASE,
         ":host": {
@@ -472,7 +474,7 @@ const $ICONS = {
     },
 }
 
-const $CHARTS = {
+var $CHARTS = {
     $PieChart: {
         ...$BASE,
         ":host": {
@@ -741,7 +743,7 @@ const $CHARTS = {
     },
 }
 
-const $COMPONENTS = {
+var $COMPONENTS = {
     $AccordionComponent: {
         ...$BASE,
         ":host": {
@@ -2084,7 +2086,7 @@ const $COMPONENTS = {
     },
 }
 
-const $FIELDS = {
+var $FIELDS = {
     $ButtonComponent: {
         ...$BASE,
         ":host": {
@@ -2996,11 +2998,6 @@ const $FIELDS = {
             display: 'inline-block',
             width: '260px',
             ...host,
-            "&([search=\"hidden\"])": {
-                "#xo-row": {
-                    display: 'none',
-                },
-            },
             "&([theme=\"water\"]) #xo-items::-webkit-scrollbar-thumb": {
                 backgroundColor: $COLORS.water.$500,
             },
@@ -3029,7 +3026,6 @@ const $FIELDS = {
         },
         "#xo-items": {
             ...items.static,
-            minWidth: '100%',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -3046,6 +3042,7 @@ const $FIELDS = {
             padding: [5, 5],
             position: 'sticky',
             backgroundColor: $COLORS.norms.$100,
+            boxShadow: '0 0 .2rem ' + $COLORS.shade,
             top: 0,
         },
         "#xo-search": {
@@ -3459,7 +3456,7 @@ const $FIELDS = {
     },
 }
 
-const $UI = {
+var $UI = {
     $AppBarUi: {
         ...$BASE,
         ":host": {

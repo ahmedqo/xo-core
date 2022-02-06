@@ -38,8 +38,8 @@ window.XONumberElement = class extends XOElement {
                     this.value = "";
                 } else {
                     let val = +this.$.text.val().trim();
-                    if (this.max && val > this.max) this.value = this.max;
-                    else if (this.min && val < this.min) this.value = this.min;
+                    if (this.max !== null && val > this.max) this.value = this.max;
+                    else if (this.min !== null && val < this.min) this.value = this.min;
                     else this.value = val;
                 }
             },
@@ -93,7 +93,7 @@ window.XONumberElement = class extends XOElement {
                 let num, val = +this.$.text.val();
                 this.step = this.step || 1;
                 this.$.label.class().add("valid");
-                if (this.max) num = (val + this.step) > this.max ? this.max : val + this.step;
+                if (this.max !== null) num = (val + this.step) > this.max ? this.max : val + this.step;
                 else num = (val + this.step);
                 this.$.text.val(num.toString());
             },
@@ -101,7 +101,7 @@ window.XONumberElement = class extends XOElement {
                 let num, val = +this.$.text.val();
                 this.step = this.step || 1;
                 this.$.label.class().add("valid");
-                if (this.min) num = (val - this.step) < this.min ? this.min : val - this.step;
+                if (this.min !== null) num = (val - this.step) < this.min ? this.min : val - this.step;
                 else num = (val - this.step);
                 this.$.text.val(num.toString());
             }
@@ -119,6 +119,8 @@ window.XONumberElement = class extends XOElement {
         switch (name) {
             case "value":
                 this.makeEvent("change");
+                if (this.max !== null && value > this.max) this.value = this.max;
+                if (this.min !== null && value < this.min) this.value = this.min;
                 break;
             case "max":
                 if (value && +this.$.text.val() > value) this.value = value;
@@ -153,7 +155,7 @@ window.XONumberElement = class extends XOElement {
                         (change)="{{>changeHandler()}}"
                         (focus)="{{>focusHandler()}}"
                         (blur)="{{>blurHandler()}}"
-                        {§if value§} value="{{value}}" {§/if§}
+                        {§if String(value) !== 'NaN'§} value="{{value}}" {§/if§}
                         {§if autocomplete§} autocomplete {§/if§}
                         {§if autofocus§} autofocus {§/if§}
                         {§if disabled§} disabled {§/if§}

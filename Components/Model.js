@@ -19,7 +19,7 @@ window.XOModalElement = class extends XOElement {
                 this.expand = true;
                 if (this.$ && this.$.content)
                     this.$.content.querySelector("slot").assignedElements().forEach(e => {
-                        __block__(e, true);
+                        __block(e, true);
                     });
                 this.makeEvent("visible");
             },
@@ -27,7 +27,7 @@ window.XOModalElement = class extends XOElement {
                 this.expand = false;
                 if (this.$ && this.$.content)
                     this.$.content.querySelector("slot").assignedElements().forEach(e => {
-                        __block__(e);
+                        __block(e);
                     });
                 this.makeEvent("hidden");
             }
@@ -61,17 +61,17 @@ XOModalElement.prototype.tag = "xo-modal";
 
 customElements.define(XOModalElement.prototype.tag, XOModalElement);
 
-function __block__(el, opt) {
+function __block(el, opt) {
     if (opt) {
         if ("disabled" in el) el.removeAttribute("disabled");
-        el.querySelectorAll("*").forEach(e => {
-            __block__(e, true);
+        el.querySelectorAll("*").forEach(function(e) {
+            __block(e, true);
         });
         return;
     }
     if ("disabled" in el) el.setAttribute("disabled", "");
-    el.querySelectorAll("*").forEach(e => {
-        __block__(e);
+    el.querySelectorAll("*").forEach(function(e) {
+        __block(e);
     });
     return;
 }
