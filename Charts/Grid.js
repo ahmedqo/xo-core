@@ -1,6 +1,6 @@
-const { $GridChart } = require('../utils/__sass__');
-const XOElement = require('../utils/__element__');
-var { _toConsumableArray, _node } = require("../utils/__runtime__");
+const { $GridChart } = require("../utils/_styles");
+const XOElement = require("../utils/_element");
+var { _toConsumableArray, _node } = require("../utils/_runtime");
 
 window.XOGridChartElement = class extends XOElement {
 
@@ -12,6 +12,7 @@ window.XOGridChartElement = class extends XOElement {
         return {
             header: String,
             theme: String,
+            axis: Array,
         }
     }
 
@@ -23,7 +24,7 @@ window.XOGridChartElement = class extends XOElement {
         }
     }
 
-    static onUpdated() {
+    static onUpdated(name, value) {
         if (this.data.length) {
             __tooltip(this);
         }
@@ -38,7 +39,17 @@ window.XOGridChartElement = class extends XOElement {
             {§/if§}
             {§if data.length§}
                 <main id="xo-container">
+                    {§if axis && axis[1]§}
+                        <div id="xo-yheader">
+                            {{axis[1]}}
+                        </div>
+                    {§/if§}
                     ${__chart(this)}
+                    {§if axis && axis[0]§}
+                        <div id="xo-xheader">
+                            {{axis[0]}}
+                        </div>
+                    {§/if§}
                 </main>
                 <div id="xo-tooltip"></div>
             {§/if§}
@@ -62,7 +73,7 @@ function __chart(self) {
         max = Math.max.apply(Math, _toConsumableArray(data.map(function(e) {
             return e.value;
         }))),
-        len = data.length > 9 ? 10 : data.length + 1,
+        len = 1,
         unit = max / len;
 
     // elems
@@ -81,8 +92,8 @@ function __chart(self) {
     svg.setAttribute("viewBox", "0 0 " + size.width + " " + size.height);
 
     // axis
-    var x = _node('line', { x1: offset.width, y1: 0, x2: offset.width, y2: nSize.height, id: "xo-axis" }),
-        y = _node('line', { x1: offset.width, y1: nSize.height, x2: size.width, y2: nSize.height, id: "xo-axis" }),
+    var x = _node('line', { x1: offset.width, y1: 0, x2: offset.width, y2: nSize.height + 5, id: "xo-axis" }),
+        y = _node('line', { x1: offset.width - 5, y1: nSize.height, x2: size.width, y2: nSize.height, id: "xo-axis" }),
         x0 = _node('line', { x1: offset.width - 5, y1: 1, x2: offset.width + 5, y2: 1, id: "xo-axis" }),
         y0 = _node('line', { x1: size.width - 1, y1: nSize.height - 5, x2: size.width - 1, y2: nSize.height + 5, id: "xo-axis" });
     g3.appendChild(x0);
@@ -91,21 +102,20 @@ function __chart(self) {
     g3.appendChild(y0);
 
     // grid
-    for (var i = 0; i < len; i++) {
-        var mv = (nSize.height - 10) / len,
-            _line = _node("line", {
-                x1: offset.width,
-                y1: mv * i + 10,
-                x2: size.width,
-                y2: mv * i + 10,
-                id: "xo-grid"
-            });
-        g4.appendChild(_line);
-    };
+    // for (var i = 0; i < len; i++) {
+    //     var mv = (nSize.height - 10) / len,
+    //         _line = _node("line", {
+    //             x1: offset.width,
+    //             y1: mv * i + 10,
+    //             x2: size.width,
+    //             y2: mv * i + 10,
+    //             id: "xo-grid"
+    //         });
+    //     g4.appendChild(_line);
+    // };
 
     // ylabels
     for (var _i = len; _i >= 0; _i--) {
-
         var _mv = (nSize.height - 10) / len,
             text = _node('text', {
                 x: offset.width / 2,
@@ -140,8 +150,16 @@ function __chart(self) {
                 y2: pr,
                 id: "xo-bars",
                 'stroke-width': "calc((100% / " + data.length + "))"
+            }),
+            _line3 = _node("line", {
+                x1: offset.width,
+                y1: pr,
+                x2: size.width,
+                y2: pr,
+                id: "xo-ref",
             });
         g5.appendChild(_line2);
+        g10.appendChild(_line3);
     }
 
     // area 
@@ -186,7 +204,6 @@ function __chart(self) {
                 y1: nSize.height - 3,
                 x2: _mv5,
                 y2: nSize.height + 3,
-                stroke: "black",
                 'stroke-linecap': 'round'
             }),
             line2 = _node("line", {
@@ -204,7 +221,6 @@ function __chart(self) {
                 x2: _mv5,
                 y2: nSize.height,
                 id: "xo-ref",
-                'stroke': "red"
             });
         g2.appendChild(_line3);
         g9.appendChild(line2);
@@ -226,6 +242,7 @@ function __chart(self) {
 }
 
 function __tooltip(self) {
+    var _len = self.$.container.find("#xo-hover").length;
     self.$.container.find("#xo-hover").forEach(function(e, i) {
         e.addEventListener("mousemove", function(_) {
             self.$.tooltip.innerHTML = e.dataset.value;
@@ -233,11 +250,13 @@ function __tooltip(self) {
             self.$.tooltip.style.top = _.y + "px";
             self.$.tooltip.style.display = "block";
             self.$.container.find("#xo-ref")[i].css('opacity', .5);
+            self.$.container.find("#xo-ref")[_len + i].css('opacity', .5);
             if (_.x < parseFloat(window.getComputedStyle(self.$.tooltip).width)) self.$.tooltip.classList.add("right");
             else self.$.tooltip.classList.remove("right");
         });
         e.addEventListener("mouseout", function() {
             self.$.container.find("#xo-ref")[i].css('opacity', 0);
+            self.$.container.find("#xo-ref")[_len + i].css('opacity', 0);
             self.$.tooltip.style.display = "none";
         });
     });

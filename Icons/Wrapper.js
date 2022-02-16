@@ -1,5 +1,5 @@
-const { $WrapperComponent } = require('../utils/__sass__');
-const XOElement = require('../utils/__element__');
+const { $WrapperComponent } = require("../utils/_styles");
+const XOElement = require("../utils/_element");
 
 class Element extends XOElement {
 

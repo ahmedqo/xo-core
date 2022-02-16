@@ -1,5 +1,5 @@
-const { $SwitchField } = require('../utils/__sass__');
-const XOElement = require('../utils/__element__');
+const { $SwitchField } = require("../utils/_styles");
+const XOElement = require("../utils/_element");
 
 window.XOSwitchElement = class extends XOElement {
 
@@ -37,12 +37,12 @@ window.XOSwitchElement = class extends XOElement {
         }
     }
 
-    static onUpdated() {
-        var label = this.$.label.style,
-            slot = this.root.querySelector("slot");
-        if (slot.assignedNodes().length > 0) {
-            label.marginLeft = "5px";
-            this.text = this.innerText;
+    static onUpdated(name, value) {
+        switch (name) {
+            case "disabled":
+                if (value) this.$.trigger.attrs().set("tabindex", "-1");
+                else this.$.trigger.attrs().del("tabindex");
+                break;
         }
     }
 
@@ -50,9 +50,7 @@ window.XOSwitchElement = class extends XOElement {
         return /*html*/ `
             <main id="xo-container" (click|prev)="{{>click()}}">
                 <a href="javascript:void(0)" id="xo-trigger"></a>
-                <label id="xo-label">
-                    <slot></slot>
-                </label>
+                <slot></slot>
             </main>
             {§if info && infotype§}
                 <label id="xo-info" {{infotype}}>

@@ -1,5 +1,5 @@
-const { $PasswordField } = require('../utils/__sass__');
-const XOElement = require('../utils/__element__');
+const { $PasswordField } = require("../utils/_styles");
+const XOElement = require("../utils/_element");
 
 window.XOPasswordElement = class extends XOElement {
 

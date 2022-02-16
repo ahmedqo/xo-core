@@ -1,6 +1,6 @@
 ("use strict");
 
-var ENG = require("./__elengine__");
+var ENG = require("./_elengine");
 
 JSON["name"] = "JSON";
 
@@ -41,6 +41,20 @@ class XOElement extends HTMLElement {
         super();
         this.root = this.attachShadow({ mode: "closed" });
         __run(this);
+        __array(this.attributes).forEach((a) => {
+            let n = a.name.slice(1);
+            if (a.name === "@load") {
+                this._load = a.value;
+            }
+            if (a.name.startsWith("@")) {
+                n = n.split("|");
+                const _es = __evaction(n.slice(1));
+                this.addEventListener(n[0], (e) => {
+                    new Function(_es + a.value).apply(this, {...window });
+                });
+                this.removeAttribute(a.name);
+            }
+        });
         __cons(this).onCreated.bind(this)();
     }
 
@@ -92,28 +106,23 @@ class XOElement extends HTMLElement {
                     this.root.querySelector("style").innerHTML = __sass(__cons(this).styles) + style;
                     this.removeAttribute("styles");
                 }
+            } else {
+                if (__attrs(this)[name] && __attrs(this)[name].name === "Boolean") {
+                    newVal = this.hasAttribute(name) && this.getAttribute(name) !== 'false';
+                    oldVal = oldVal === null || oldVal === undefined || oldVal === false || oldVal === "false" ? false : true;
+                }
+                var f = __type(__attrs(this)[name].name);
+                __cons(this).onUpdated.bind(this)(name, f(newVal), f(oldVal));
             }
             this.revive();
         }
-        __cons(this).onUpdated.bind(this)(name, newVal, oldVal);
     }
 
     connectedCallback() {
-        __array(this.attributes).forEach((a) => {
-            let n = a.name.slice(1);
-            if (a.name === "@load") {
-                new Function(a.value).bind(this)();
-                this.removeAttribute("@load");
-            }
-            if (a.name.startsWith("@")) {
-                n = n.split("|");
-                const _es = __evaction(n.slice(1));
-                this.addEventListener(n[0], (e) => {
-                    new Function(_es + a.value).bind(this)(e);
-                });
-                this.removeAttribute(a.name);
-            }
-        });
+        if (this._load) {
+            new Function(this._load).apply(this, {...window });
+            delete this._load;
+        }
         __cons(this).onMounted.bind(this)();
     }
 
@@ -163,11 +172,11 @@ function __observe(s) {
                 _ev = _ev[1].split("|");
                 const _es = __evaction(_ev.slice(1));
                 var call = new Function(`
-                        return (event) => {
+                        return (event)=>{
                             ${_es}
                             ${a.value} 
                         }
-                    `).bind(s)(event);
+                    `).apply(s);
                 e.addEventListener(_ev[0], call);
                 e.removeAttribute(a.name);
             }
@@ -193,7 +202,7 @@ function __evaction(ev) {
 function __change(c, ot) {
     let nc = "";
     c.forEach((m) => {
-        let o = {...m },
+        let o = Object.assign({}, m),
             v;
         switch (ot) {
             case -1:
@@ -209,8 +218,8 @@ function __change(c, ot) {
                 delete o.condition;
                 break;
         }
-        nc += v + __orgin(o);
-        nc += `}`;
+        nc += v + __orgin(o) + '}';
+        //nc += `}`;
     });
     return nc;
 }
@@ -293,27 +302,28 @@ function __arr(v, n) {
 
 function __dom(E) {
     if (E.tagName === "STYLE") return;
+    var _this = E;
     E.attrs = function() {
-        let set = (n, v) => {
-                this.setAttribute(n, v || "");
-                return this;
+        let set = function(n, v) {
+                _this.setAttribute(n, v || "");
+                return _this;
             },
-            del = (n) => {
-                this.removeAttribute(n);
-                return this;
+            del = function(n) {
+                _this.removeAttribute(n);
+                return _this;
             },
-            get = (n) => {
-                return this.getAttribute(n);
+            get = function(n) {
+                return _this.getAttribute(n);
             },
-            has = (n) => {
-                return this.hasAttribute(n);
+            has = function(n) {
+                return _this.hasAttribute(n);
             },
-            match = (n) => {
-                return this.matches("[" + n + "]");
+            match = function(n) {
+                return _this.matches("[" + n + "]");
             },
-            shift = (n) => {
-                this.toggleAttribute(n);
-                return this;
+            shift = function(n) {
+                _this.toggleAttribute(n);
+                return _this;
             };
         return {
             set,
@@ -325,13 +335,13 @@ function __dom(E) {
         };
     };
     E.class = function() {
-        let add = (v) => {
-                this.classList.add(v);
-                return this;
+        let add = function(v) {
+                _this.classList.add(v);
+                return _this;
             },
-            del = (v) => {
-                this.classList.remove(v);
-                return this;
+            del = function(v) {
+                _this.classList.remove(v);
+                return _this;
             };
         return {
             add,
@@ -341,59 +351,59 @@ function __dom(E) {
     E.css = function(n, v) {
         if (n instanceof Object) {
             for (var k in n) {
-                this.style.setProperty(k, n[k]);
+                _this.style.setProperty(k, n[k]);
             }
         } else {
-            this.style.setProperty(n, v);
+            _this.style.setProperty(n, v);
         }
-        return this;
+        return _this;
     };
     E.htm = function(v) {
         if (v || v === "") {
-            this.innerHTML = v;
-            return this;
+            _this.innerHTML = v;
+            return _this;
         } else {
-            return this.innerHTML;
+            return _this.innerHTML;
         }
     };
     E.txt = function(v) {
         if (v || v === "") {
-            this.innerText = v;
-            return this;
+            _this.innerText = v;
+            return _this;
         } else {
-            return this.innerText;
+            return _this.innerText;
         }
     };
     E.val = function(v) {
         if (v || v === "") {
-            this.value = v;
-            return this;
+            _this.value = v;
+            return _this;
         } else {
-            return this.value;
+            return _this.value;
         }
     };
     E.on = function(ev, c) {
-        this.addEventListener(ev, c);
-        return this;
+        _this.addEventListener(ev, c);
+        return _this;
     };
-    E.off = function(ev) {
-        this.removeEventListener(ev, () => {});
-        return this;
+    E.off = function(ev, c) {
+        _this.removeEventListener(ev, c);
+        return _this;
     };
     E.find = function(e) {
-        e = __array(this.querySelectorAll(e));
+        e = __array(_this.querySelectorAll(e));
         return e.length > 1 ? e : e[0];
     };
     E.each = function(n, fn) {
-        this.querySelectorAll(n).forEach((e, i) => {
+        _this.querySelectorAll(n).forEach((e, i) => {
             fn(e, i);
         });
-        return this;
+        return _this;
     };
 }
 
 function __sass(c, e) {
-    let o = (({ mediaQueries, keyFrames, properties, ...obj }) => obj)(c),
+    let o = __clean(c, ['mediaQueries', 'properties', 'keyFrames']), //(({ mediaQueries, keyFrames, properties, ...obj }) => obj)(c),
         m = c.mediaQueries ? [...c.mediaQueries] : [],
         p = c.properties ? [...c.properties] : [],
         k = c.keyFrames ? [...c.keyFrames] : [],
@@ -403,26 +413,36 @@ function __sass(c, e) {
     return __orgin(o) + ps + ks + ms;
 }
 
+function __clean(o, k) {
+    var t = {};
+    for (var i in o) {
+        if (k.indexOf(i) >= 0) continue;
+        if (!Object.prototype.hasOwnProperty.call(o, i)) continue;
+        t[i] = o[i];
+    }
+    return t;
+}
+
 function __type(n) {
     switch (n) {
         case "Array":
-            return (e) => {
+            return function(e) {
                 if (e) {
                     if (Array.isArray(e)) return __array(e);
-                    else return JSON.parse(e);
+                    else return new Function("return " + e)();
                 }
                 return e;
             };
         case "Object":
-            return (e) => {
+            return function(e) {
                 if (e) {
                     if (typeof e === "object") return Object(e);
-                    else return JSON.parse(e);
+                    else return new Function("return " + e)();
                 }
                 return e;
             };
         case "Date":
-            return (e) => new Date(e);
+            return function(e) { return new Date(e) };
         case "JSON":
             return JSON.parse;
         case "Boolean":
@@ -436,7 +456,7 @@ function __type(n) {
         case "parseFloat":
             return parseFloat;
         default:
-            return (e) => e;
+            return function(e) { return e };
     }
 }
 

@@ -1,5 +1,5 @@
-const { $RateField } = require('../utils/__sass__');
-const XOElement = require('../utils/__element__');
+const { $RateField } = require("../utils/_styles");
+const XOElement = require("../utils/_element");
 
 window.XORateElement = class extends XOElement {
 
@@ -34,20 +34,20 @@ window.XORateElement = class extends XOElement {
                     let box = this.getBoundingClientRect(),
                         stars = this.$.container.find("button").length,
                         starIndex = Math.floor((e.pageX - box.left) / box.width * stars);
-                    __hover(this, starIndex);
+                    _hover(this, starIndex);
                 }
             },
             outHandler() {
                 if (!this.readonly && !this.disabled)
-                    __hover(this, this.value - 1);
+                    _hover(this, this.value - 1);
             },
             focusHandler(idx) {
                 if (!this.readonly && !this.disabled)
-                    __hover(this, idx);
+                    _hover(this, idx);
             },
             blurHandler() {
                 if (!this.readonly && !this.disabled)
-                    __hover(this, this.value - 1);
+                    _hover(this, this.value - 1);
             },
             clear() {
                 this.value = null;
@@ -65,7 +65,7 @@ window.XORateElement = class extends XOElement {
     static onUpdated(name, value) {
         switch (name) {
             case "value":
-                __hover(this, value - 1)
+                _hover(this, value - 1)
                 this.makeEvent("change");
                 break;
         }
@@ -87,11 +87,11 @@ window.XORateElement = class extends XOElement {
 
     render() {
         return /*html*/ `
-            <main id="xo-container" (mousemove)="{{>moveHandler('event')}}" (mouseout)="{{>outHandler()}}">
+            <main id="xo-container" (mousemove)="{{>moveHandler(event)}}" (mouseout)="{{>outHandler()}}">
                 {§loop (count || 5)§}
                     <button  id="xo-icon"
-                        (click)="{{>clickHandler($i)}}"
-                        (focus)="{{>focusHandler($i)}}"
+                        (click)="{{>clickHandler($$i)}}"
+                        (focus)="{{>focusHandler($$i)}}"
                         (blur)="{{>blurHandler()}}"
                         {§if disabled || readonly§} disabled {§/if§}
                         {§if value && $i < value§} class="active" {§/if§}
@@ -130,7 +130,7 @@ XORateElement.prototype.tag = "xo-rate";
 
 customElements.define(XORateElement.prototype.tag, XORateElement);
 
-function __hover(self, index) {
+function _hover(self, index) {
     self.$.container.each("button", function(star, i) {
         star.classList.toggle("active", i <= index);
     });

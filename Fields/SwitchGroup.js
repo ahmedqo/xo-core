@@ -1,5 +1,5 @@
-const { $SwitchGroupField } = require('../utils/__sass__');
-const XOElement = require('../utils/__element__');
+const { $SwitchGroupField } = require("../utils/_styles");
+const XOElement = require("../utils/_element");
 require('./Switch');
 
 window.XOSwitchGroupElement = class extends XOElement {
@@ -36,6 +36,7 @@ window.XOSwitchGroupElement = class extends XOElement {
                     this.text = item.innerText;
                 }
                 item.addEventListener("click", (e) => {
+                    if (this.disabled) return;
                     if (item.checked) { e.preventDefault(); } else {
                         this.querySelectorAll("xo-switch").forEach(e => {
                             if (e !== item && e.checked) e.removeAttribute("checked");
@@ -57,7 +58,7 @@ window.XOSwitchGroupElement = class extends XOElement {
                 });
                 break;
             case "disabled":
-                if (value !== null)
+                if (value)
                     this.querySelectorAll("xo-switch").forEach(s => {
                         s.setAttribute("disabled", "");
                     });
@@ -67,7 +68,7 @@ window.XOSwitchGroupElement = class extends XOElement {
                     });
                 break;
             case "rounded":
-                if (value !== null)
+                if (value)
                     this.querySelectorAll("xo-switch").forEach(s => {
                         s.setAttribute("rounded", "");
                     });
@@ -77,7 +78,7 @@ window.XOSwitchGroupElement = class extends XOElement {
                     });
                 break;
             case "flatted":
-                if (value !== null)
+                if (value)
                     this.querySelectorAll("xo-switch").forEach(s => {
                         s.setAttribute("flatted", "");
                     });

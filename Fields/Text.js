@@ -1,5 +1,5 @@
-const { $TextField } = require('../utils/__sass__');
-const XOElement = require('../utils/__element__');
+const { $TextField } = require("../utils/_styles");
+const XOElement = require("../utils/_element");
 
 window.XOTextElement = class extends XOElement {
 

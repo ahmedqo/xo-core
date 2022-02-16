@@ -1,5 +1,5 @@
-const { $NavBarItemComponent } = require('../utils/__sass__');
-const XOElement = require('../utils/__element__');
+const { $NavBarItemComponent } = require("../utils/_styles");
+const XOElement = require("../utils/_element");
 
 window.XONavBarItemElement = class extends XOElement {
 
@@ -18,7 +18,7 @@ window.XONavBarItemElement = class extends XOElement {
     static get methods() {
         return {
             click() {
-                this.makeEvent("push", {}, () => {
+                this.makeEvent("click", {}, () => {
                     if (this.disabled) return;
                     this.parentElement.querySelectorAll("xo-navbar-item").forEach(e => {
                         e.removeAttribute("active");

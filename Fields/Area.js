@@ -1,5 +1,5 @@
-const { $AreaField } = require("../utils/__sass__");
-const XOElement = require("../utils/__element__");
+const { $AreaField } = require("../utils/_styles");
+const XOElement = require("../utils/_element");
 
 window.XOAreaElement = class extends XOElement {
     static get styles() {

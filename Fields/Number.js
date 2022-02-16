@@ -1,5 +1,5 @@
-const { $NumberField } = require('../utils/__sass__');
-const XOElement = require('../utils/__element__');
+const { $NumberField } = require("../utils/_styles");
+const XOElement = require("../utils/_element");
 
 window.XONumberElement = class extends XOElement {
 

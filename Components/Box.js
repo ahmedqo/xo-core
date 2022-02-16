@@ -1,5 +1,5 @@
-const { $BoxComponent } = require('../utils/__sass__');
-const XOElement = require('../utils/__element__');
+const { $BoxComponent } = require("../utils/_styles");
+const XOElement = require("../utils/_element");
 
 window.XOBoxElement = class extends XOElement {
 

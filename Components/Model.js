@@ -1,5 +1,5 @@
-const { $ModalComponent } = require('../utils/__sass__');
-const XOElement = require('../utils/__element__');
+const { $ModalComponent } = require("../utils/_styles");
+const XOElement = require("../utils/_element");
 
 window.XOModalElement = class extends XOElement {
 

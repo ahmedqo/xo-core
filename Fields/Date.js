@@ -1,7 +1,7 @@
-const { $DateField } = require('../utils/__sass__');
-const XOElement = require('../utils/__element__');
+const { $DateField } = require("../utils/_styles");
+const XOElement = require("../utils/_element");
 
-const DATE = new Date(),
+var DATE = new Date(),
     months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December", ],
     days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
@@ -21,6 +21,7 @@ window.XODateElement = class extends XOElement {
             disabled: Boolean,
             label: String,
             trigger: String,
+            format: String,
         }
     }
 
@@ -42,24 +43,15 @@ window.XODateElement = class extends XOElement {
             clickHandler() {
                 if (this.disabled || this.readonly) return;
                 if (!this._expand) {
+                    _re(this);
                     if ((window.innerWidth - this.offsetLeft) < this.$.items.clientWidth) {
                         this.$.items.css({ left: "unset", right: "0", transform: "unset" });
                     } else if (this.offsetLeft < ((this.$.items.offsetWidth - this.offsetWidth) / 2)) {
                         this.$.items.css({ left: "0", transform: "unset" });
                     }
-
-                    if (window.innerWidth < this.$.items.clientWidth) {
-                        this.$.items.css("width", window.innerWidth - 50 + "px");
-                    }
-
-                    setTimeout(() => {
-                        if ((window.innerHeight - (this.offsetTop + this.clientHeight)) < this.$.items.clientHeight) {
-                            this.$.items.css("--slide", -this.$.items.clientHeight + "px");
-                        }
-                    }, 150);
                 }
                 this._expand = !this._expand;
-                __cal(this, this.day, this.month - 1, this.year);
+                _run(this, this.day, this.month - 1, this.year);
             },
             blurHandler(e) {
                 if (e.relatedTarget !== this.$.search) {
@@ -97,7 +89,7 @@ window.XODateElement = class extends XOElement {
                         this.$.items.css("--slide", -this.$.items.clientHeight + "px");
                     }
                 }, 100);
-                __cal(this, this.day, this.month - 1, this.year);
+                _run(this, this.day, this.month - 1, this.year);
             },
             clear() {
                 this.value = "";
@@ -113,16 +105,23 @@ window.XODateElement = class extends XOElement {
     static onMounted() {
         if (this.hasAttribute("value")) {
             this.value = (new Date(this.getAttribute("value"))).toISOString().split('T')[0];
+            DATE = new Date(this.getAttribute("value"));
             this.removeAttribute("value");
         }
         document.addEventListener("click", e => {
-            __click(this, e);
+            _click(this, e);
+        });
+        document.addEventListener("scroll", () => {
+            if (this._expand) _re(this);
         });
     }
 
     static onRemoved() {
         document.removeEventListener("click", e => {
-            __click(this, e);
+            _click(this, e);
+        });
+        document.removeEventListener("scroll", () => {
+            if (this._expand) _re(this);
         });
     }
 
@@ -135,8 +134,12 @@ window.XODateElement = class extends XOElement {
                 this.month = this.date.getMonth() + 1;
                 this.strMonth = months[this.date.getMonth()];
                 this.year = this.date.getFullYear();
+                this.formated = _date(value, this.format);
                 this._expand = false;
                 this.makeEvent("change");
+                break;
+            case "format":
+                this.formated = _date(this.value, value);
                 break;
         }
     }
@@ -181,9 +184,9 @@ window.XODateElement = class extends XOElement {
                     </button>
                 {§/if§}
                 <slot name="suffix"></slot>
-                <div id="xo-items" {§if _expand§} expand {§/if§} (click)="{{>dayHandler('event')}}">
+                <div id="xo-items" {§if _expand§} expand {§/if§} (click)="{{>dayHandler(event)}}">
                     <header>
-                        <button id="xo-controll" {§if !_expand§} disabled {§/if§} (click)="{{>ctrHandler(0)}}">
+                        <button id="xo-controll" {§if !_expand§} tabindex="-1" {§/if§} (click)="{{>ctrHandler(0)}}">
                             <svg viewBox="0 0 1000.000000 1000.000000">
                                 <g transform="translate(0.000000,1000.000000) scale(0.100000,-0.100000)">
                                     <path d="M4671 9735 c-35 -8 -93 -28 -130 -45 -63 -29 -175 -140 -2222 -2188 -1349 -1349 -2170 -2178 -2193 -2212 -103 -159 -112 -363 -24 -534 27 -53 310 -339 2202 -2233 2147 -2148 2172 -2173 2246 -2207 130 -62 252 -70 388 -28 111 35 173 87 474 390 308 311 327 336 364 482 31 122 4 279 -68 394 -18 30 -321 343 -733 756 -385 388 -1146 1152 -1689 1698 l-988 994 133 136 c74 75 827 833 1674 1685 847 852 1559 1574 1582 1605 86 116 121 279 89 416 -34 143 -57 173 -399 512 -290 288 -317 312 -382 342 -68 30 -169 53 -230 51 -16 0 -59 -7 -94 -14z"/>
@@ -191,7 +194,7 @@ window.XODateElement = class extends XOElement {
                                 </g>
                             </svg>  
                         </button>
-                        <button id="xo-controll" {§if !_expand§} disabled {§/if§} (click)="{{>ctrHandler(1)}}">
+                        <button id="xo-controll" {§if !_expand§} tabindex="-1" {§/if§} (click)="{{>ctrHandler(1)}}">
                             <svg viewBox="0 0 1000.000000 1000.000000">
                                 <g transform="translate(0.000000,1000.000000) scale(0.100000,-0.100000)">
                                     <path d="M6865 9974 c-49 -8 -147 -45 -190 -72 -49 -30 -126 -107 -2603 -2584 -2101 -2101 -2026 -2022 -2069 -2158 -25 -75 -24 -255 1 -325 49 -139 -50 -36 2342 -2429 1297 -1297 2287 -2279 2317 -2299 91 -60 166 -81 292 -82 118 0 150 7 255 57 57 27 103 69 391 357 337 336 351 353 396 478 22 61 25 270 4 323 -34 89 -77 165 -116 206 -26 29 -1608 1619 -2517 2530 -554 556 -1008 1017 -1008 1024 0 7 516 530 1147 1164 1909 1915 2381 2390 2401 2416 32 42 70 113 89 165 25 69 25 270 0 338 -45 125 -59 142 -396 478 -289 289 -333 329 -391 357 -36 17 -81 36 -100 42 -38 12 -197 21 -245 14z"/>
@@ -199,7 +202,7 @@ window.XODateElement = class extends XOElement {
                             </svg>
                         </button>
                         <h1 id="xo-title">${months[DATE.getMonth()] + ", " + DATE.getFullYear()}</h1>
-                        <button id="xo-controll" {§if !_expand§} disabled {§/if§} (click)="{{>ctrHandler(2)}}">
+                        <button id="xo-controll" {§if !_expand§} tabindex="-1" {§/if§} (click)="{{>ctrHandler(2)}}">
                             <svg viewBox="0 0 1000.000000 1000.000000">
                                 <g transform="translate(0.000000,1000.000000) scale(0.100000,-0.100000)">
                                     <path
@@ -208,7 +211,7 @@ window.XODateElement = class extends XOElement {
                                 </g>
                             </svg>
                         </button>
-                        <button id="xo-controll" {§if !_expand§} disabled {§/if§} (click)="{{>ctrHandler(3)}}">
+                        <button id="xo-controll" {§if !_expand§} tabindex="-1" {§/if§} (click)="{{>ctrHandler(3)}}">
                             <svg viewBox="0 0 1000.000000 1000.000000">
                                 <g transform="translate(0.000000,1000.000000) scale(0.100000,-0.100000)">
                                     <path d="M975 9734 c-176 -37 -190 -47 -524 -383 -162 -163 -309 -318 -326 -346 -61 -96 -79 -158 -78 -280 0 -126 19 -192 79 -283 20 -30 772 -794 1717 -1744 925 -929 1684 -1694 1685 -1699 2 -5 -749 -766 -1669 -1690 -920 -924 -1690 -1702 -1709 -1728 -47 -63 -77 -126 -95 -204 -18 -78 -19 -134 -1 -219 30 -141 41 -155 380 -496 294 -296 315 -315 391 -353 146 -72 300 -74 450 -7 69 31 112 74 2229 2187 1409 1408 2172 2176 2197 2215 57 87 81 157 86 261 6 105 -10 180 -58 277 -28 57 -244 276 -2197 2231 -2370 2371 -2207 2215 -2363 2252 -60 14 -149 18 -194 9z"/>
@@ -228,7 +231,7 @@ window.XODateElement = class extends XOElement {
                             <h1 id="xo-weekDay">Sat</h1>
                         </div>
                         {§loop 30§}
-                            <button id="xo-day" disabled>{{$i+1}}</button>
+                            <button id="xo-day" tabindex="-1">{{$i+1}}</button>
                         {§/loop§}
                     </main>
                 </div>
@@ -259,8 +262,12 @@ XODateElement.prototype.tag = "xo-date";
 
 customElements.define(XODateElement.prototype.tag, XODateElement);
 
-
-function __click(self, e) {
+/**
+ * 
+ * @param {HTMLElement} self 
+ * @param {Event} e 
+ */
+function _click(self, e) {
     if (e.target !== self) {
         if (self.label) {
             if (self.$.text.val().trim()) {
@@ -273,7 +280,11 @@ function __click(self, e) {
     }
 }
 
-function __cal(el) {
+/**
+ * 
+ * @param {HTMLElement} el 
+ */
+function _run(el) {
     var d = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
     var m = arguments.length <= 2 || arguments[2] === undefined ? null : arguments[2];
     var y = arguments.length <= 3 || arguments[3] === undefined ? null : arguments[3];
@@ -299,13 +310,14 @@ function __cal(el) {
 
     for (var i = 1; i <= lastDay; i++) {
         var day = i < 10 ? "0" + i : i,
-            mon = DATE.getMonth() + 1 < 10 ? "0" + (DATE.getMonth() + 1) : DATE.getMonth() + 1;
+            mon = DATE.getMonth() + 1 < 10 ? "0" + (DATE.getMonth() + 1) : DATE.getMonth() + 1,
+            _date = DATE.getFullYear() + "-" + mon + "-" + day;
         if (i === d && DATE.getMonth() === m && DATE.getFullYear() === y) {
-            days += "<button id=\"xo-day\" part=\"--xo-day\" date=\"" + DATE.getFullYear() + "-" + mon + "-" + day + "\" active>" + day + "</button>";
+            days += "<button id=\"xo-day\" part=\"--xo-day\" date=\"" + _date + "\" active>" + day + "</button>";
         } else if (i === new Date().getDate() && DATE.getMonth() === new Date().getMonth() && DATE.getFullYear() === new Date().getFullYear()) {
-            days += "<button id=\"xo-day\" part=\"--xo-day\" date=\"" + DATE.getFullYear() + "-" + mon + "-" + day + "\" on>" + day + "</button>";
+            days += "<button id=\"xo-day\" part=\"--xo-day\" date=\"" + _date + "\" on>" + day + "</button>";
         } else {
-            days += "<button id=\"xo-day\" part=\"--xo-day\" date=\"" + DATE.getFullYear() + "-" + mon + "-" + day + "\">" + day + "</button>";
+            days += "<button id=\"xo-day\" part=\"--xo-day\" date=\"" + _date + "\">" + day + "</button>";
         }
     }
 
@@ -313,4 +325,100 @@ function __cal(el) {
         days += "<div id=\"xo-day\" part=\"--xo-day\" off></div>";
     }
     el.$.items.find("main").innerHTML += days;
+}
+
+/**
+ * @param {HTMLElement} self 
+ */
+function _re(self) {
+    setTimeout(() => {
+        if (self.$.items.clientHeight === 0) { _re(self); } else {
+            if ((window.innerHeight - (self.getBoundingClientRect().top + self.clientHeight)) < self.$.items.clientHeight) {
+                self.$.items.css("--slide", -self.$.items.clientHeight + "px");
+            } else {
+                self.$.items.css("--slide", "");
+            }
+        }
+    }, 10);
+}
+
+/**
+ * 
+ * @param {Date} date 
+ * @param {String} formatStr 
+ * @returns {String}
+ */
+function _date(date, formatStr = "YYYY-MM-DD") {
+    formatStr = formatStr || "";
+    var tokens = formatStr.match(/(\w)\1*|''|'(''|[^'])+('|$)|./g);
+    if (!tokens) return date;
+    date = new Date(date);
+    var result = tokens.map(function(substring) {
+        if (substring === "''") {
+            return "'";
+        }
+        var firstCharacter = substring[0];
+        if (firstCharacter === "'") {
+            return _clean(substring);
+        }
+        var formatter = _action(firstCharacter.toUpperCase());
+        if (formatter) {
+            return formatter(date, substring);
+        }
+
+        return substring;
+    }).join('');
+
+    return result;
+}
+
+/**
+ * 
+ * @param {String} format 
+ * @returns {Function}
+ */
+function _action(format) {
+    var formatters = {
+        Y: function y(date, token) {
+            var signedYear = date.getUTCFullYear();
+            var year = signedYear > 0 ? signedYear : 1 - signedYear;
+            return _zeros(token === 'yy' ? year % 100 : year, token.length);
+        },
+        M: function M(date, token) {
+            var month = date.getUTCMonth();
+            return token === 'M' ? String(month + 1) : _zeros(month + 1, 2);
+        },
+        D: function d(date, token) {
+            return _zeros(date.getUTCDate(), token.length);
+        },
+    };
+    return formatters[format]
+}
+
+/**
+ * 
+ * @param {Number} nbr 
+ * @param {Number} len 
+ * @returns {String}
+ */
+function _zeros(nbr, len) {
+    var sign = nbr < 0 ? '-' : '';
+    var output = Math.abs(nbr).toString();
+    while (output.length < len) {
+        output = '0' + output;
+    }
+    return sign + output;
+}
+
+/**
+ * 
+ * @param {String} input 
+ * @returns {String}
+ */
+function _clean(input) {
+    var matches = input.match(/^'([^]*?)'?$/);
+    if (!matches) {
+        return input;
+    }
+    return matches[1].replace(/''/g, "'");
 }

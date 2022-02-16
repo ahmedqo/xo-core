@@ -1,5 +1,5 @@
-const { $IconComponent } = require('../utils/__sass__');
-const XOElement = require('../utils/__element__');
+const { $IconComponent } = require("../utils/_styles");
+const XOElement = require("../utils/_element");
 
 module.exports = class extends XOElement {
 

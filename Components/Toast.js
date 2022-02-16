@@ -1,17 +1,19 @@
-const { $AlertComponent } = require('../utils/__sass__');
-const XOElement = require('../utils/__element__');
+const { $ToastComponent } = require("../utils/_styles");
+const XOElement = require("../utils/_element");
 
-window.XOAlertElement = class extends XOElement {
+window.XOToastElement = class extends XOElement {
 
     static get styles() {
-        return $AlertComponent;
+        return $ToastComponent;
     }
 
     static get attributes() {
         return {
             theme: String,
             keep: Boolean,
-            trigger: String
+            trigger: String,
+            animation: String,
+            auto: Number,
         }
     }
 
@@ -30,6 +32,16 @@ window.XOAlertElement = class extends XOElement {
                     this.makeEvent("remove");
                 }
             }
+        }
+    }
+
+    static onUpdated(name, value) {
+        switch (name) {
+            case "auto":
+                if (value) setTimeout(() => {
+                    this.hide()
+                }, value);
+                break;
         }
     }
 
@@ -54,6 +66,17 @@ window.XOAlertElement = class extends XOElement {
 
 }
 
-XOAlertElement.prototype.tag = "xo-alert";
+XOToastElement.prototype.tag = "xo-toast";
 
-customElements.define(XOAlertElement.prototype.tag, XOAlertElement);
+XOToastElement.Create = function(message, { theme, keep, auto, trigger, animation } = {}) {
+    var el = new XOToastElement();
+    el.innerText = message;
+    if (keep) el.setAttribute("keep", keep);
+    if (auto) el.setAttribute("auto", auto);
+    if (theme) el.setAttribute("theme", theme);
+    if (trigger) el.setAttribute("trigger", trigger);
+    if (animation) el.setAttribute("animation", animation);
+    return el;
+}
+
+customElements.define(XOToastElement.prototype.tag, XOToastElement);

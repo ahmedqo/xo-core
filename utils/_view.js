@@ -1,59 +1,7 @@
-// const XOHtml = require("./__engine__");
-
-// const objs = (self) => {
-//     const state = self.state(),
-//         all = { param: self.param, query: self.query };
-//     Object.getOwnPropertyNames(state).forEach((p) => {
-//         all[p] = state[p];
-//     });
-//     return all;
-// };
-
-// class XOView {
-//     constructor(param, query) {
-//         document.title = this.props().title || "";
-//         this.param = param;
-//         this.query = query;
-//     }
-
-//     props() {
-//         return {};
-//     }
-
-//     state() {
-//         return {};
-//     }
-
-//     render() {
-//         return (async() => {
-//             return await XOHtml(objs(this))(`{§include ${this.props().template}§}`);
-//         })();
-//     }
-// }
-
-// XOView.prototype.name = "XOView";
-
-// module.exports = function(n, { title, template, state }) {
-//     return class extends XOView {
-//         static get name() {
-//             return n || "";
-//         }
-//         props() {
-//             return {
-//                 title: title || "",
-//                 template: template || "",
-//             };
-//         }
-//         state() {
-//             return state || {};
-//         }
-//     };
-// };
-
 ("use strict");
 
-var { _createClass, _inherits, _classCallCheck, _possibleConstructorReturn } = require("./__runtime__");
-var XOHtml = require("./__engine__");
+var { _createClass, _inherits, _classCallCheck, _possibleConstructorReturn } = require("./_runtime");
+var { XOBuild } = require("./_build");
 
 var objs = function objs(self) {
     var state = self.state(),
@@ -67,11 +15,12 @@ var objs = function objs(self) {
 var XOView = (function() {
     function XOView(param, query) {
         _classCallCheck(this, XOView);
-
         document.title = this.props().title || "";
         this.param = param;
         this.query = query;
     }
+
+    XOView.prototype.name = "XOView";
 
     _createClass(XOView, [{
             key: "props",
@@ -91,7 +40,7 @@ var XOView = (function() {
                 var _this = this;
 
                 return (async function() {
-                    return await XOHtml(objs(_this))("{§include " + _this.props().template + "§}");
+                    return await XOBuild.loader(objs(_this), _this.props().template);
                 })();
             },
         },
@@ -100,24 +49,22 @@ var XOView = (function() {
     return XOView;
 })();
 
-XOView.prototype.name = "XOView";
-
 module.exports = function(n, _ref) {
     var title = _ref.title;
     var template = _ref.template;
     var _state = _ref.state;
 
     return (function(_XOView) {
-        _inherits(_class, _XOView);
+        _inherits(XOView, _XOView);
 
-        function _class() {
-            _classCallCheck(this, _class);
+        function XOView() {
+            _classCallCheck(this, XOView);
 
-            return _possibleConstructorReturn(this, (_class.__proto__ || Object.getPrototypeOf(_class)).apply(this, arguments));
+            return _possibleConstructorReturn(this, (XOView.__proto__ || Object.getPrototypeOf(XOView)).apply(this, arguments));
         }
 
         _createClass(
-            _class, [{
+            XOView, [{
                     key: "props",
                     value: function props() {
                         return {
@@ -140,6 +87,6 @@ module.exports = function(n, _ref) {
             }, ]
         );
 
-        return _class;
+        return XOView;
     })(XOView);
 };

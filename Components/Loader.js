@@ -1,7 +1,5 @@
-const { $LoaderComponent } = require('../utils/__sass__');
-const XOElement = require('../utils/__element__');
-
-var timer1, timer2;
+const { $LoaderComponent } = require("../utils/_styles");
+const XOElement = require("../utils/_element");
 
 window.XOLoaderElement = class extends XOElement {
 
@@ -16,27 +14,8 @@ window.XOLoaderElement = class extends XOElement {
     }
 
     static onMounted() {
-        timer1 = setInterval(() => {
-            var off = parseInt(window.getComputedStyle(this.$.circle[0]).strokeDashoffset);
-            if (off < 400) {
-                this.$.circle[0].css("stroke-dashoffset", off + 1);
-            } else {
-                this.$.circle[0].css("stroke-dashoffset", 0);
-            }
-        }, 20);
-        timer2 = setInterval(() => {
-            var off = parseInt(window.getComputedStyle(this.$.circle[1]).strokeDashoffset);
-            if (off < 100) {
-                this.$.circle[1].css("stroke-dashoffset", off + 1);
-            } else {
-                this.$.circle[1].css("stroke-dashoffset", 0);
-            }
-        }, 10);
-    }
-
-    static unMounted() {
-        clearInterval(timer1);
-        clearInterval(timer2);
+        _run(this, 0);
+        _run(this, 1);
     }
 
     render() {
@@ -55,3 +34,20 @@ window.XOLoaderElement = class extends XOElement {
 XOLoaderElement.prototype.tag = "xo-loader";
 
 customElements.define(XOLoaderElement.prototype.tag, XOLoaderElement);
+
+/**
+ * run the function every interval
+ * @param {HTMLElement} self 
+ * @param {Number} i 
+ */
+function _run(self, i) {
+    var time = i ? 15 : 0;
+    setTimeout(() => {
+        var off = parseInt(window.getComputedStyle(self.$.circle[i]).strokeDashoffset);
+        if (off < 400) self.$.circle[i].css("stroke-dashoffset", off + 1);
+        else self.$.circle[i].css("stroke-dashoffset", 0);
+        requestAnimationFrame(function() {
+            _run(self, i);
+        })
+    }, time);
+}

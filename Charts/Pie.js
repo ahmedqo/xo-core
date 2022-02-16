@@ -1,7 +1,7 @@
-const { $PieChart } = require('../utils/__sass__');
-const XOElement = require('../utils/__element__');
-const XOColor = require('../utils/__color__');
-var { _node } = require("../utils/__runtime__");
+const { $PieChart } = require("../utils/_styles");
+const XOElement = require("../utils/_element");
+const XOColor = require('../utils/_color');
+var { _node } = require("../utils/_runtime");
 
 window.XOPieChartElement = class extends XOElement {
 

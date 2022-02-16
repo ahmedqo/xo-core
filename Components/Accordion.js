@@ -1,5 +1,5 @@
-const { $AccordionComponent } = require('../utils/__sass__');
-const XOElement = require('../utils/__element__');
+const { $AccordionComponent } = require("../utils/_styles");
+const XOElement = require("../utils/_element");
 
 window.XOAccordionElement = class extends XOElement {
 
@@ -31,12 +31,18 @@ window.XOAccordionElement = class extends XOElement {
                     this.makeEvent("expand");
                 }
                 this.expand = !this.expand;
+                setTimeout(() => {
+                    this.$.content.css("--height", "auto");
+                }, 100);
             }
         }
     }
 
     static onMounted() {
         this._height = this.$.content.scrollHeight;
+        setTimeout(() => {
+            this.$.content.css("--height", "auto");
+        }, 100);
     }
 
     render() {

@@ -1,5 +1,5 @@
-const { $SelectField } = require('../utils/__sass__');
-const XOElement = require('../utils/__element__');
+const { $SelectField } = require("../utils/_styles");
+const XOElement = require("../utils/_element");
 require('./SelectItem');
 
 window.XOSelectElement = class extends XOElement {
@@ -37,24 +37,15 @@ window.XOSelectElement = class extends XOElement {
             clickHandler() {
                 if (this.disabled || this.readonly || this.querySelectorAll("xo-select-item").length === 0) return;
                 if (this._expand) {
-                    __hide(this);
+                    _hide(this);
                 } else {
-                    __show(this);
+                    _show(this);
+                    _re(this);
                     if ((window.innerWidth - this.offsetLeft) < this.$.items.clientWidth) {
                         this.$.items.css({ left: "unset", right: "0", transform: "unset" });
                     } else if (this.offsetLeft < ((this.$.items.offsetWidth - this.offsetWidth) / 2)) {
                         this.$.items.css({ left: "0", transform: "unset" });
                     }
-
-                    if (window.innerWidth < this.$.items.clientWidth) {
-                        this.$.items.css("width", window.innerWidth - 50 + "px");
-                    }
-
-                    setTimeout(() => {
-                        if ((window.innerHeight - (this.offsetTop + this.clientHeight)) < this.$.items.clientHeight) {
-                            this.$.items.css("--slide", -this.$.items.clientHeight + "px");
-                        }
-                    }, 100);
                 }
                 this._expand = !this._expand;
             },
@@ -98,18 +89,26 @@ window.XOSelectElement = class extends XOElement {
                 let slot = e.getAttribute("slot");
                 if (e.tagName !== "XO-SELECT-ITEM" && e.parentElement === this && slot !== "prefix" && slot !== "suffix")
                     e.remove();
+                if (e.tagName === "XO-SELECT-ITEM")
+                    e.setAttribute("tabindex", "-1");
             });
         });
         observer.observe(this, { characterData: true, childList: true, subtree: true });
         this.innerHTML = this.innerHTML.trim();
         document.addEventListener("click", e => {
-            __click(this, e);
+            _click(this, e);
+        });
+        document.addEventListener("scroll", () => {
+            if (this._expand) _re(this);
         });
     }
 
     static onRemoved() {
         document.removeEventListener("click", e => {
-            __click(this, e);
+            _click(this, e);
+        });
+        document.removeEventListener("scroll", () => {
+            if (this._expand) _re(this);
         });
     }
 
@@ -200,9 +199,13 @@ XOSelectElement.prototype.tag = "xo-select";
 
 customElements.define(XOSelectElement.prototype.tag, XOSelectElement);
 
-function __click(self, e) {
+/**
+ * @param {HTMLElement} self 
+ * @param {Event} e 
+ */
+function _click(self, e) {
     if (e.target !== self) {
-        __hide(self);
+        _hide(self);
         if (self.label) {
             if (self.$.text.val().trim()) {
                 self.$.label.class().add("valid");
@@ -214,16 +217,39 @@ function __click(self, e) {
     }
 }
 
-function __hide(self) {
+/**
+ * disable all element
+ * @param {HTMLElement} self 
+ */
+function _hide(self) {
     self.querySelectorAll("xo-select-item").forEach(function(e) {
-        e.setAttribute("disabled", "");
+        e.setAttribute("tabindex", "-1");
         e.style.display = "";
     });
 }
 
-function __show(self) {
+/**
+ * enable all element
+ * @param {HTMLElement} self 
+ */
+function _show(self) {
     self.querySelectorAll("xo-select-item").forEach(function(e) {
-        e.removeAttribute("disabled");
+        e.removeAttribute("tabindex");
         e.style.display = "";
     });
+}
+
+/**
+ * @param {HTMLElement} self 
+ */
+function _re(self) {
+    setTimeout(() => {
+        if (self.$.items.clientHeight === 0) { _re(self); } else {
+            if ((window.innerHeight - (self.getBoundingClientRect().top + self.clientHeight)) < self.$.items.clientHeight) {
+                self.$.items.css("--slide", -self.$.items.clientHeight + "px");
+            } else {
+                self.$.items.css("--slide", "");
+            }
+        }
+    }, 10);
 }

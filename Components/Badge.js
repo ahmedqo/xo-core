@@ -1,6 +1,6 @@
-const { $BadgeComponent } = require('../utils/__sass__');
-const XOElement = require('../utils/__element__');
-const XOColor = require('../utils/__color__');
+const { $BadgeComponent } = require("../utils/_styles");
+const XOElement = require("../utils/_element");
+const XOColor = require('../utils/_color');
 
 window.XOBadgeElement = class extends XOElement {
 
@@ -15,10 +15,10 @@ window.XOBadgeElement = class extends XOElement {
     }
 
     render() {
-        let back = __getBackground__(__getText__(this.innerHTML));
+        let back = _background(_text(this.innerHTML));
         return /*html*/ `
-                <main id="xo-container" styles="{'--delay': '{{loading || 1500}}ms'}">
-                    <span id="xo-icon" styles="{background: ${back}}">
+                <main id="xo-container" styles="{'--delay': '{{loading || 1200}}ms'}">
+                    <span id="xo-icon" styles="{backgroundImage: ${back}}">
                         <slot name="icon"></slot>
                     </span>
                     <label id="xo-label">
@@ -27,31 +27,45 @@ window.XOBadgeElement = class extends XOElement {
                 </main>
             `;
     }
-
 }
 
 XOBadgeElement.prototype.tag = "xo-badge";
 
+XOBadgeElement.Create = function(icon, loading, ...children) {
+    var el = new XOBadgeElement();
+    if (icon) {
+        icon.setAttribute("slot", "icon");
+        el.appendChild(icon);
+    }
+    if (loading) el.setAttribute("loading", loading);
+    for (var c in children) {
+        el.appendChild(c);
+    }
+    return el;
+}
+
 customElements.define(XOBadgeElement.prototype.tag, XOBadgeElement);
+
 /**
- * @param {strinig} txt 
- * @returns first letter of each word 
+ * returns fisrt letter of each word
+ * @param {String} txt 
+ * @returns {String}
  */
-function __getText__(txt) {
+function _text(txt) {
     let text = txt.trim().split(" ");
     return (text.length > 1) ? text[0][0] + text[1][0] : "";
 }
 /**
- * 
+ * create an image with text
  * @param {strinig} txt 
- * @returns create an image with text
+ * @returns {String}
  */
-function __getBackground__(txt) {
+function _background(txt) {
     const canvas = document.createElement("canvas");
     const context = canvas.getContext("2d");
     canvas.width = 60;
     canvas.height = 60;
-    context.fillStyle = __getColor__();
+    context.fillStyle = _color();
     context.fillRect(0, 0, canvas.width, canvas.height);
     context.font = "bold 24px Assistant";
     context.fillStyle = "white";
@@ -61,8 +75,9 @@ function __getBackground__(txt) {
 }
 
 /**
- * @returns a random color form the colors list
+ * returns a random color form the colors list
+ * @returns {String}
  */
-function __getColor__() {
+function _color() {
     return XOColor.NAMES[Object.keys(XOColor.NAMES)[Math.floor(Math.random() * Object.keys(XOColor.NAMES).length)]];
 }

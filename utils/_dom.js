@@ -1,14 +1,16 @@
 ("use strict");
 
-module.exports = (function(window, document) {
-    let domReadyQueue = [];
+var { _typeof } = require("./_runtime");
+
+module.exports = function(window, document) {
+    var domReadyQueue = [];
 
     /**
      * check if dom loaded then run fn else push to array
      * @param {Function} fn
      * @return Function|Array
      */
-    const handleDOMReady = (fn) => {
+    var handleDOMReady = function handleDOMReady(fn) {
         return document.readyState === "complete" ? fn.call(document) : domReadyQueue.push(fn);
     };
 
@@ -40,14 +42,7 @@ module.exports = (function(window, document) {
 
         this._nodes = [];
 
-        if (
-            ele instanceof HTMLCollection ||
-            ele instanceof HTMLElement ||
-            ele instanceof NodeList ||
-            ele instanceof Array ||
-            ele === document ||
-            ele === window
-        ) {
+        if (ele instanceof HTMLCollection || ele instanceof HTMLElement || ele instanceof NodeList || ele instanceof Array || ele === document || ele === window) {
             this._nodes = ele.length > 0 ? [].slice.call(ele) : [ele];
         } else if (typeof ele === "string") {
             if (ele[ele.length - 1] === ">" && ele[0] === "<") {
@@ -59,7 +54,7 @@ module.exports = (function(window, document) {
 
         if (this._nodes.length) {
             this.length = this._nodes.length;
-            for (let i = 0; i < this._nodes.length; i++) {
+            for (var i = 0; i < this._nodes.length; i++) {
                 this[i] = this._nodes[i];
             }
         }
@@ -71,7 +66,7 @@ module.exports = (function(window, document) {
      * @return HTMLElement
      */
     function createNode(htm) {
-        let div = document.createElement("div");
+        var div = document.createElement("div");
         div.innerHTML = htm;
         return div.firstChild;
     }
@@ -84,7 +79,7 @@ module.exports = (function(window, document) {
      * @return XODom
      */
     XODom.fn.each = function(fn) {
-        for (let i = 0; i < this.length; i++) {
+        for (var i = 0; i < this.length; i++) {
             fn.call(this, this[i], i);
         }
         return this;
@@ -105,7 +100,7 @@ module.exports = (function(window, document) {
             return this[0] && this[0].outerHTML;
         }
 
-        this.each((e) => {
+        this.each(function(e) {
             e.innerHTML = htm;
         });
 
@@ -123,7 +118,7 @@ module.exports = (function(window, document) {
             return this[0] && this[0].innerText;
         }
 
-        this.each((e) => {
+        this.each(function(e) {
             e.innerText = txt;
         });
 
@@ -137,12 +132,14 @@ module.exports = (function(window, document) {
      * @return XODom
      */
     XODom.fn.val = function(val) {
+        var _this = this;
+
         if (val == undefined) {
             return this[0] && "value" in this[0] && this[0].value;
         }
 
-        this.each((e) => {
-            if ("value" in this[0]) e.value = val;
+        this.each(function(e) {
+            if ("value" in _this[0]) e.value = val;
         });
 
         return this;
@@ -161,16 +158,39 @@ module.exports = (function(window, document) {
      * @param {String|NodeList} htm
      * @return XODom
      */
-    XODom.fn.attach = function(...htm) {
-        for (var n of htm) {
-            if (typeof n === "string")
-                this.each(function(e) {
+    XODom.fn.attach = function() {
+        for (var _len = arguments.length, htm = Array(_len), _key = 0; _key < _len; _key++) {
+            htm[_key] = arguments[_key];
+        }
+
+        var _iteratorNormalCompletion = true;
+        var _didIteratorError = false;
+        var _iteratorError = undefined;
+
+        try {
+            for (var _iterator = htm[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                var n = _step.value;
+
+                if (typeof n === "string") this.each(function(e) {
                     e.innerHTML = e.innerHTML + n;
                 });
-            if (n instanceof HTMLElement)
-                this.each(function(e) {
+                if (n instanceof HTMLElement) this.each(function(e) {
                     e.append(n);
                 });
+            }
+        } catch (err) {
+            _didIteratorError = true;
+            _iteratorError = err;
+        } finally {
+            try {
+                if (!_iteratorNormalCompletion && _iterator.return) {
+                    _iterator.return();
+                }
+            } finally {
+                if (_didIteratorError) {
+                    throw _iteratorError;
+                }
+            }
         }
 
         return this;
@@ -188,7 +208,7 @@ module.exports = (function(window, document) {
             });
         }
         if (typeof el === "string") {
-            let _el = document.querySelector(el);
+            var _el = document.querySelector(el);
             this.each(function(e) {
                 _el.append(e);
             });
@@ -202,16 +222,39 @@ module.exports = (function(window, document) {
      * @param {String|NodeList} htm
      * @return XODom
      */
-    XODom.fn.pretach = function(...htm) {
-        for (var n of htm) {
-            if (typeof n === "string")
-                this.each(function(e) {
+    XODom.fn.pretach = function() {
+        for (var _len2 = arguments.length, htm = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+            htm[_key2] = arguments[_key2];
+        }
+
+        var _iteratorNormalCompletion2 = true;
+        var _didIteratorError2 = false;
+        var _iteratorError2 = undefined;
+
+        try {
+            for (var _iterator2 = htm[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+                var n = _step2.value;
+
+                if (typeof n === "string") this.each(function(e) {
                     e.innerHTML = n + e.innerHTML;
                 });
-            if (n instanceof HTMLElement)
-                this.each(function(e) {
+                if (n instanceof HTMLElement) this.each(function(e) {
                     e.prepend(n);
                 });
+            }
+        } catch (err) {
+            _didIteratorError2 = true;
+            _iteratorError2 = err;
+        } finally {
+            try {
+                if (!_iteratorNormalCompletion2 && _iterator2.return) {
+                    _iterator2.return();
+                }
+            } finally {
+                if (_didIteratorError2) {
+                    throw _iteratorError2;
+                }
+            }
         }
 
         return this;
@@ -229,7 +272,7 @@ module.exports = (function(window, document) {
             });
         }
         if (typeof el === "string") {
-            let _el = document.querySelector(el);
+            var _el = document.querySelector(el);
             this.each(function(e) {
                 _el.prepend(e);
             });
@@ -246,7 +289,7 @@ module.exports = (function(window, document) {
     XODom.fn.wrap = function(htm) {
         if (typeof htm === "string") {
             this.each(function(e) {
-                let w = createNode(htm);
+                var w = createNode(htm);
                 e.parentElement.insertBefore(w, e);
                 w.append(e);
             });
@@ -260,7 +303,7 @@ module.exports = (function(window, document) {
      */
     XODom.fn.unwrap = function() {
         this.each(function(e) {
-            let p = e.parentElement,
+            var p = e.parentElement,
                 g = p.parentElement;
             g.insertBefore(e, p);
             p.remove();
@@ -292,17 +335,42 @@ module.exports = (function(window, document) {
      * @param {String|NodeList} htm
      * @return XODom
      */
-    XODom.fn.after = function(...htm) {
-        for (var n of htm) {
-            if (typeof n === "string") {
-                this.each(function(e) {
-                    e.insertAdjacentHTML("afterEnd", n);
-                });
+    XODom.fn.after = function() {
+        for (var _len3 = arguments.length, htm = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+            htm[_key3] = arguments[_key3];
+        }
+
+        var _iteratorNormalCompletion3 = true;
+        var _didIteratorError3 = false;
+        var _iteratorError3 = undefined;
+
+        try {
+            for (var _iterator3 = htm[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+                var n = _step3.value;
+
+                if (typeof n === "string") {
+                    this.each(function(e) {
+                        e.insertAdjacentHTML("afterEnd", n);
+                    });
+                }
+                if (n instanceof HTMLElement) {
+                    this.each(function(e) {
+                        e.insertAdjacentElement("afterEnd", n);
+                    });
+                }
             }
-            if (n instanceof HTMLElement) {
-                this.each(function(e) {
-                    e.insertAdjacentElement("afterEnd", n);
-                });
+        } catch (err) {
+            _didIteratorError3 = true;
+            _iteratorError3 = err;
+        } finally {
+            try {
+                if (!_iteratorNormalCompletion3 && _iterator3.return) {
+                    _iterator3.return();
+                }
+            } finally {
+                if (_didIteratorError3) {
+                    throw _iteratorError3;
+                }
             }
         }
 
@@ -314,16 +382,39 @@ module.exports = (function(window, document) {
      * @param {String|NodeList} htm
      * @return XODom
      */
-    XODom.fn.before = function(...htm) {
-        for (var n of htm) {
-            if (typeof n === "string")
-                this.each(function(e) {
+    XODom.fn.before = function() {
+        for (var _len4 = arguments.length, htm = Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
+            htm[_key4] = arguments[_key4];
+        }
+
+        var _iteratorNormalCompletion4 = true;
+        var _didIteratorError4 = false;
+        var _iteratorError4 = undefined;
+
+        try {
+            for (var _iterator4 = htm[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+                var n = _step4.value;
+
+                if (typeof n === "string") this.each(function(e) {
                     e.insertAdjacentHTML("beforeBegin", n);
                 });
-            if (n instanceof HTMLElement)
-                this.each(function(e) {
+                if (n instanceof HTMLElement) this.each(function(e) {
                     e.insertAdjacentElement("beforeBegin", n);
                 });
+            }
+        } catch (err) {
+            _didIteratorError4 = true;
+            _iteratorError4 = err;
+        } finally {
+            try {
+                if (!_iteratorNormalCompletion4 && _iterator4.return) {
+                    _iterator4.return();
+                }
+            } finally {
+                if (_didIteratorError4) {
+                    throw _iteratorError4;
+                }
+            }
         }
 
         return this;
@@ -335,19 +426,38 @@ module.exports = (function(window, document) {
      * @return XODom
      */
     XODom.fn.remove = function(ele) {
-        if (ele)
-            this.each(function(e) {
-                var chd = [].slice.call(e.querySelectorAll(ele));
-                for (var c of chd) {
+        if (ele) this.each(function(e) {
+            var chd = [].slice.call(e.querySelectorAll(ele));
+            var _iteratorNormalCompletion5 = true;
+            var _didIteratorError5 = false;
+            var _iteratorError5 = undefined;
+
+            try {
+                for (var _iterator5 = chd[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+                    var c = _step5.value;
+
                     c.remove();
                 }
-            });
-        else
-            this.each(function(e, i) {
-                this._nodes = [];
-                delete this[i];
-                e.remove();
-            });
+            } catch (err) {
+                _didIteratorError5 = true;
+                _iteratorError5 = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion5 && _iterator5.return) {
+                        _iterator5.return();
+                    }
+                } finally {
+                    if (_didIteratorError5) {
+                        throw _iteratorError5;
+                    }
+                }
+            }
+        });
+        else this.each(function(e, i) {
+            this._nodes = [];
+            delete this[i];
+            e.remove();
+        });
 
         return this;
     };
@@ -376,7 +486,7 @@ module.exports = (function(window, document) {
      * @return XODom
      */
     XODom.fn.children = function() {
-        let all = [];
+        var all = [];
         this.each(function(e) {
             all = [].concat.call(all, [].slice.call(e.children));
         });
@@ -389,7 +499,7 @@ module.exports = (function(window, document) {
      * @return XODom
      */
     XODom.fn.nodes = function() {
-        let all = [];
+        var all = [];
         this.each(function(e) {
             all = [].concat.call(all, [].slice.call(e.childNodes));
         });
@@ -402,7 +512,7 @@ module.exports = (function(window, document) {
      * @return XODom
      */
     XODom.fn.clone = function() {
-        let all = [];
+        var all = [];
         this.each(function(e) {
             all.push(e.cloneNode());
         });
@@ -417,8 +527,8 @@ module.exports = (function(window, document) {
      */
     XODom.fn.replace = function(ele) {
         if (ele) {
-            let node = createNode(ele);
-            this.each((el) => {
+            var node = createNode(ele);
+            this.each(function(el) {
                 el.replaceWith(node);
             });
         }
@@ -431,9 +541,15 @@ module.exports = (function(window, document) {
      * @param  {...String} nms
      * @return XODom
      */
-    XODom.fn.addClass = function(...nms) {
-        this.each((el) => {
-            el.classList.add(...nms);
+    XODom.fn.addClass = function() {
+        for (var _len5 = arguments.length, nms = Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
+            nms[_key5] = arguments[_key5];
+        }
+
+        this.each(function(el) {
+            var _el$classList;
+
+            (_el$classList = el.classList).add.apply(_el$classList, nms);
         });
 
         return this;
@@ -444,9 +560,15 @@ module.exports = (function(window, document) {
      * @param  {...String} nms
      * @return XODom
      */
-    XODom.fn.delClass = function(...nms) {
+    XODom.fn.delClass = function() {
+        for (var _len6 = arguments.length, nms = Array(_len6), _key6 = 0; _key6 < _len6; _key6++) {
+            nms[_key6] = arguments[_key6];
+        }
+
         this.each(function(e) {
-            e.classList.remove(...nms);
+            var _e$classList;
+
+            (_e$classList = e.classList).remove.apply(_e$classList, nms);
         });
 
         return this;
@@ -457,10 +579,35 @@ module.exports = (function(window, document) {
      * @param  {...String} nms
      * @return XODom
      */
-    XODom.fn.togClass = function(...nms) {
+    XODom.fn.togClass = function() {
+        for (var _len7 = arguments.length, nms = Array(_len7), _key7 = 0; _key7 < _len7; _key7++) {
+            nms[_key7] = arguments[_key7];
+        }
+
         this.each(function(e) {
-            for (var c of nms) {
-                e.classList.toggle(c);
+            var _iteratorNormalCompletion6 = true;
+            var _didIteratorError6 = false;
+            var _iteratorError6 = undefined;
+
+            try {
+                for (var _iterator6 = nms[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
+                    var c = _step6.value;
+
+                    e.classList.toggle(c);
+                }
+            } catch (err) {
+                _didIteratorError6 = true;
+                _iteratorError6 = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion6 && _iterator6.return) {
+                        _iterator6.return();
+                    }
+                } finally {
+                    if (_didIteratorError6) {
+                        throw _iteratorError6;
+                    }
+                }
             }
         });
 
@@ -503,13 +650,13 @@ module.exports = (function(window, document) {
             return this[0] && this[0].getAttribute(nam);
         }
         if (nam && val != undefined && typeof nam == "string") {
-            this.each((e) => {
+            this.each(function(e) {
                 e.setAttribute(nam, val);
             });
         }
 
-        if (nam && val === undefined && typeof nam == "object") {
-            this.each((e) => {
+        if (nam && val === undefined && (typeof nam === "undefined" ? "undefined" : _typeof(nam)) == "object") {
+            this.each(function(e) {
                 for (var key in nam) {
                     let dec = key.replace(/\p{Lu}/gu, (m) => "-" + m.toLowerCase());
                     e.setAttribute(dec, nam[key]);
@@ -525,10 +672,35 @@ module.exports = (function(window, document) {
      * @param  {...String} nms
      * @return XODom
      */
-    XODom.fn.delAttr = function(...nms) {
+    XODom.fn.delAttr = function() {
+        for (var _len8 = arguments.length, nms = Array(_len8), _key8 = 0; _key8 < _len8; _key8++) {
+            nms[_key8] = arguments[_key8];
+        }
+
         this.each(function(e) {
-            for (var c of nms) {
-                e.removeAttribute(c);
+            var _iteratorNormalCompletion7 = true;
+            var _didIteratorError7 = false;
+            var _iteratorError7 = undefined;
+
+            try {
+                for (var _iterator7 = nms[Symbol.iterator](), _step7; !(_iteratorNormalCompletion7 = (_step7 = _iterator7.next()).done); _iteratorNormalCompletion7 = true) {
+                    var c = _step7.value;
+
+                    e.removeAttribute(c);
+                }
+            } catch (err) {
+                _didIteratorError7 = true;
+                _iteratorError7 = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion7 && _iterator7.return) {
+                        _iterator7.return();
+                    }
+                } finally {
+                    if (_didIteratorError7) {
+                        throw _iteratorError7;
+                    }
+                }
             }
         });
 
@@ -540,10 +712,35 @@ module.exports = (function(window, document) {
      * @param  {...String} nms
      * @return XODom
      */
-    XODom.fn.togAttr = function(...nms) {
+    XODom.fn.togAttr = function() {
+        for (var _len9 = arguments.length, nms = Array(_len9), _key9 = 0; _key9 < _len9; _key9++) {
+            nms[_key9] = arguments[_key9];
+        }
+
         this.each(function(e) {
-            for (var c of nms) {
-                e.toggleAttribute(c);
+            var _iteratorNormalCompletion8 = true;
+            var _didIteratorError8 = false;
+            var _iteratorError8 = undefined;
+
+            try {
+                for (var _iterator8 = nms[Symbol.iterator](), _step8; !(_iteratorNormalCompletion8 = (_step8 = _iterator8.next()).done); _iteratorNormalCompletion8 = true) {
+                    var c = _step8.value;
+
+                    e.toggleAttribute(c);
+                }
+            } catch (err) {
+                _didIteratorError8 = true;
+                _iteratorError8 = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion8 && _iterator8.return) {
+                        _iterator8.return();
+                    }
+                } finally {
+                    if (_didIteratorError8) {
+                        throw _iteratorError8;
+                    }
+                }
             }
         });
 
@@ -588,13 +785,13 @@ module.exports = (function(window, document) {
         }
 
         if (nam && val !== undefined && typeof nam == "string") {
-            this.each((e) => {
+            this.each(function(e) {
                 e[nam] = val;
             });
         }
 
-        if (nam && val === undefined && typeof nam == "object") {
-            this.each((e) => {
+        if (nam && val === undefined && (typeof nam === "undefined" ? "undefined" : _typeof(nam)) == "object") {
+            this.each(function(e) {
                 for (var key in nam) {
                     e[key] = nam[key];
                 }
@@ -609,10 +806,35 @@ module.exports = (function(window, document) {
      * @param  {...String} nms
      * @return XODom
      */
-    XODom.fn.delProp = function(...nms) {
+    XODom.fn.delProp = function() {
+        for (var _len10 = arguments.length, nms = Array(_len10), _key10 = 0; _key10 < _len10; _key10++) {
+            nms[_key10] = arguments[_key10];
+        }
+
         this.each(function(e) {
-            for (var c of nms) {
-                delete e[c];
+            var _iteratorNormalCompletion9 = true;
+            var _didIteratorError9 = false;
+            var _iteratorError9 = undefined;
+
+            try {
+                for (var _iterator9 = nms[Symbol.iterator](), _step9; !(_iteratorNormalCompletion9 = (_step9 = _iterator9.next()).done); _iteratorNormalCompletion9 = true) {
+                    var c = _step9.value;
+
+                    delete e[c];
+                }
+            } catch (err) {
+                _didIteratorError9 = true;
+                _iteratorError9 = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion9 && _iterator9.return) {
+                        _iterator9.return();
+                    }
+                } finally {
+                    if (_didIteratorError9) {
+                        throw _iteratorError9;
+                    }
+                }
             }
         });
 
@@ -677,13 +899,13 @@ module.exports = (function(window, document) {
             if (val.startsWith(":")) {
                 return this[0] && getComputedStyle(this[0], val)[nam];
             }
-            this.each((e) => {
+            this.each(function(e) {
                 e.style.setProperty(nam, val);
             });
         }
 
-        if (nam && val === undefined && typeof nam == "object") {
-            this.each((e) => {
+        if (nam && val === undefined && (typeof nam === "undefined" ? "undefined" : _typeof(nam)) == "object") {
+            this.each(function(e) {
                 for (var key in nam) {
                     let dec = key.replace(/\p{Lu}/gu, (m) => "-" + m.toLowerCase());
                     e.style.setProperty(dec, nam[key]);
@@ -708,13 +930,13 @@ module.exports = (function(window, document) {
         }
 
         if (nam && val !== undefined && typeof nam == "string") {
-            this.each((e) => {
+            this.each(function(e) {
                 e.dataset[nam] = val;
             });
         }
 
-        if (nam && val === undefined && typeof nam == "object") {
-            this.each((e) => {
+        if (nam && val === undefined && (typeof nam === "undefined" ? "undefined" : _typeof(nam)) == "object") {
+            this.each(function(e) {
                 for (var key in nam) {
                     e.dataset[key] = nam[key];
                 }
@@ -731,7 +953,7 @@ module.exports = (function(window, document) {
      */
     XODom.fn.get = function(n) {
         if (typeof n === "number") {
-            let el;
+            var el = void 0;
             if (n === -1) el = this._nodes[this._nodes.length - 1];
             else el = this._nodes[n];
             if (el) return new XODom(el);
@@ -743,23 +965,50 @@ module.exports = (function(window, document) {
      * @param  {...String} nms
      * @return Boolean
      */
-    XODom.fn.validate = function(...nms) {
+    XODom.fn.validate = function() {
         var regex = {
                 email: /[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}/g,
                 zipCode: /[0-9]{4,10}/g,
                 upperCase: /[A-Z]/g,
                 lowerCase: /[a-z]/g,
                 numeric: /[0-9]/g,
-                special: /\W/g,
+                special: /\W/g
             },
             keys = Object.keys(regex),
             arr = [];
         if (!this[0] && !("value" in this[0])) return null;
-        for (var n of nms) {
-            if (keys.indeXODomf(n) !== -1) {
-                arr.push(regex[n].test(this[0].value.trim()));
+
+        for (var _len11 = arguments.length, nms = Array(_len11), _key11 = 0; _key11 < _len11; _key11++) {
+            nms[_key11] = arguments[_key11];
+        }
+
+        var _iteratorNormalCompletion10 = true;
+        var _didIteratorError10 = false;
+        var _iteratorError10 = undefined;
+
+        try {
+            for (var _iterator10 = nms[Symbol.iterator](), _step10; !(_iteratorNormalCompletion10 = (_step10 = _iterator10.next()).done); _iteratorNormalCompletion10 = true) {
+                var n = _step10.value;
+
+                if (keys.indeXODomf(n) !== -1) {
+                    arr.push(regex[n].test(this[0].value.trim()));
+                }
+            }
+        } catch (err) {
+            _didIteratorError10 = true;
+            _iteratorError10 = err;
+        } finally {
+            try {
+                if (!_iteratorNormalCompletion10 && _iterator10.return) {
+                    _iterator10.return();
+                }
+            } finally {
+                if (_didIteratorError10) {
+                    throw _iteratorError10;
+                }
             }
         }
+
         return arr.includes(false) ? false : true;
     };
 
@@ -1867,22 +2116,28 @@ module.exports = (function(window, document) {
          * @param {String|Object|Array} val
          * @param {Boolean} jsn
          */
-        set(nam, val, jsn) {
+        set: function set(nam, val, jsn) {
             if (nam && val !== undefined && typeof nam === "string") {
                 val = jsn ? JSON.stringify(val) : val;
                 localStorage.setItem(nam, val);
             }
         },
 
+
         /**
          * delete local storage items
          * @param  {...String} nms
          */
-        del(...nms) {
+        del: function del() {
+            for (var _len12 = arguments.length, nms = Array(_len12), _key12 = 0; _key12 < _len12; _key12++) {
+                nms[_key12] = arguments[_key12];
+            }
+
             for (var nm in nms) {
                 localStorage.removeItem(nm);
             }
         },
+
 
         /**
          * get local storage item if exist if jsn as json
@@ -1890,28 +2145,30 @@ module.exports = (function(window, document) {
          * @param {Boolean} jsn
          * @return String|Object
          */
-        get(nam, jsn) {
+        get: function get(nam, jsn) {
             if (nam && this.has(nam)) {
-                let val = localStorage.getItem(nam);
+                var val = localStorage.getItem(nam);
                 return jsn ? JSON.parse(val) : val;
             }
         },
+
 
         /**
          * get true if local storage item exist else fals
          * @param {String} nam
          * @return Boolean
          */
-        has(nam) {
+        has: function has(nam) {
             return typeof nam === "string" && localStorage.getItem(nam) ? true : false;
         },
+
 
         /**
          * delete all local storage items
          */
-        rid() {
+        rid: function rid() {
             localStorage.clear();
-        },
+        }
     };
 
     /**
@@ -1924,22 +2181,28 @@ module.exports = (function(window, document) {
          * @param {String|Object|Array} val
          * @param {Boolean} jsn
          */
-        set(nam, val, jsn) {
+        set: function set(nam, val, jsn) {
             if (nam && val !== undefined && typeof nam === "string") {
                 val = jsn ? JSON.stringify(val) : val;
                 sessionStorage.setItem(nam, val);
             }
         },
 
+
         /**
          * delete session storage items
          * @param  {...String} nms
          */
-        del(...nms) {
+        del: function del() {
+            for (var _len13 = arguments.length, nms = Array(_len13), _key13 = 0; _key13 < _len13; _key13++) {
+                nms[_key13] = arguments[_key13];
+            }
+
             for (var nm in nms) {
                 sessionStorage.removeItem(nm);
             }
         },
+
 
         /**
          * get session storage item if exist if jsn as json
@@ -1947,28 +2210,30 @@ module.exports = (function(window, document) {
          * @param {Boolean} jsn
          * @return String|Object
          */
-        get(nam, jsn) {
+        get: function get(nam, jsn) {
             if (nam && this.has(nam)) {
-                let val = sessionStorage.getItem(nam);
+                var val = sessionStorage.getItem(nam);
                 return jsn ? JSON.parse(val) : val;
             }
         },
+
 
         /**
          * get true if session storage item exist else fals
          * @param {String} nam
          * @return Boolean
          */
-        has(nam) {
+        has: function has(nam) {
             return typeof nam === "string" && sessionStorage.getItem(nam) ? true : false;
         },
+
 
         /**
          * delete all session storage items
          */
-        rid() {
+        rid: function rid() {
             sessionStorage.clear();
-        },
+        }
     };
 
     /**
@@ -1980,13 +2245,40 @@ module.exports = (function(window, document) {
          * @param  {...Array} arr
          * @return Object
          */
-        object(...arr) {
-            let all = {};
-            for (var a of arr) {
-                if (a.length === 2) all[a[0]] = a[1];
+        object: function object() {
+            var all = {};
+
+            for (var _len14 = arguments.length, arr = Array(_len14), _key14 = 0; _key14 < _len14; _key14++) {
+                arr[_key14] = arguments[_key14];
             }
+
+            var _iteratorNormalCompletion11 = true;
+            var _didIteratorError11 = false;
+            var _iteratorError11 = undefined;
+
+            try {
+                for (var _iterator11 = arr[Symbol.iterator](), _step11; !(_iteratorNormalCompletion11 = (_step11 = _iterator11.next()).done); _iteratorNormalCompletion11 = true) {
+                    var a = _step11.value;
+
+                    if (a.length === 2) all[a[0]] = a[1];
+                }
+            } catch (err) {
+                _didIteratorError11 = true;
+                _iteratorError11 = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion11 && _iterator11.return) {
+                        _iterator11.return();
+                    }
+                } finally {
+                    if (_didIteratorError11) {
+                        throw _iteratorError11;
+                    }
+                }
+            }
+
             return all;
-        },
+        }
     };
 
     /**
@@ -2000,9 +2292,10 @@ module.exports = (function(window, document) {
          * @param {Boolean} eq
          * @return Boolean
          */
-        bigger(fn, ln, eq) {
+        bigger: function bigger(fn, ln, eq) {
             if ((Number(fn) || Number(fn) == 0) && (Number(ln) || Number(ln) == 0)) return eq ? Number(fn) >= Number(ln) : Number(fn) > Number(ln);
         },
+
 
         /**
          * check if fn smaller then ln if eq inlude =
@@ -2011,9 +2304,10 @@ module.exports = (function(window, document) {
          * @param {Boolean} eq
          * @return Boolean
          */
-        lesser(fn, ln, eq) {
+        lesser: function lesser(fn, ln, eq) {
             if ((Number(fn) || Number(fn) == 0) && (Number(ln) || Number(ln) == 0)) return eq ? Number(fn) <= Number(ln) : Number(fn) < Number(ln);
         },
+
 
         /**
          * check if fn equals to ln
@@ -2022,9 +2316,10 @@ module.exports = (function(window, document) {
          * @param {Boolean} eq
          * @return Boolean
          */
-        equals(fn, ln) {
+        equals: function equals(fn, ln) {
             if ((Number(fn) || Number(fn) == 0) && (Number(ln) || Number(ln) == 0)) return Number(fn) == Number(ln);
         },
+
 
         /**
          * check if num betweem min and max if eq inlude =
@@ -2034,11 +2329,10 @@ module.exports = (function(window, document) {
          * @param {Boolean} eql
          * @return Boolean
          */
-        middle(num, min, max, eql) {
-            if ((Number(num) || Number(num) == 0) && (Number(min) || Number(min) == 0) && (Number(max) || Number(max) == 0))
-                return this.bigger(num, min, eql) && this.lesser(num, max, eql);
-        },
+        middle: function middle(num, min, max, eql) {
+            if ((Number(num) || Number(num) == 0) && (Number(min) || Number(min) == 0) && (Number(max) || Number(max) == 0)) return this.bigger(num, min, eql) && this.lesser(num, max, eql);
+        }
     };
 
     return XODom;
-})(window, document);
+}(window, document);

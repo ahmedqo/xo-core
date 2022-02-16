@@ -1,5 +1,5 @@
-const { $NavBarComponent } = require('../utils/__sass__');
-const XOElement = require('../utils/__element__');
+const { $NavBarComponent } = require("../utils/_styles");
+const XOElement = require("../utils/_element");
 require('./NavBarItem');
 
 
@@ -42,10 +42,10 @@ window.XONavBarElement = class extends XOElement {
         window.removeEventListener("resize", () => { __resize(this); });
     }
 
-    static onUpdated(name, value) {
+    static onUpdated(name, value, _) {
         switch (name) {
             case "expand":
-                JSON.parse(value) ?
+                value ?
                     this.querySelectorAll("xo-navbar-item").forEach(item => item.removeAttribute("tabindex")) :
                     this.querySelectorAll("xo-navbar-item").forEach(item => {
                         if (!item.hasAttribute("slot"))

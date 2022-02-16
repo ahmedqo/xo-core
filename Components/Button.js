@@ -1,6 +1,5 @@
-const { $ButtonComponent } = require('../utils/__sass__');
-const XOElement = require('../utils/__element__');
-
+const { $ButtonComponent } = require("../utils/_styles");
+const XOElement = require("../utils/_element");
 window.XOButtonElement = class extends XOElement {
 
     static get styles() {

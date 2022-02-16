@@ -1,6 +1,6 @@
-const { $RadarChart } = require('../utils/__sass__');
-const XOElement = require('../utils/__element__');
-var { _toConsumableArray, _node } = require("../utils/__runtime__");
+const { $RadarChart } = require("../utils/_styles");
+const XOElement = require("../utils/_element");
+var { _toConsumableArray, _node } = require("../utils/_runtime");
 
 window.XORadarChartElement = class extends XOElement {
 
@@ -23,7 +23,7 @@ window.XORadarChartElement = class extends XOElement {
 
     static onUpdated() {
         if (this.data.length) {
-            __tooltip(this);
+            _tooltip(this);
         }
     }
 
@@ -36,7 +36,7 @@ window.XORadarChartElement = class extends XOElement {
             {§/if§}
             {§if data.length§}
                 <main id="xo-container">
-                    ${__grid(this.data)}
+                    ${_grid(this.data)}
                 </main>
                 <div id="xo-tooltip"></div>
             {§/if§}
@@ -49,7 +49,7 @@ XORadarChartElement.prototype.tag = "xo-radar-chart";
 
 customElements.define(XORadarChartElement.prototype.tag, XORadarChartElement);
 
-function __grid(data) {
+function _grid(data) {
     var size = arguments.length <= 1 || arguments[1] === undefined ? 500 : arguments[1];
 
     var group = _node("g", {
@@ -59,14 +59,14 @@ function __grid(data) {
         scale = 5;
     for (var i = scale; i > 0; i--) {
         var poly = _node("path", {
-            d: __polygon(size / 2, size / 2, data.length, size / 2 / scale * i),
+            d: _polygon(size / 2, size / 2, data.length, size / 2 / scale * i),
             id: "xo-grid"
         });
         group.append(poly);
     }
-    __lines(data.length, size, group);
-    __area(size, group, data);
-    __dots(size, group, data);
+    _lines(data.length, size, group);
+    _area(size, group, data);
+    _dots(size, group, data);
     grid.append(group);
     grid.setAttribute("viewBox", "0 0 " + (size + 20) + " " + (size + 20));
     if (data.length === 3) grid.setAttribute("viewBox", "0 0 " + (size + 20) + " " + (size + 20 - size / 100 * 25));
@@ -74,7 +74,7 @@ function __grid(data) {
     return grid.outerHTML;
 }
 
-function __polar(centerX, centerY, radius, angleInDegrees) {
+function _polar(centerX, centerY, radius, angleInDegrees) {
     var angleInRadians = (angleInDegrees - 90) * Math.PI / 180.0;
     return {
         x: centerX + radius * Math.cos(angleInRadians),
@@ -82,17 +82,17 @@ function __polar(centerX, centerY, radius, angleInDegrees) {
     };
 }
 
-function __polygon(centerX, centerY, points, radius) {
+function _polygon(centerX, centerY, points, radius) {
     var degreeIncrement = 360 / points;
     var d = new Array(points).fill('foo').map(function(p, i) {
-        var point = __polar(centerX, centerY, radius, degreeIncrement * i);
+        var point = _polar(centerX, centerY, radius, degreeIncrement * i);
         return point.x + "," + point.y;
     });
     return "M " + d.join(" ") + " Z";
 }
 
-function __lines(corners, size, svg) {
-    var pts = __polygon(size / 2, size / 2, corners, size / 2).split(" ");
+function _lines(corners, size, svg) {
+    var pts = _polygon(size / 2, size / 2, corners, size / 2).split(" ");
     pts.splice(pts.length - 1, 1);
     pts.splice(0, 1);
     for (var i = 0; i < corners; i++) {
@@ -107,12 +107,12 @@ function __lines(corners, size, svg) {
     }
 }
 
-function __dots(size, svg, data) {
+function _dots(size, svg, data) {
     var max = Math.max.apply(Math, _toConsumableArray(data.map(function(e) {
         return parseFloat(e.value);
     })));
     for (var i = 0; i < data.length; i++) {
-        var pts = __polygon(size / 2, size / 2, data.length, size / 2 / 100 * (parseFloat(data[i].value) / max * 100)).split(" "),
+        var pts = _polygon(size / 2, size / 2, data.length, size / 2 / 100 * (parseFloat(data[i].value) / max * 100)).split(" "),
             c = data[i].color || "";
         pts.splice(pts.length - 1, 1);
         pts.splice(0, 1);
@@ -128,13 +128,13 @@ function __dots(size, svg, data) {
     }
 }
 
-function __area(size, svg, data) {
+function _area(size, svg, data) {
     var path = "M ",
         max = Math.max.apply(Math, _toConsumableArray(data.map(function(e) {
             return parseFloat(e.value);
         })));
     for (var i = 0; i < data.length; i++) {
-        var pts = __polygon(size / 2, size / 2, data.length, size / 2 / 100 * (parseFloat(data[i].value) / max * 100)).split(" ");
+        var pts = _polygon(size / 2, size / 2, data.length, size / 2 / 100 * (parseFloat(data[i].value) / max * 100)).split(" ");
         pts.splice(pts.length - 1, 1);
         pts.splice(0, 1);
         path += pts[i] + " ";
@@ -146,7 +146,7 @@ function __area(size, svg, data) {
     svg.append(poly);
 }
 
-function __tooltip(E) {
+function _tooltip(E) {
     E.$.container.find("#xo-dots").forEach(function(e) {
         e.addEventListener("mousemove", function(_) {
             E.$.tooltip.innerHTML = e.dataset.value;

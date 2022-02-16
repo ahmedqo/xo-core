@@ -1,5 +1,5 @@
-const { $ContainerUi } = require('../utils/__sass__');
-const XOElement = require('../utils/__element__');
+const { $ContainerUi } = require("../utils/_styles");
+const XOElement = require("../utils/_element");
 
 window.XOContainerElement = class extends XOElement {
 
